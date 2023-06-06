@@ -1,0 +1,180 @@
+basePath: /api/v1
+definitions:
+  controllers.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  controllers.LoginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  controllers.StaffRequest:
+    properties:
+      address:
+        type: string
+      birth_date:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      gender:
+        type: string
+      identity_card:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+      salary:
+        type: integer
+      staff_type:
+        type: string
+      status:
+        type: string
+    required:
+    - address
+    - birth_date
+    - email
+    - full_name
+    - gender
+    - identity_card
+    - password
+    - phone_number
+    - staff_type
+    type: object
+  controllers.StaffResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Staff'
+        type: array
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  models.Staff:
+    properties:
+      address:
+        type: string
+      birth_date:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      identity_card:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+      salary:
+        type: integer
+      staff_type:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Clinic Management API
+  title: Clinic Management
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login your account
+      parameters:
+      - description: Login data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login response
+          schema:
+            $ref: '#/definitions/controllers.LoginResponse'
+      summary: Login
+      tags:
+      - auth
+  /staff:
+    get:
+      description: Get staff
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Staff response
+          schema:
+            $ref: '#/definitions/controllers.StaffResponse'
+      summary: Get staff
+      tags:
+      - staff
+  /staff/{id}:
+    get:
+      description: Get staff by id
+      parameters:
+      - description: Staff id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Staff response
+          schema:
+            $ref: '#/definitions/controllers.StaffResponse'
+      summary: Get staff by id
+      tags:
+      - staff
+  /staff/create:
+    post:
+      consumes:
+      - application/json
+      description: Create staff
+      parameters:
+      - description: Staff data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.StaffRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Staff response
+          schema:
+            $ref: '#/definitions/controllers.StaffResponse'
+      summary: Create staff
+      tags:
+      - staff
+swagger: "2.0"
