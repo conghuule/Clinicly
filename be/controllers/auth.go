@@ -15,7 +15,8 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	Token string `json:"token"`
+	Response
+	Data models.User `json:"data"`
 }
 
 // @Summary Login
@@ -29,20 +30,24 @@ type LoginResponse struct {
 func Login(c *gin.Context) {
 	var input LoginRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
 	}
 
-	u := models.User{}
-	u.Email = input.Email
-	u.Password = input.Password
-	token, err := loginCheck(u.Email, u.Password)
+	user := &models.User{}
+	user.Email = input.Email
+	user.Password = input.Password
+	token, err := loginCheck(user.Email, user.Password)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "email or password is incorrect."})
+		c.JSON(http.StatusBadRequest, ErrorResponse("email or password is incorrect."))
 		return
 	}
 
-	c.JSON(http.StatusOK, LoginResponse{Token: token})
+	user, _ = models.GetUserByEmail(input.Email)
+
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", token, 3600*24, "", "", false, true)
+	c.JSON(http.StatusOK, LoginResponse{Data: *user})
 }
 
 func loginCheck(email, password string) (string, error) {

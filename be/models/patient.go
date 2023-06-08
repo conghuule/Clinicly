@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strconv"
 	"time"
 )
 
@@ -23,10 +24,38 @@ func (Patient) TableName() string {
 	return TableNamePatient
 }
 
-func GetPatientList() []Patient {
+func (patient *Patient) CreatePatient() (*Patient, error) {
+	err := DB.Create(&patient).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return patient, nil
+}
+
+func GetPatient() ([]Patient, error) {
 	patients := []Patient{}
 
-	DB.Find(&patients)
+	err := DB.Find(&patients).Error
+	if err != nil {
+		return nil, err
+	}
 
-	return patients
+	return patients, nil
+}
+
+func GetPatientByID(id string) (*Patient, error) {
+	ID, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
+	patient := &Patient{}
+
+	err = DB.Where(Patient{ID: uint(ID)}).Find(patient).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return patient, nil
 }

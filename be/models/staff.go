@@ -22,7 +22,7 @@ type Staff struct {
 	StaffType    string    `gorm:"column:LoaiNV" json:"staff_type"`
 	Salary       uint      `gorm:"column:MucLuong" json:"salary"`
 	Status       string    `gorm:"column:TrangThai" json:"status"`
-	Password     string    `gorm:"column:Password" json:"password"`
+	Password     string    `gorm:"column:Password" json:"-"`
 	CreatedAt    time.Time `gorm:"column:NgayTao" json:"created_at"`
 	UpdatedAt    time.Time `gorm:"column:NgayCapNhat" json:"updated_at"`
 	UpdatedBy    *uint     `gorm:"column:CapNhatBoi" json:"updated_by"`
@@ -51,13 +51,12 @@ func (staff *Staff) CreateStaff() (*Staff, error) {
 	}
 
 	return staff, nil
-
 }
 
-func GetStaff() ([]Staff, error) {
+func GetStaff(query ...func(*gorm.DB) *gorm.DB) ([]Staff, error) {
 	staffs := []Staff{}
 
-	err := DB.Find(&staffs).Error
+	err := DB.Scopes(query...).Find(&staffs).Error
 	if err != nil {
 		return nil, err
 	}

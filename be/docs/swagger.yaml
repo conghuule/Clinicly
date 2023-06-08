@@ -12,7 +12,66 @@ definitions:
     type: object
   controllers.LoginResponse:
     properties:
-      token:
+      data:
+        $ref: '#/definitions/models.User'
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  controllers.PatientListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Patient'
+        type: array
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  controllers.PatientRequest:
+    properties:
+      address:
+        type: string
+      birth_date:
+        type: string
+      full_name:
+        type: string
+      gender:
+        type: string
+      identity_card:
+        type: string
+      phone_number:
+        type: string
+      updated_by:
+        type: integer
+    required:
+    - address
+    - birth_date
+    - full_name
+    - gender
+    - identity_card
+    - phone_number
+    type: object
+  controllers.PatientResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Patient'
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  controllers.StaffListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Staff'
+        type: array
+      message:
+        type: string
+      status:
         type: string
     type: object
   controllers.StaffRequest:
@@ -39,6 +98,8 @@ definitions:
         type: string
       status:
         type: string
+      updated_by:
+        type: integer
     required:
     - address
     - birth_date
@@ -53,13 +114,34 @@ definitions:
   controllers.StaffResponse:
     properties:
       data:
-        items:
-          $ref: '#/definitions/models.Staff'
-        type: array
+        $ref: '#/definitions/models.Staff'
       message:
         type: string
       status:
         type: string
+    type: object
+  models.Patient:
+    properties:
+      address:
+        type: string
+      birth_date:
+        type: string
+      created_at:
+        type: string
+      full_name:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      identity_card:
+        type: string
+      phone_number:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: integer
     type: object
   models.Staff:
     properties:
@@ -79,8 +161,6 @@ definitions:
         type: integer
       identity_card:
         type: string
-      password:
-        type: string
       phone_number:
         type: string
       salary:
@@ -93,6 +173,15 @@ definitions:
         type: string
       updated_by:
         type: integer
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      role:
+        type: string
     type: object
 host: localhost:8080
 info:
@@ -123,16 +212,85 @@ paths:
       summary: Login
       tags:
       - auth
+  /patient:
+    get:
+      description: Get patient
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Patient response
+          schema:
+            $ref: '#/definitions/controllers.PatientListResponse'
+      summary: Get patient
+      tags:
+      - patient
+  /patient/{id}:
+    get:
+      description: Get patient by id
+      parameters:
+      - description: Patient id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Patient response
+          schema:
+            $ref: '#/definitions/controllers.PatientResponse'
+      summary: Get patient by id
+      tags:
+      - patient
+  /patient/create:
+    post:
+      consumes:
+      - application/json
+      description: Create patient
+      parameters:
+      - description: Patient data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.PatientRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Patient response
+          schema:
+            $ref: '#/definitions/controllers.PatientResponse'
+      summary: Create patient
+      tags:
+      - patient
   /staff:
     get:
       description: Get staff
+      parameters:
+      - description: Staff name
+        in: query
+        name: name
+        type: string
+      - default: 1
+        description: Page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: Staff response
           schema:
-            $ref: '#/definitions/controllers.StaffResponse'
+            $ref: '#/definitions/controllers.StaffListResponse'
       summary: Get staff
       tags:
       - staff

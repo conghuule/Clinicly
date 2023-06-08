@@ -1,6 +1,10 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"clinic-management/middlewares"
+
+	"github.com/gin-gonic/gin"
+)
 
 func Config(r *gin.Engine) {
 	addSwaggerRoute(r)
@@ -8,6 +12,12 @@ func Config(r *gin.Engine) {
 	v1 := r.Group("api/v1")
 	{
 		addAuthRoute(v1)
-		addStaffRoute(v1)
+
+		authorizedRoute := v1.Group("")
+
+		authorizedRoute.Use(middlewares.Authorize)
+
+		addStaffRoute(authorizedRoute)
+		addPatientRoute(authorizedRoute)
 	}
 }

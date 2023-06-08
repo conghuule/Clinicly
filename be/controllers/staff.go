@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"clinic-management/models"
+	"clinic-management/utils/query"
 	"net/http"
 	"time"
 
@@ -20,6 +21,7 @@ type StaffRequest struct {
 	Salary       uint      `json:"salary"`
 	Status       string    `json:"status"`
 	Password     string    `json:"password" binding:"required"`
+	UpdatedBy    *uint     `json:"updated_by"`
 }
 
 type StaffResponse struct {
@@ -43,7 +45,7 @@ type StaffListResponse struct {
 func CreateStaff(c *gin.Context) {
 	var input StaffRequest
 	if err := c.ShouldBind(&input); err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
 	}
 
@@ -59,11 +61,12 @@ func CreateStaff(c *gin.Context) {
 		Salary:       input.Salary,
 		Status:       input.Status,
 		Password:     input.Password,
+		UpdatedBy:    input.UpdatedBy,
 	}
 
 	_, err := staff.CreateStaff()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
 	}
 
@@ -77,12 +80,15 @@ func CreateStaff(c *gin.Context) {
 // @Description Get staff
 // @Tags staff
 // @Produce json
+// @Param name query string false "Staff name"
+// @Param page query int false "Page" default(1)
+// @Param page_size query int false "Page size" default(10)
 // @Success 200 {object} StaffListResponse "Staff response"
 // @Router /staff [get]
 func GetStaff(c *gin.Context) {
-	staffs, err := models.GetStaff()
+	staffs, err := models.GetStaff(query.Paginate(c), query.DebounceSearch("HoTen", c.Query("name")))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
 	}
 
@@ -104,7 +110,7 @@ func GetStaffByID(c *gin.Context) {
 
 	staff, err := models.GetStaffByID(id)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
 	}
 
