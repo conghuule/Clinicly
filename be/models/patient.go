@@ -3,6 +3,8 @@ package models
 import (
 	"strconv"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 const TableNamePatient = "BenhNhan"
@@ -26,7 +28,6 @@ func (Patient) TableName() string {
 
 func (patient *Patient) CreatePatient() (*Patient, error) {
 	err := DB.Create(&patient).Error
-
 	if err != nil {
 		return nil, err
 	}
@@ -34,10 +35,28 @@ func (patient *Patient) CreatePatient() (*Patient, error) {
 	return patient, nil
 }
 
-func GetPatient() ([]Patient, error) {
+func (patient *Patient) UpdatePatient(updatedStaff Patient) (*Patient, error) {
+	err := DB.Model(&patient).Updates(updatedStaff).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return patient, nil
+}
+
+func (patient *Patient) DeletePatient() (*Patient, error) {
+	err := DB.First(&patient).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return patient, nil
+}
+
+func GetPatient(query ...func(*gorm.DB) *gorm.DB) ([]Patient, error) {
 	patients := []Patient{}
 
-	err := DB.Find(&patients).Error
+	err := DB.Scopes(query...).Find(&patients).Error
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +71,7 @@ func GetPatientByID(id string) (*Patient, error) {
 	}
 	patient := &Patient{}
 
-	err = DB.Where(Patient{ID: uint(ID)}).Find(patient).Error
+	err = DB.Where(Patient{ID: uint(ID)}).First(patient).Error
 	if err != nil {
 		return nil, err
 	}

@@ -19,5 +19,6 @@ func Config(r *gin.Engine) {
 
 		addStaffRoute(authorizedRoute)
 		addPatientRoute(authorizedRoute)
+		addRegulationRoute(authorizedRoute)
 	}
 }

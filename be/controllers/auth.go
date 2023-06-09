@@ -47,7 +47,10 @@ func Login(c *gin.Context) {
 
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Authorization", token, 3600*24, "", "", false, true)
-	c.JSON(http.StatusOK, LoginResponse{Data: *user})
+	c.JSON(http.StatusOK, LoginResponse{
+		Response: SuccessfulResponse,
+		Data:     *user,
+	})
 }
 
 func loginCheck(email, password string) (string, error) {

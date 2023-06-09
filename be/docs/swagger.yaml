@@ -63,6 +63,28 @@ definitions:
       status:
         type: string
     type: object
+  controllers.RegulationListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Regulation'
+        type: array
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  controllers.RegulationRequest:
+    type: object
+  controllers.RegulationResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Regulation'
+      message:
+        type: string
+      status:
+        type: string
+    type: object
   controllers.StaffListResponse:
     properties:
       data:
@@ -120,6 +142,68 @@ definitions:
       status:
         type: string
     type: object
+  controllers.UpdatePatientRequest:
+    properties:
+      address:
+        type: string
+      birth_date:
+        type: string
+      full_name:
+        type: string
+      gender:
+        type: string
+      identity_card:
+        type: string
+      phone_number:
+        type: string
+      updated_by:
+        type: integer
+    required:
+    - address
+    - birth_date
+    - full_name
+    - gender
+    - identity_card
+    - phone_number
+    type: object
+  controllers.UpdateRegulationRequest:
+    properties:
+      name:
+        type: string
+      updated_by:
+        type: integer
+      value:
+        $ref: '#/definitions/datatypes.JSON'
+    type: object
+  controllers.UpdateStaffRequest:
+    properties:
+      address:
+        type: string
+      birth_date:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      gender:
+        type: string
+      identity_card:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+      salary:
+        type: integer
+      staff_type:
+        type: string
+      status:
+        type: string
+      updated_by:
+        type: integer
+    type: object
+  datatypes.JSON:
+    type: object
   models.Patient:
     properties:
       address:
@@ -142,6 +226,21 @@ definitions:
         type: string
       updated_by:
         type: integer
+    type: object
+  models.Regulation:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: integer
+      value:
+        $ref: '#/definitions/datatypes.JSON'
     type: object
   models.Staff:
     properties:
@@ -226,6 +325,24 @@ paths:
       tags:
       - patient
   /patient/{id}:
+    delete:
+      description: Delete patient
+      parameters:
+      - description: Patient id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Patient response
+          schema:
+            $ref: '#/definitions/controllers.PatientResponse'
+      summary: Delete patient
+      tags:
+      - patient
     get:
       description: Get patient by id
       parameters:
@@ -242,6 +359,32 @@ paths:
           schema:
             $ref: '#/definitions/controllers.PatientResponse'
       summary: Get patient by id
+      tags:
+      - patient
+    put:
+      consumes:
+      - application/json
+      description: Update patient
+      parameters:
+      - description: Patient id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Patient data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdatePatientRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Patient response
+          schema:
+            $ref: '#/definitions/controllers.PatientResponse'
+      summary: Update patient
       tags:
       - patient
   /patient/create:
@@ -266,6 +409,68 @@ paths:
       summary: Create patient
       tags:
       - patient
+  /regulation:
+    get:
+      description: Get regulation
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Regulation response
+          schema:
+            $ref: '#/definitions/controllers.RegulationListResponse'
+      summary: Get regulation
+      tags:
+      - regulation
+  /regulation/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update regulation
+      parameters:
+      - description: Regulation id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Regulation data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdateRegulationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Regulation response
+          schema:
+            $ref: '#/definitions/controllers.RegulationResponse'
+      summary: Update regulation
+      tags:
+      - regulation
+  /regulation/create:
+    post:
+      consumes:
+      - application/json
+      description: Create regulation
+      parameters:
+      - description: Regulation data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.RegulationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Regulation response
+          schema:
+            $ref: '#/definitions/controllers.RegulationResponse'
+      summary: Create regulation
+      tags:
+      - regulation
   /staff:
     get:
       description: Get staff
@@ -295,6 +500,24 @@ paths:
       tags:
       - staff
   /staff/{id}:
+    delete:
+      description: Delete staff
+      parameters:
+      - description: Staff id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Staff response
+          schema:
+            $ref: '#/definitions/controllers.StaffResponse'
+      summary: Delete staff
+      tags:
+      - staff
     get:
       description: Get staff by id
       parameters:
@@ -311,6 +534,32 @@ paths:
           schema:
             $ref: '#/definitions/controllers.StaffResponse'
       summary: Get staff by id
+      tags:
+      - staff
+    put:
+      consumes:
+      - application/json
+      description: Update staff
+      parameters:
+      - description: Staff id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Staff data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdateStaffRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Staff response
+          schema:
+            $ref: '#/definitions/controllers.StaffResponse'
+      summary: Update staff
       tags:
       - staff
   /staff/create:

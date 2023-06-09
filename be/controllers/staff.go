@@ -24,6 +24,21 @@ type StaffRequest struct {
 	UpdatedBy    *uint     `json:"updated_by"`
 }
 
+type UpdateStaffRequest struct {
+	FullName     string    `json:"full_name"`
+	BirthDate    time.Time `json:"birth_date"`
+	Gender       string    `json:"gender"`
+	Address      string    `json:"address"`
+	IdentityCard string    `json:"identity_card"`
+	PhoneNumber  string    `json:"phone_number"`
+	Email        string    `json:"email"`
+	StaffType    string    `json:"staff_type"`
+	Salary       uint      `json:"salary"`
+	Status       string    `json:"status"`
+	Password     string    `json:"password"`
+	UpdatedBy    *uint     `json:"updated_by"`
+}
+
 type StaffResponse struct {
 	Response
 	Data models.Staff `json:"data"`
@@ -76,6 +91,85 @@ func CreateStaff(c *gin.Context) {
 	})
 }
 
+// @Summary Update staff
+// @Description Update staff
+// @Tags staff
+// @Accept json
+// @Produce json
+// @Param id path int true "Staff id"
+// @Param data body UpdateStaffRequest true "Staff data"
+// @Success 200 {object} StaffResponse "Staff response"
+// @Router /staff/{id} [put]
+func UpdateStaff(c *gin.Context) {
+	id := c.Param("id")
+
+	var input UpdateStaffRequest
+	if err := c.ShouldBind(&input); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	staff, err := models.GetStaffByID(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	updatedStaff := models.Staff{
+		FullName:     input.FullName,
+		BirthDate:    input.BirthDate,
+		Gender:       input.Gender,
+		Address:      input.Address,
+		IdentityCard: input.IdentityCard,
+		PhoneNumber:  input.PhoneNumber,
+		Email:        input.Email,
+		StaffType:    input.StaffType,
+		Salary:       input.Salary,
+		Status:       input.Status,
+		Password:     input.Password,
+		UpdatedBy:    input.UpdatedBy,
+	}
+
+	staff, err = staff.UpdateStaff(updatedStaff)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, StaffResponse{
+		Response: SuccessfulResponse,
+		Data:     *staff,
+	})
+}
+
+// @Summary Delete staff
+// @Description Delete staff
+// @Tags staff
+// @Produce json
+// @Param id path int true "Staff id"
+// @Success 200 {object} StaffResponse "Staff response"
+// @Router /staff/{id} [delete]
+func DeleteStaff(c *gin.Context) {
+	id := c.Param("id")
+
+	staff, err := models.GetStaffByID(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	staff, err = staff.DeleteStaff()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, StaffResponse{
+		Response: SuccessfulResponse,
+		Data:     *staff,
+	})
+}
+
 // @Summary Get staff
 // @Description Get staff
 // @Tags staff
@@ -86,7 +180,8 @@ func CreateStaff(c *gin.Context) {
 // @Success 200 {object} StaffListResponse "Staff response"
 // @Router /staff [get]
 func GetStaff(c *gin.Context) {
-	staffs, err := models.GetStaff(query.Paginate(c), query.DebounceSearch("HoTen", c.Query("name")))
+	staffs, err := models.GetStaff(query.Paginate(c),
+		query.StringSearch("HoTen", c.Query("name")))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
