@@ -5,7 +5,7 @@ import { Avatar, Tooltip } from 'antd';
 
 const HeaderBar = ({ title, icon, image, name, role }) => {
   return (
-    <div className="flex justify-center items-center item h-[80px] w-[1000px] px-5 py-2">
+    <div className="flex justify-center items-center item h-[80px] w-[1000px] px-5 py-2 shadow-md shadow-neutral-500/50">
       <div className="flex items-center gap-4 flex-1">
         <FontAwesomeIcon icon={icon} className="w-8 h-8 text-primary-200" />
         <h2 className="font-bold text-[28px]">{title}</h2>
@@ -20,7 +20,7 @@ const HeaderBar = ({ title, icon, image, name, role }) => {
             <FontAwesomeIcon icon={faBell} fontSize={20} className="w-[20px] text-primary-200" />
           </Tooltip>
           <Tooltip
-            title="Dark mode"
+            title="Switch to dark mode"
             placement="bottom"
             className="p-[6px] rounded-[12px] shadow-md shadow-neutral-500/50 cursor-pointer"
           >
@@ -40,3 +40,13 @@ const HeaderBar = ({ title, icon, image, name, role }) => {
 };
 
 export default HeaderBar;
+
+/*
+<HeaderBar title="Tổng quan" icon={faChartSimple} image="" name="Nguyen Long Vu" role="Bac si" />
+<HeaderBar title="Danh sách đợi khám" icon={faUserClock} image="" name="Nguyen Long Vu" role="Bac si" />
+<HeaderBar title="Danh sách khám" icon={faRectangleList} image="" name="Nguyen Long Vu" role="Bac si" />
+<HeaderBar title="Bệnh nhân" icon={faHospitalUser} image="" name="Nguyen Long Vu" role="Bac si" />
+<HeaderBar title="Kho thuốc" icon={faPills} image="" name="Nguyen Long Vu" role="Bac si" />
+<HeaderBar title="Hoá đơn" icon={faFileInvoiceDollar} image="" name="Nguyen Long Vu" role="Bac si" />
+<HeaderBar title="Quản lý" icon={faChalkboardUser} image="" name="Nguyen Long Vu" role="Bac si" />
+*/
