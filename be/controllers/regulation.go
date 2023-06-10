@@ -109,9 +109,9 @@ func UpdateRegulation(c *gin.Context) {
 // @Description Delete regulation
 // @Tags regulation
 // @Produce json
-// @Param id path int true "Staff id"
-// @Success 200 {object} StaffResponse "Staff response"
-// @Router /staff/{id} [delete]
+// @Param id path int true "Regulation id"
+// @Success 200 {object} RegulationResponse "Regulation response"
+// @Router /regulation/{id} [delete]
 func DeleteRegulation(c *gin.Context) {
 	id := c.Param("id")
 

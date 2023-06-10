@@ -291,6 +291,33 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Delete regulation",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "regulation"
+                ],
+                "summary": "Delete regulation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Regulation id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Regulation response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.RegulationResponse"
+                        }
+                    }
+                }
             }
         },
         "/staff": {
@@ -578,7 +605,26 @@ const docTemplate = `{
             }
         },
         "controllers.RegulationRequest": {
-            "type": "object"
+            "type": "object",
+            "required": [
+                "name",
+                "updated_by",
+                "value"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
         },
         "controllers.RegulationResponse": {
             "type": "object",
@@ -721,7 +767,10 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "value": {
-                    "$ref": "#/definitions/datatypes.JSON"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
@@ -765,9 +814,6 @@ const docTemplate = `{
                     "type": "integer"
                 }
             }
-        },
-        "datatypes.JSON": {
-            "type": "object"
         },
         "models.Patient": {
             "type": "object",
@@ -823,7 +869,10 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "value": {
-                    "$ref": "#/definitions/datatypes.JSON"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

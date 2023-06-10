@@ -75,6 +75,19 @@ definitions:
         type: string
     type: object
   controllers.RegulationRequest:
+    properties:
+      name:
+        type: string
+      updated_by:
+        type: integer
+      value:
+        items:
+          type: integer
+        type: array
+    required:
+    - name
+    - updated_by
+    - value
     type: object
   controllers.RegulationResponse:
     properties:
@@ -173,7 +186,9 @@ definitions:
       updated_by:
         type: integer
       value:
-        $ref: '#/definitions/datatypes.JSON'
+        items:
+          type: integer
+        type: array
     type: object
   controllers.UpdateStaffRequest:
     properties:
@@ -201,8 +216,6 @@ definitions:
         type: string
       updated_by:
         type: integer
-    type: object
-  datatypes.JSON:
     type: object
   models.Patient:
     properties:
@@ -240,7 +253,9 @@ definitions:
       updated_by:
         type: integer
       value:
-        $ref: '#/definitions/datatypes.JSON'
+        items:
+          type: integer
+        type: array
     type: object
   models.Staff:
     properties:
@@ -423,6 +438,24 @@ paths:
       tags:
       - regulation
   /regulation/{id}:
+    delete:
+      description: Delete regulation
+      parameters:
+      - description: Regulation id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Regulation response
+          schema:
+            $ref: '#/definitions/controllers.RegulationResponse'
+      summary: Delete regulation
+      tags:
+      - regulation
     put:
       consumes:
       - application/json

@@ -33,11 +33,12 @@ func (Staff) TableName() string {
 }
 
 func (staff *Staff) BeforeCreate(tx *gorm.DB) error {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(staff.Password), bcrypt.DefaultCost)
+	hashedPassword, err := hashPassword(staff.Password)
 	if err != nil {
 		return err
 	}
-	staff.Password = string(hashedPassword)
+
+	staff.Password = hashedPassword
 
 	return nil
 }
@@ -51,17 +52,16 @@ func (staff *Staff) CreateStaff() (*Staff, error) {
 	return staff, nil
 }
 
-func (staff *Staff) BeforeUpdate(tx *gorm.DB) (err error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(staff.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
-	staff.Password = string(hashedPassword)
-
-	return nil
-}
-
 func (staff *Staff) UpdateStaff(updatedStaff Staff) (*Staff, error) {
+	if updatedStaff.Password != "" {
+		hashedPassword, err := hashPassword(updatedStaff.Password)
+		if err != nil {
+			return nil, err
+		}
+
+		updatedStaff.Password = hashedPassword
+	}
+
 	err := DB.Model(&staff).Updates(updatedStaff).Error
 	if err != nil {
 		return nil, err
@@ -105,4 +105,13 @@ func GetStaffByID(id string) (*Staff, error) {
 	}
 
 	return staff, nil
+}
+
+func hashPassword(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+
+	return string(hashedPassword), nil
 }
