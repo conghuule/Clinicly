@@ -49,6 +49,250 @@ const docTemplate = `{
                 }
             }
         },
+        "/patient": {
+            "get": {
+                "description": "Get patient",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patient"
+                ],
+                "summary": "Get patient",
+                "responses": {
+                    "200": {
+                        "description": "Patient response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.PatientListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/patient/create": {
+            "post": {
+                "description": "Create patient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patient"
+                ],
+                "summary": "Create patient",
+                "parameters": [
+                    {
+                        "description": "Patient data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.PatientRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Patient response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.PatientResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/patient/{id}": {
+            "get": {
+                "description": "Get patient by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patient"
+                ],
+                "summary": "Get patient by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Patient id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Patient response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.PatientResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update patient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patient"
+                ],
+                "summary": "Update patient",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Patient id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Patient data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UpdatePatientRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Patient response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.PatientResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete patient",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patient"
+                ],
+                "summary": "Delete patient",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Patient id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Patient response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.PatientResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/regulation": {
+            "get": {
+                "description": "Get regulation",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "regulation"
+                ],
+                "summary": "Get regulation",
+                "responses": {
+                    "200": {
+                        "description": "Regulation response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.RegulationListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/regulation/create": {
+            "post": {
+                "description": "Create regulation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "regulation"
+                ],
+                "summary": "Create regulation",
+                "parameters": [
+                    {
+                        "description": "Regulation data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.RegulationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Regulation response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.RegulationResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/regulation/{id}": {
+            "put": {
+                "description": "Update regulation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "regulation"
+                ],
+                "summary": "Update regulation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Regulation id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Regulation data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UpdateRegulationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Regulation response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.RegulationResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/staff": {
             "get": {
                 "description": "Get staff",
@@ -59,11 +303,33 @@ const docTemplate = `{
                     "staff"
                 ],
                 "summary": "Get staff",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Staff name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Staff response",
                         "schema": {
-                            "$ref": "#/definitions/controllers.StaffResponse"
+                            "$ref": "#/definitions/controllers.StaffListResponse"
                         }
                     }
                 }
@@ -130,6 +396,72 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "put": {
+                "description": "Update staff",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "staff"
+                ],
+                "summary": "Update staff",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Staff id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Staff data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UpdateStaffRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Staff response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.StaffResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete staff",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "staff"
+                ],
+                "summary": "Delete staff",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Staff id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Staff response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.StaffResponse"
+                        }
+                    }
+                }
             }
         }
     },
@@ -152,7 +484,129 @@ const docTemplate = `{
         "controllers.LoginResponse": {
             "type": "object",
             "properties": {
-                "token": {
+                "data": {
+                    "$ref": "#/definitions/models.User"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.PatientListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Patient"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.PatientRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "birth_date",
+                "full_name",
+                "gender",
+                "identity_card",
+                "phone_number"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "birth_date": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "identity_card": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
+                }
+            }
+        },
+        "controllers.PatientResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/models.Patient"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.RegulationListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Regulation"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.RegulationRequest": {
+            "type": "object"
+        },
+        "controllers.RegulationResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/models.Regulation"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.StaffListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Staff"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 }
             }
@@ -203,6 +657,9 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
                 }
             }
         },
@@ -210,16 +667,163 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Staff"
-                    }
+                    "$ref": "#/definitions/models.Staff"
                 },
                 "message": {
                     "type": "string"
                 },
                 "status": {
                     "type": "string"
+                }
+            }
+        },
+        "controllers.UpdatePatientRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "birth_date",
+                "full_name",
+                "gender",
+                "identity_card",
+                "phone_number"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "birth_date": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "identity_card": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
+                }
+            }
+        },
+        "controllers.UpdateRegulationRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
+                },
+                "value": {
+                    "$ref": "#/definitions/datatypes.JSON"
+                }
+            }
+        },
+        "controllers.UpdateStaffRequest": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "birth_date": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "identity_card": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "salary": {
+                    "type": "integer"
+                },
+                "staff_type": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
+                }
+            }
+        },
+        "datatypes.JSON": {
+            "type": "object"
+        },
+        "models.Patient": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "birth_date": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "identity_card": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Regulation": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
+                },
+                "value": {
+                    "$ref": "#/definitions/datatypes.JSON"
                 }
             }
         },
@@ -250,9 +854,6 @@ const docTemplate = `{
                 "identity_card": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string"
-                },
                 "phone_number": {
                     "type": "string"
                 },
@@ -270,6 +871,20 @@ const docTemplate = `{
                 },
                 "updated_by": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "role": {
+                    "type": "string"
                 }
             }
         }

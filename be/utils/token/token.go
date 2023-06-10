@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -12,9 +11,7 @@ import (
 )
 
 func GenerateToken(user_id uint) (string, error) {
-
 	token_lifespan, err := strconv.Atoi(os.Getenv("TOKEN_HOUR_LIFESPAN"))
-
 	if err != nil {
 		return "", err
 	}
@@ -29,11 +26,9 @@ func GenerateToken(user_id uint) (string, error) {
 }
 
 func ExtractToken(c *gin.Context) (*jwt.Token, error) {
-	tokenString := ""
-	bearerToken := c.GetHeader("Authorization")
-
-	if len(strings.Split(bearerToken, " ")) == 2 {
-		tokenString = strings.Split(bearerToken, " ")[1]
+	tokenString, err := c.Cookie("Authorization")
+	if err != nil {
+		return nil, err
 	}
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

@@ -22,7 +22,7 @@ type Staff struct {
 	StaffType    string    `gorm:"column:LoaiNV" json:"staff_type"`
 	Salary       uint      `gorm:"column:MucLuong" json:"salary"`
 	Status       string    `gorm:"column:TrangThai" json:"status"`
-	Password     string    `gorm:"column:Password" json:"password"`
+	Password     string    `gorm:"column:Password" json:"-"`
 	CreatedAt    time.Time `gorm:"column:NgayTao" json:"created_at"`
 	UpdatedAt    time.Time `gorm:"column:NgayCapNhat" json:"updated_at"`
 	UpdatedBy    *uint     `gorm:"column:CapNhatBoi" json:"updated_by"`
@@ -34,7 +34,6 @@ func (Staff) TableName() string {
 
 func (staff *Staff) BeforeCreate(tx *gorm.DB) error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(staff.Password), bcrypt.DefaultCost)
-
 	if err != nil {
 		return err
 	}
@@ -45,19 +44,47 @@ func (staff *Staff) BeforeCreate(tx *gorm.DB) error {
 
 func (staff *Staff) CreateStaff() (*Staff, error) {
 	err := DB.Create(&staff).Error
-
 	if err != nil {
 		return nil, err
 	}
 
 	return staff, nil
-
 }
 
-func GetStaff() ([]Staff, error) {
+func (staff *Staff) BeforeUpdate(tx *gorm.DB) (err error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(staff.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	staff.Password = string(hashedPassword)
+
+	return nil
+}
+
+func (staff *Staff) UpdateStaff(updatedStaff Staff) (*Staff, error) {
+	err := DB.Model(&staff).Updates(updatedStaff).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return staff, nil
+}
+
+func (staff *Staff) DeleteStaff() (*Staff, error) {
+	err := DB.First(&staff).Error
+	if err != nil {
+		return nil, err
+	}
+
+	DB.Delete(&staff)
+
+	return staff, nil
+}
+
+func GetStaff(query ...func(*gorm.DB) *gorm.DB) ([]Staff, error) {
 	staffs := []Staff{}
 
-	err := DB.Find(&staffs).Error
+	err := DB.Scopes(query...).Find(&staffs).Error
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +99,7 @@ func GetStaffByID(id string) (*Staff, error) {
 	}
 	staff := &Staff{}
 
-	err = DB.Where(Staff{ID: uint(ID)}).Find(staff).Error
+	err = DB.Where(Staff{ID: uint(ID)}).First(staff).Error
 	if err != nil {
 		return nil, err
 	}

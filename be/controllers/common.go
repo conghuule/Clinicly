@@ -11,10 +11,10 @@ var SuccessfulResponse = Response{
 	Message: "",
 }
 
-func ErrorResponse(err error) Response {
+func ErrorResponse(err string) Response {
 	return Response{
 		Status:  "error",
 		Data:    nil,
-		Message: err.Error(),
+		Message: err,
 	}
 }
