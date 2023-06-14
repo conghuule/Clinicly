@@ -13,9 +13,9 @@ func StringSearch(field, value string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-func QueryByDate(field string, date string) func(db *gorm.DB) *gorm.DB {
+func QueryByDate(field string, date time.Time) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		startDate, _ := time.Parse("02-01-2006", date)
+		startDate := date
 		endDate := startDate.Add(time.Hour * 24 * time.Duration(1))
 
 		return db.Where(fmt.Sprintf(`"%s" BETWEEN ? AND ?`, field), startDate, endDate)

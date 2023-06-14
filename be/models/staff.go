@@ -19,7 +19,7 @@ type Staff struct {
 	IdentityCard string    `gorm:"column:CCCD" json:"identity_card"`
 	PhoneNumber  string    `gorm:"column:SDT" json:"phone_number"`
 	Email        string    `gorm:"column:Email" json:"email"`
-	StaffType    string    `gorm:"column:LoaiNV" json:"staff_type"`
+	Role         string    `gorm:"column:LoaiNV" json:"role"`
 	Salary       uint      `gorm:"column:MucLuong" json:"salary"`
 	Status       string    `gorm:"column:TrangThai" json:"status"`
 	Password     string    `gorm:"column:Password" json:"-"`
@@ -33,16 +33,17 @@ func (Staff) TableName() string {
 }
 
 func (staff *Staff) BeforeCreate(tx *gorm.DB) error {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(staff.Password), bcrypt.DefaultCost)
+	hashedPassword, err := hashPassword(staff.Password)
 	if err != nil {
 		return err
 	}
-	staff.Password = string(hashedPassword)
+
+	staff.Password = hashedPassword
 
 	return nil
 }
 
-func (staff *Staff) CreateStaff() (*Staff, error) {
+func (staff *Staff) Create() (*Staff, error) {
 	err := DB.Create(&staff).Error
 	if err != nil {
 		return nil, err
@@ -51,17 +52,16 @@ func (staff *Staff) CreateStaff() (*Staff, error) {
 	return staff, nil
 }
 
-func (staff *Staff) BeforeUpdate(tx *gorm.DB) (err error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(staff.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return err
+func (staff *Staff) Update(updatedStaff Staff) (*Staff, error) {
+	if updatedStaff.Password != "" {
+		hashedPassword, err := hashPassword(updatedStaff.Password)
+		if err != nil {
+			return nil, err
+		}
+
+		updatedStaff.Password = hashedPassword
 	}
-	staff.Password = string(hashedPassword)
 
-	return nil
-}
-
-func (staff *Staff) UpdateStaff(updatedStaff Staff) (*Staff, error) {
 	err := DB.Model(&staff).Updates(updatedStaff).Error
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (staff *Staff) UpdateStaff(updatedStaff Staff) (*Staff, error) {
 	return staff, nil
 }
 
-func (staff *Staff) DeleteStaff() (*Staff, error) {
+func (staff *Staff) Delete() (*Staff, error) {
 	err := DB.First(&staff).Error
 	if err != nil {
 		return nil, err
@@ -105,4 +105,13 @@ func GetStaffByID(id string) (*Staff, error) {
 	}
 
 	return staff, nil
+}
+
+func hashPassword(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+
+	return string(hashedPassword), nil
 }

@@ -75,6 +75,19 @@ definitions:
         type: string
     type: object
   controllers.RegulationRequest:
+    properties:
+      name:
+        type: string
+      updated_by:
+        type: integer
+      value:
+        items:
+          type: integer
+        type: array
+    required:
+    - name
+    - updated_by
+    - value
     type: object
   controllers.RegulationResponse:
     properties:
@@ -107,19 +120,19 @@ definitions:
       full_name:
         type: string
       gender:
-        type: string
+        $ref: '#/definitions/types.Gender'
       identity_card:
         type: string
       password:
         type: string
       phone_number:
         type: string
+      role:
+        $ref: '#/definitions/types.Role'
       salary:
         type: integer
-      staff_type:
-        type: string
       status:
-        type: string
+        $ref: '#/definitions/types.StaffStatus'
       updated_by:
         type: integer
     required:
@@ -131,12 +144,41 @@ definitions:
     - identity_card
     - password
     - phone_number
-    - staff_type
+    - role
     type: object
   controllers.StaffResponse:
     properties:
       data:
         $ref: '#/definitions/models.Staff'
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  controllers.TicketListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Ticket'
+        type: array
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  controllers.TicketRequest:
+    properties:
+      patient_id:
+        type: integer
+      updated_by:
+        type: integer
+    required:
+    - patient_id
+    type: object
+  controllers.TicketResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Ticket'
       message:
         type: string
       status:
@@ -173,7 +215,9 @@ definitions:
       updated_by:
         type: integer
       value:
-        $ref: '#/definitions/datatypes.JSON'
+        items:
+          type: integer
+        type: array
     type: object
   controllers.UpdateStaffRequest:
     properties:
@@ -186,23 +230,21 @@ definitions:
       full_name:
         type: string
       gender:
-        type: string
+        $ref: '#/definitions/types.Gender'
       identity_card:
         type: string
       password:
         type: string
       phone_number:
         type: string
+      role:
+        $ref: '#/definitions/types.Role'
       salary:
         type: integer
-      staff_type:
-        type: string
       status:
-        type: string
+        $ref: '#/definitions/types.StaffStatus'
       updated_by:
         type: integer
-    type: object
-  datatypes.JSON:
     type: object
   models.Patient:
     properties:
@@ -240,7 +282,9 @@ definitions:
       updated_by:
         type: integer
       value:
-        $ref: '#/definitions/datatypes.JSON'
+        items:
+          type: integer
+        type: array
     type: object
   models.Staff:
     properties:
@@ -262,10 +306,31 @@ definitions:
         type: string
       phone_number:
         type: string
+      role:
+        type: string
       salary:
         type: integer
-      staff_type:
+      status:
         type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: integer
+    type: object
+  models.Ticket:
+    properties:
+      created_at:
+        type: string
+      date:
+        type: string
+      id:
+        type: integer
+      number:
+        type: integer
+      patient:
+        $ref: '#/definitions/models.Patient'
+      patient_id:
+        type: integer
       status:
         type: string
       updated_at:
@@ -282,6 +347,36 @@ definitions:
       role:
         type: string
     type: object
+  types.Gender:
+    enum:
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - Male
+    - Female
+    - Other
+  types.Role:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - Receptionist
+    - Doctor
+    - Pharmacist
+    - Admin
+  types.StaffStatus:
+    enum:
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - Working
+    - Quit
 host: localhost:8080
 info:
   contact: {}
@@ -322,6 +417,27 @@ paths:
           schema:
             $ref: '#/definitions/controllers.PatientListResponse'
       summary: Get patient
+      tags:
+      - patient
+    post:
+      consumes:
+      - application/json
+      description: Create patient
+      parameters:
+      - description: Patient data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.PatientRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Patient response
+          schema:
+            $ref: '#/definitions/controllers.PatientResponse'
+      summary: Create patient
       tags:
       - patient
   /patient/{id}:
@@ -387,28 +503,6 @@ paths:
       summary: Update patient
       tags:
       - patient
-  /patient/create:
-    post:
-      consumes:
-      - application/json
-      description: Create patient
-      parameters:
-      - description: Patient data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/controllers.PatientRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Patient response
-          schema:
-            $ref: '#/definitions/controllers.PatientResponse'
-      summary: Create patient
-      tags:
-      - patient
   /regulation:
     get:
       description: Get regulation
@@ -422,7 +516,46 @@ paths:
       summary: Get regulation
       tags:
       - regulation
+    post:
+      consumes:
+      - application/json
+      description: Create regulation
+      parameters:
+      - description: Regulation data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.RegulationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Regulation response
+          schema:
+            $ref: '#/definitions/controllers.RegulationResponse'
+      summary: Create regulation
+      tags:
+      - regulation
   /regulation/{id}:
+    delete:
+      description: Delete regulation
+      parameters:
+      - description: Regulation id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Regulation response
+          schema:
+            $ref: '#/definitions/controllers.RegulationResponse'
+      summary: Delete regulation
+      tags:
+      - regulation
     put:
       consumes:
       - application/json
@@ -447,28 +580,6 @@ paths:
           schema:
             $ref: '#/definitions/controllers.RegulationResponse'
       summary: Update regulation
-      tags:
-      - regulation
-  /regulation/create:
-    post:
-      consumes:
-      - application/json
-      description: Create regulation
-      parameters:
-      - description: Regulation data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/controllers.RegulationRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Regulation response
-          schema:
-            $ref: '#/definitions/controllers.RegulationResponse'
-      summary: Create regulation
       tags:
       - regulation
   /staff:
@@ -497,6 +608,27 @@ paths:
           schema:
             $ref: '#/definitions/controllers.StaffListResponse'
       summary: Get staff
+      tags:
+      - staff
+    post:
+      consumes:
+      - application/json
+      description: Create staff
+      parameters:
+      - description: Staff data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.StaffRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Staff response
+          schema:
+            $ref: '#/definitions/controllers.StaffResponse'
+      summary: Create staff
       tags:
       - staff
   /staff/{id}:
@@ -562,26 +694,86 @@ paths:
       summary: Update staff
       tags:
       - staff
-  /staff/create:
-    post:
-      consumes:
+  /staff/enums:
+    get:
+      description: Get staff enums
+      produces:
       - application/json
-      description: Create staff
+      responses: {}
+      summary: Get staff enums
+      tags:
+      - staff
+  /ticket:
+    get:
+      description: Get ticket
       parameters:
-      - description: Staff data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/controllers.StaffRequest'
+      - default: 1
+        description: Page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: Staff response
+          description: Ticket response
           schema:
-            $ref: '#/definitions/controllers.StaffResponse'
-      summary: Create staff
+            $ref: '#/definitions/controllers.TicketListResponse'
+      summary: Get ticket
       tags:
-      - staff
+      - ticket
+    post:
+      consumes:
+      - application/json
+      description: Create waiting ticket
+      parameters:
+      - description: Waiting ticket data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.TicketRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Waiting ticket response
+          schema:
+            $ref: '#/definitions/controllers.TicketListResponse'
+      summary: Create waiting ticket
+      tags:
+      - ticket
+  /ticket/{id}:
+    delete:
+      description: Delete ticket
+      parameters:
+      - description: Ticket id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Ticket response
+          schema:
+            $ref: '#/definitions/controllers.TicketResponse'
+      summary: Delete ticket
+      tags:
+      - ticket
+  /ticket/enums:
+    get:
+      description: Get ticket enums
+      produces:
+      - application/json
+      responses: {}
+      summary: Get ticket enums
+      tags:
+      - ticket
 swagger: "2.0"

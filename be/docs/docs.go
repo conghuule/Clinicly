@@ -67,9 +67,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/patient/create": {
+            },
             "post": {
                 "description": "Create patient",
                 "consumes": [
@@ -216,9 +214,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/regulation/create": {
+            },
             "post": {
                 "description": "Create regulation",
                 "consumes": [
@@ -291,6 +287,33 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Delete regulation",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "regulation"
+                ],
+                "summary": "Delete regulation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Regulation id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Regulation response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.RegulationResponse"
+                        }
+                    }
+                }
             }
         },
         "/staff": {
@@ -333,9 +356,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/staff/create": {
+            },
             "post": {
                 "description": "Create staff",
                 "consumes": [
@@ -367,6 +388,19 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/staff/enums": {
+            "get": {
+                "description": "Get staff enums",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "staff"
+                ],
+                "summary": "Get staff enums",
+                "responses": {}
             }
         },
         "/staff/{id}": {
@@ -459,6 +493,116 @@ const docTemplate = `{
                         "description": "Staff response",
                         "schema": {
                             "$ref": "#/definitions/controllers.StaffResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/ticket": {
+            "get": {
+                "description": "Get ticket",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ticket"
+                ],
+                "summary": "Get ticket",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ticket response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.TicketListResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create waiting ticket",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ticket"
+                ],
+                "summary": "Create waiting ticket",
+                "parameters": [
+                    {
+                        "description": "Waiting ticket data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.TicketRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Waiting ticket response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.TicketListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/ticket/enums": {
+            "get": {
+                "description": "Get ticket enums",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ticket"
+                ],
+                "summary": "Get ticket enums",
+                "responses": {}
+            }
+        },
+        "/ticket/{id}": {
+            "delete": {
+                "description": "Delete ticket",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ticket"
+                ],
+                "summary": "Delete ticket",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Ticket id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ticket response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.TicketResponse"
                         }
                     }
                 }
@@ -578,7 +722,26 @@ const docTemplate = `{
             }
         },
         "controllers.RegulationRequest": {
-            "type": "object"
+            "type": "object",
+            "required": [
+                "name",
+                "updated_by",
+                "value"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
         },
         "controllers.RegulationResponse": {
             "type": "object",
@@ -622,7 +785,7 @@ const docTemplate = `{
                 "identity_card",
                 "password",
                 "phone_number",
-                "staff_type"
+                "role"
             ],
             "properties": {
                 "address": {
@@ -638,7 +801,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "gender": {
-                    "type": "string"
+                    "$ref": "#/definitions/types.Gender"
                 },
                 "identity_card": {
                     "type": "string"
@@ -649,14 +812,14 @@ const docTemplate = `{
                 "phone_number": {
                     "type": "string"
                 },
+                "role": {
+                    "$ref": "#/definitions/types.Role"
+                },
                 "salary": {
                     "type": "integer"
                 },
-                "staff_type": {
-                    "type": "string"
-                },
                 "status": {
-                    "type": "string"
+                    "$ref": "#/definitions/types.StaffStatus"
                 },
                 "updated_by": {
                     "type": "integer"
@@ -668,6 +831,51 @@ const docTemplate = `{
             "properties": {
                 "data": {
                     "$ref": "#/definitions/models.Staff"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.TicketListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Ticket"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.TicketRequest": {
+            "type": "object",
+            "required": [
+                "patient_id"
+            ],
+            "properties": {
+                "patient_id": {
+                    "type": "integer"
+                },
+                "updated_by": {
+                    "type": "integer"
+                }
+            }
+        },
+        "controllers.TicketResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/models.Ticket"
                 },
                 "message": {
                     "type": "string"
@@ -721,7 +929,10 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "value": {
-                    "$ref": "#/definitions/datatypes.JSON"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
@@ -741,7 +952,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "gender": {
-                    "type": "string"
+                    "$ref": "#/definitions/types.Gender"
                 },
                 "identity_card": {
                     "type": "string"
@@ -752,22 +963,19 @@ const docTemplate = `{
                 "phone_number": {
                     "type": "string"
                 },
+                "role": {
+                    "$ref": "#/definitions/types.Role"
+                },
                 "salary": {
                     "type": "integer"
                 },
-                "staff_type": {
-                    "type": "string"
-                },
                 "status": {
-                    "type": "string"
+                    "$ref": "#/definitions/types.StaffStatus"
                 },
                 "updated_by": {
                     "type": "integer"
                 }
             }
-        },
-        "datatypes.JSON": {
-            "type": "object"
         },
         "models.Patient": {
             "type": "object",
@@ -823,7 +1031,10 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "value": {
-                    "$ref": "#/definitions/datatypes.JSON"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
@@ -857,11 +1068,43 @@ const docTemplate = `{
                 "phone_number": {
                     "type": "string"
                 },
+                "role": {
+                    "type": "string"
+                },
                 "salary": {
                     "type": "integer"
                 },
-                "staff_type": {
+                "status": {
                     "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Ticket": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "number": {
+                    "type": "integer"
+                },
+                "patient": {
+                    "$ref": "#/definitions/models.Patient"
+                },
+                "patient_id": {
+                    "type": "integer"
                 },
                 "status": {
                     "type": "string"
@@ -887,6 +1130,45 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "types.Gender": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3
+            ],
+            "x-enum-varnames": [
+                "Male",
+                "Female",
+                "Other"
+            ]
+        },
+        "types.Role": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-varnames": [
+                "Receptionist",
+                "Doctor",
+                "Pharmacist",
+                "Admin"
+            ]
+        },
+        "types.StaffStatus": {
+            "type": "integer",
+            "enum": [
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "Working",
+                "Quit"
+            ]
         }
     }
 }`

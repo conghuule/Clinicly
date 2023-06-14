@@ -29,4 +29,6 @@ func ConnectDB() {
 	} else {
 		fmt.Println("We are connected to the database")
 	}
+
+	initAdminAccount()
 }
