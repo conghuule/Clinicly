@@ -16,11 +16,23 @@ func (User) TableName() string {
 func GetUserByEmail(email string) (*User, error) {
 	user := &User{}
 
-	err := DB.Where(&User{Email: email}).Find(&user).Error
+	err := DB.Where(&User{Email: email}).First(&user).Error
 
 	if err != nil {
 		return nil, err
 	}
 
 	return user, nil
+}
+
+func initAdminAccount() {
+	var adminAccount = Staff{
+		Email:    "admin",
+		Password: "admin",
+	}
+
+	if _, err := GetUserByEmail(adminAccount.Email); err != nil {
+		adminAccount.Create()
+		return
+	}
 }

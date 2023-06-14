@@ -37,7 +37,7 @@ type RegulationListResponse struct {
 // @Produce json
 // @Param data body RegulationRequest true "Regulation data"
 // @Success 200 {object} RegulationResponse "Regulation response"
-// @Router /regulation/create [post]
+// @Router /regulation [post]
 func CreateRegulation(c *gin.Context) {
 	var input RegulationRequest
 	if err := c.ShouldBind(&input); err != nil {

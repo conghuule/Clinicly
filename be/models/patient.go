@@ -26,7 +26,7 @@ func (Patient) TableName() string {
 	return TableNamePatient
 }
 
-func (patient *Patient) CreatePatient() (*Patient, error) {
+func (patient *Patient) Create() (*Patient, error) {
 	err := DB.Create(&patient).Error
 	if err != nil {
 		return nil, err
@@ -35,7 +35,7 @@ func (patient *Patient) CreatePatient() (*Patient, error) {
 	return patient, nil
 }
 
-func (patient *Patient) UpdatePatient(updatedStaff Patient) (*Patient, error) {
+func (patient *Patient) Update(updatedStaff Patient) (*Patient, error) {
 	err := DB.Model(&patient).Updates(updatedStaff).Error
 	if err != nil {
 		return nil, err
@@ -44,7 +44,7 @@ func (patient *Patient) UpdatePatient(updatedStaff Patient) (*Patient, error) {
 	return patient, nil
 }
 
-func (patient *Patient) DeletePatient() (*Patient, error) {
+func (patient *Patient) Delete() (*Patient, error) {
 	err := DB.First(&patient).Error
 	if err != nil {
 		return nil, err

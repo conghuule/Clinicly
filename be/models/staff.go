@@ -19,7 +19,7 @@ type Staff struct {
 	IdentityCard string    `gorm:"column:CCCD" json:"identity_card"`
 	PhoneNumber  string    `gorm:"column:SDT" json:"phone_number"`
 	Email        string    `gorm:"column:Email" json:"email"`
-	StaffType    string    `gorm:"column:LoaiNV" json:"staff_type"`
+	Role         string    `gorm:"column:LoaiNV" json:"role"`
 	Salary       uint      `gorm:"column:MucLuong" json:"salary"`
 	Status       string    `gorm:"column:TrangThai" json:"status"`
 	Password     string    `gorm:"column:Password" json:"-"`
@@ -43,7 +43,7 @@ func (staff *Staff) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
-func (staff *Staff) CreateStaff() (*Staff, error) {
+func (staff *Staff) Create() (*Staff, error) {
 	err := DB.Create(&staff).Error
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (staff *Staff) CreateStaff() (*Staff, error) {
 	return staff, nil
 }
 
-func (staff *Staff) UpdateStaff(updatedStaff Staff) (*Staff, error) {
+func (staff *Staff) Update(updatedStaff Staff) (*Staff, error) {
 	if updatedStaff.Password != "" {
 		hashedPassword, err := hashPassword(updatedStaff.Password)
 		if err != nil {
@@ -70,7 +70,7 @@ func (staff *Staff) UpdateStaff(updatedStaff Staff) (*Staff, error) {
 	return staff, nil
 }
 
-func (staff *Staff) DeleteStaff() (*Staff, error) {
+func (staff *Staff) Delete() (*Staff, error) {
 	err := DB.First(&staff).Error
 	if err != nil {
 		return nil, err

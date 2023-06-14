@@ -4,9 +4,9 @@ import (
 	"time"
 )
 
-const TableNameTicket = "PhieuDoiKham"
+const TableNameWaitingTicket = "PhieuDoiKham"
 
-type Ticket struct {
+type WaitingTicket struct {
 	ListID    *uint     `gorm:"column:MaDS" json:"list_id"`
 	PatientID *uint     `gorm:"column:MaBN" json:"patient_id"`
 	No        uint      `gorm:"column:STT" json:"no"`
@@ -16,12 +16,12 @@ type Ticket struct {
 	UpdatedBy *uint     `gorm:"column:CapNhatBoi" json:"updated_by"`
 }
 
-func (Ticket) TableName() string {
-	return TableNameTicket
+func (WaitingTicket) TableName() string {
+	return TableNameWaitingTicket
 }
 
-func GetTicketList() []Ticket {
-	Tickets := []Ticket{}
+func GetTicketList() []WaitingTicket {
+	Tickets := []WaitingTicket{}
 
 	DB.Find(&Tickets)
 

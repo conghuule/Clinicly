@@ -11,7 +11,7 @@ func addPatientRoute(r *gin.RouterGroup) {
 
 	group.GET("", controllers.GetPatient)
 	group.GET(":id", controllers.GetPatientByID)
-	group.POST("create", controllers.CreatePatient)
+	group.POST("", controllers.CreatePatient)
 	group.PUT(":id", controllers.UpdatePatient)
 	group.DELETE(":id", controllers.DeletePatient)
 }

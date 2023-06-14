@@ -10,8 +10,9 @@ func addStaffRoute(r *gin.RouterGroup) {
 	group := r.Group("staff")
 
 	group.GET("", controllers.GetStaff)
+	group.GET("enums", controllers.GetStaffEnums)
 	group.GET(":id", controllers.GetStaffByID)
-	group.POST("create", controllers.CreateStaff)
+	group.POST("", controllers.CreateStaff)
 	group.PUT(":id", controllers.UpdateStaff)
 	group.DELETE(":id", controllers.DeleteStaff)
 }

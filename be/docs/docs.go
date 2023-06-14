@@ -67,9 +67,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/patient/create": {
+            },
             "post": {
                 "description": "Create patient",
                 "consumes": [
@@ -216,9 +214,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/regulation/create": {
+            },
             "post": {
                 "description": "Create regulation",
                 "consumes": [
@@ -360,9 +356,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/staff/create": {
+            },
             "post": {
                 "description": "Create staff",
                 "consumes": [
@@ -394,6 +388,19 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/staff/enums": {
+            "get": {
+                "description": "Get staff enums",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "staff"
+                ],
+                "summary": "Get staff enums",
+                "responses": {}
             }
         },
         "/staff/{id}": {
@@ -668,7 +675,7 @@ const docTemplate = `{
                 "identity_card",
                 "password",
                 "phone_number",
-                "staff_type"
+                "role"
             ],
             "properties": {
                 "address": {
@@ -684,7 +691,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "gender": {
-                    "type": "string"
+                    "$ref": "#/definitions/types.Gender"
                 },
                 "identity_card": {
                     "type": "string"
@@ -695,14 +702,14 @@ const docTemplate = `{
                 "phone_number": {
                     "type": "string"
                 },
+                "role": {
+                    "$ref": "#/definitions/types.Role"
+                },
                 "salary": {
                     "type": "integer"
                 },
-                "staff_type": {
-                    "type": "string"
-                },
                 "status": {
-                    "type": "string"
+                    "$ref": "#/definitions/types.StaffStatus"
                 },
                 "updated_by": {
                     "type": "integer"
@@ -790,7 +797,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "gender": {
-                    "type": "string"
+                    "$ref": "#/definitions/types.Gender"
                 },
                 "identity_card": {
                     "type": "string"
@@ -801,14 +808,14 @@ const docTemplate = `{
                 "phone_number": {
                     "type": "string"
                 },
+                "role": {
+                    "$ref": "#/definitions/types.Role"
+                },
                 "salary": {
                     "type": "integer"
                 },
-                "staff_type": {
-                    "type": "string"
-                },
                 "status": {
-                    "type": "string"
+                    "$ref": "#/definitions/types.StaffStatus"
                 },
                 "updated_by": {
                     "type": "integer"
@@ -906,11 +913,11 @@ const docTemplate = `{
                 "phone_number": {
                     "type": "string"
                 },
+                "role": {
+                    "type": "string"
+                },
                 "salary": {
                     "type": "integer"
-                },
-                "staff_type": {
-                    "type": "string"
                 },
                 "status": {
                     "type": "string"
@@ -936,6 +943,45 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "types.Gender": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3
+            ],
+            "x-enum-varnames": [
+                "Male",
+                "Female",
+                "Other"
+            ]
+        },
+        "types.Role": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-varnames": [
+                "Receptionist",
+                "Doctor",
+                "Pharmacist",
+                "Admin"
+            ]
+        },
+        "types.StaffStatus": {
+            "type": "integer",
+            "enum": [
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "Working",
+                "Quit"
+            ]
         }
     }
 }`

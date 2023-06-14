@@ -45,7 +45,7 @@ type PatientListResponse struct {
 // @Produce json
 // @Param data body PatientRequest true "Patient data"
 // @Success 200 {object} PatientResponse "Patient response"
-// @Router /patient/create [post]
+// @Router /patient [post]
 func CreatePatient(c *gin.Context) {
 	var input PatientRequest
 	if err := c.ShouldBind(&input); err != nil {
@@ -63,7 +63,7 @@ func CreatePatient(c *gin.Context) {
 		UpdatedBy:    input.UpdatedBy,
 	}
 
-	_, err := patient.CreatePatient()
+	_, err := patient.Create()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -109,7 +109,7 @@ func UpdatePatient(c *gin.Context) {
 		UpdatedBy:    input.UpdatedBy,
 	}
 
-	patient, err = patient.UpdatePatient(updatedPatient)
+	patient, err = patient.Update(updatedPatient)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -137,7 +137,7 @@ func DeletePatient(c *gin.Context) {
 		return
 	}
 
-	patient, err = patient.DeletePatient()
+	patient, err = patient.Delete()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return

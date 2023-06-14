@@ -12,5 +12,5 @@ func addRegulationRoute(r *gin.RouterGroup) {
 	group.GET("", controllers.GetRegulation)
 	group.PUT(":id", controllers.UpdateRegulation)
 	group.DELETE(":id", controllers.DeleteRegulation)
-	group.POST("create", controllers.CreateRegulation)
+	group.POST("", controllers.CreateRegulation)
 }
