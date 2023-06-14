@@ -161,7 +161,7 @@ func DeleteStaff(c *gin.Context) {
 		return
 	}
 
-	staff, err = staff.Delete()
+	_, err = staff.Delete()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return

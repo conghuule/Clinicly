@@ -27,8 +27,10 @@ func GetUserByEmail(email string) (*User, error) {
 
 func initAdminAccount() {
 	var adminAccount = Staff{
-		Email:    "admin",
-		Password: "admin",
+		Email:        "admin",
+		Password:     "admin",
+		IdentityCard: "000000000000",
+		PhoneNumber:  "0000000000",
 	}
 
 	if _, err := GetUserByEmail(adminAccount.Email); err != nil {
