@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"clinic-management/models"
+	"clinic-management/types"
+	"clinic-management/utils/query"
 	"net/http"
 	"time"
 
@@ -9,23 +11,23 @@ import (
 )
 
 type PatientRequest struct {
-	FullName     string    `json:"full_name" binding:"required"`
-	Gender       string    `json:"gender" binding:"required"`
-	BirthDate    time.Time `json:"birth_date" binding:"required"`
-	IdentityCard string    `json:"identity_card" binding:"required"`
-	Address      string    `json:"address" binding:"required"`
-	PhoneNumber  string    `json:"phone_number" binding:"required"`
-	UpdatedBy    *uint     `json:"updated_by"`
+	FullName     string       `json:"full_name" binding:"required"`
+	Gender       types.Gender `json:"gender" binding:"required,enum"`
+	BirthDate    *time.Time   `json:"birth_date" binding:"required"`
+	IdentityCard string       `json:"identity_card" binding:"required"`
+	Address      string       `json:"address" binding:"required"`
+	PhoneNumber  string       `json:"phone_number" binding:"required"`
+	UpdatedBy    *uint        `json:"updated_by"`
 }
 
 type UpdatePatientRequest struct {
-	FullName     string    `json:"full_name" binding:"required"`
-	Gender       string    `json:"gender" binding:"required"`
-	BirthDate    time.Time `json:"birth_date" binding:"required"`
-	IdentityCard string    `json:"identity_card" binding:"required"`
-	Address      string    `json:"address" binding:"required"`
-	PhoneNumber  string    `json:"phone_number" binding:"required"`
-	UpdatedBy    *uint     `json:"updated_by"`
+	FullName     string       `json:"full_name"`
+	Gender       types.Gender `json:"gender,enum"`
+	BirthDate    *time.Time   `json:"birth_date"`
+	IdentityCard string       `json:"identity_card"`
+	Address      string       `json:"address"`
+	PhoneNumber  string       `json:"phone_number"`
+	UpdatedBy    *uint        `json:"updated_by"`
 }
 
 type PatientResponse struct {
@@ -36,6 +38,52 @@ type PatientResponse struct {
 type PatientListResponse struct {
 	Response
 	Data []models.Patient `json:"data"`
+}
+
+// @Summary Get patient
+// @Description Get patient
+// @Tags patient
+// @Produce json
+// @Param name query string false "Patient name"
+// @Param page query int false "Page" default(1)
+// @Param page_size query int false "Page size" default(10)
+// @Success 200 {object} PatientListResponse "Patient response"
+// @Router /patient [get]
+func GetPatient(c *gin.Context) {
+	patients, err := models.GetPatient(query.Paginate(c),
+		query.OrderBy("NgayTao", false),
+		query.StringSearch("HoTen", c.Query("name")))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, PatientListResponse{
+		Response: SuccessfulResponse,
+		Data:     patients,
+	})
+}
+
+// @Summary Get patient by id
+// @Description Get patient by id
+// @Tags patient
+// @Produce json
+// @Param id path int true "Patient id"
+// @Success 200 {object} PatientResponse "Patient response"
+// @Router /patient/{id} [get]
+func GetPatientByID(c *gin.Context) {
+	id := c.Param("id")
+
+	patient, err := models.GetPatientByID(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, PatientResponse{
+		Response: SuccessfulResponse,
+		Data:     *patient,
+	})
 }
 
 // @Summary Create patient
@@ -56,7 +104,7 @@ func CreatePatient(c *gin.Context) {
 	patient := models.Patient{
 		FullName:     input.FullName,
 		BirthDate:    input.BirthDate,
-		Gender:       input.Gender,
+		Gender:       input.Gender.Value(),
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,
 		PhoneNumber:  input.PhoneNumber,
@@ -87,7 +135,7 @@ func CreatePatient(c *gin.Context) {
 func UpdatePatient(c *gin.Context) {
 	id := c.Param("id")
 
-	var input PatientRequest
+	var input UpdatePatientRequest
 	if err := c.ShouldBind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -102,7 +150,7 @@ func UpdatePatient(c *gin.Context) {
 	updatedPatient := models.Patient{
 		FullName:     input.FullName,
 		BirthDate:    input.BirthDate,
-		Gender:       input.Gender,
+		Gender:       input.Gender.Value(),
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,
 		PhoneNumber:  input.PhoneNumber,
@@ -149,43 +197,15 @@ func DeletePatient(c *gin.Context) {
 	})
 }
 
-// @Summary Get patient
-// @Description Get patient
+// @Summary Get patient enums
+// @Description Get patient enums
 // @Tags patient
 // @Produce json
-// @Success 200 {object} PatientListResponse "Patient response"
-// @Router /patient [get]
-func GetPatient(c *gin.Context) {
-	patients, err := models.GetPatient()
-	if err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
-		return
-	}
+// @Router /patient/enums [get]
+func GetPatientEnums(c *gin.Context) {
+	response := SuccessfulResponse
 
-	c.JSON(http.StatusOK, PatientListResponse{
-		Response: SuccessfulResponse,
-		Data:     patients,
-	})
-}
+	response.Data = types.PatientEnums
 
-// @Summary Get patient by id
-// @Description Get patient by id
-// @Tags patient
-// @Produce json
-// @Param id path int true "Patient id"
-// @Success 200 {object} PatientResponse "Patient response"
-// @Router /patient/{id} [get]
-func GetPatientByID(c *gin.Context) {
-	id := c.Param("id")
-
-	patient, err := models.GetPatientByID(id)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
-		return
-	}
-
-	c.JSON(http.StatusOK, PatientResponse{
-		Response: SuccessfulResponse,
-		Data:     *patient,
-	})
+	c.JSON(http.StatusOK, response)
 }

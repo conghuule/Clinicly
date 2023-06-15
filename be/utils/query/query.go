@@ -13,6 +13,16 @@ func StringSearch(field, value string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
+func QueryByField(field, value string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if value == "" {
+			return db
+		}
+
+		return db.Where(fmt.Sprintf(`"%s" = ?`, field), value)
+	}
+}
+
 func QueryByDate(field string, date time.Time) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		startDate := date

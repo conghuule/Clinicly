@@ -2,7 +2,6 @@ package models
 
 import (
 	"clinic-management/utils/query"
-	"strconv"
 	"time"
 
 	"gorm.io/gorm"
@@ -11,15 +10,15 @@ import (
 const TableNameWaitingTicket = "PhieuDoiKham"
 
 type Ticket struct {
-	ID        uint      `gorm:"column:MaPDK" json:"id"`
-	PatientID uint      `gorm:"column:MaBN" json:"patient_id"`
-	Patient   *Patient  `gorm:"foreignKey:PatientID" json:"patient"`
-	Number    uint      `gorm:"column:STT" json:"number"`
-	Status    string    `gorm:"column:TrangThai" json:"status"`
-	Date      time.Time `gorm:"column:NgayKham" json:"date"`
-	CreatedAt time.Time `gorm:"column:NgayTao" json:"created_at"`
-	UpdatedAt time.Time `gorm:"column:NgayCapNhat" json:"updated_at"`
-	UpdatedBy *uint     `gorm:"column:CapNhatBoi" json:"updated_by"`
+	ID        uint       `gorm:"column:MaPDK" json:"id"`
+	PatientID uint       `gorm:"column:MaBN" json:"patient_id"`
+	Patient   *Patient   `gorm:"foreignKey:PatientID" json:"patient"`
+	Number    uint       `gorm:"column:STT" json:"number"`
+	Status    string     `gorm:"column:TrangThai" json:"status"`
+	Date      *time.Time `gorm:"column:NgayKham" json:"date"`
+	CreatedAt *time.Time `gorm:"column:NgayTao" json:"created_at"`
+	UpdatedAt *time.Time `gorm:"column:NgayCapNhat" json:"updated_at"`
+	UpdatedBy *uint      `gorm:"column:CapNhatBoi" json:"updated_by"`
 }
 
 func (Ticket) TableName() string {
@@ -41,7 +40,16 @@ func (ticket *Ticket) BeforeCreate(tx *gorm.DB) error {
 }
 
 func (ticket *Ticket) Create() (*Ticket, error) {
-	err := DB.Create(&ticket).Error
+	err := DB.Create(ticket).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return ticket, nil
+}
+
+func (ticket *Ticket) Update(updatedTicket Ticket) (*Ticket, error) {
+	err := DB.Model(ticket).Updates(updatedTicket).Error
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +58,7 @@ func (ticket *Ticket) Create() (*Ticket, error) {
 }
 
 func (ticket *Ticket) Delete() (*Ticket, error) {
-	err := DB.First(&ticket).Error
+	err := DB.First(ticket).Error
 	if err != nil {
 		return nil, err
 	}
@@ -72,13 +80,9 @@ func GetTicket(query ...func(*gorm.DB) *gorm.DB) ([]Ticket, error) {
 }
 
 func GetTicketByID(id string) (*Ticket, error) {
-	ID, err := strconv.Atoi(id)
-	if err != nil {
-		return nil, err
-	}
 	ticket := &Ticket{}
 
-	err = DB.Where(Ticket{ID: uint(ID)}).First(ticket).Error
+	err := DB.Where(`"MaPDK" = ?`, id).First(ticket).Error
 	if err != nil {
 		return nil, err
 	}

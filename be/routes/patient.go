@@ -14,4 +14,5 @@ func addPatientRoute(r *gin.RouterGroup) {
 	group.POST("", controllers.CreatePatient)
 	group.PUT(":id", controllers.UpdatePatient)
 	group.DELETE(":id", controllers.DeletePatient)
+	group.GET("enums", controllers.GetPatientEnums)
 }
