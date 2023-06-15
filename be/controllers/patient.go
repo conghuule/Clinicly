@@ -22,7 +22,7 @@ type PatientRequest struct {
 
 type UpdatePatientRequest struct {
 	FullName     string       `json:"full_name"`
-	Gender       types.Gender `json:"gender,enum"`
+	Gender       types.Gender `json:"gender" binding:"enum"`
 	BirthDate    *time.Time   `json:"birth_date"`
 	IdentityCard string       `json:"identity_card"`
 	Address      string       `json:"address"`
