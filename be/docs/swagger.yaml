@@ -59,6 +59,17 @@ definitions:
       status:
         type: string
     type: object
+  controllers.MedicineListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Medicine'
+        type: array
+      message:
+        type: string
+      status:
+        type: string
+    type: object
   controllers.PatientListResponse:
     properties:
       data:
@@ -237,6 +248,23 @@ definitions:
       status:
         type: string
     type: object
+  controllers.UpdateMedicalReportRequest:
+    properties:
+      date:
+        type: string
+      diagnose:
+        type: string
+      doctor_id:
+        type: integer
+      patient_id:
+        type: integer
+      prescription:
+        items:
+          $ref: '#/definitions/controllers.PrescriptionRequest'
+        type: array
+      updated_by:
+        type: integer
+    type: object
   controllers.UpdatePatientRequest:
     properties:
       address:
@@ -319,6 +347,27 @@ definitions:
         items:
           $ref: '#/definitions/models.Prescription'
         type: array
+      updated_at:
+        type: string
+      updated_by:
+        type: integer
+    type: object
+  models.Medicine:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      info:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+      quantity:
+        type: integer
+      unit:
+        type: string
       updated_at:
         type: string
       updated_by:
@@ -557,6 +606,24 @@ paths:
       tags:
       - medical report
   /medical-report/{id}:
+    delete:
+      description: Delete medical report
+      parameters:
+      - description: Medical report id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medical report response
+          schema:
+            $ref: '#/definitions/controllers.MedicalReportResponse'
+      summary: Delete medical report
+      tags:
+      - medical report
     get:
       description: Get medical report by id
       parameters:
@@ -575,6 +642,64 @@ paths:
       summary: Get medical report by id
       tags:
       - medical report
+    put:
+      consumes:
+      - application/json
+      description: Update medical report
+      parameters:
+      - description: Medical report id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Medical report data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdateMedicalReportRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medical report response
+          schema:
+            $ref: '#/definitions/controllers.MedicalReportResponse'
+      summary: Update medical report
+      tags:
+      - medical report
+  /medicine:
+    get:
+      description: Get medicine
+      parameters:
+      - description: Medicine id
+        in: query
+        name: id
+        type: string
+      - description: Medicine name
+        in: query
+        name: name
+        type: string
+      - default: 1
+        description: Page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medicine response
+          schema:
+            $ref: '#/definitions/controllers.MedicineListResponse'
+      summary: Get medicine
+      tags:
+      - medicine
   /patient:
     get:
       description: Get patient
@@ -783,6 +908,14 @@ paths:
         in: query
         name: name
         type: string
+      - description: Order by field
+        in: query
+        name: order_by
+        type: string
+      - description: Is descending order
+        in: query
+        name: desc
+        type: boolean
       - default: 1
         description: Page
         in: query

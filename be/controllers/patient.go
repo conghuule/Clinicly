@@ -40,6 +40,13 @@ type PatientListResponse struct {
 	Data []models.Patient `json:"data"`
 }
 
+type PatientQuery struct {
+	PaginateQuery
+	Name    string `form:"name"`
+	OrderBy string `form:"order_by,default=NgayTao"`
+	Desc    bool   `form:"desc,default=false"`
+}
+
 // @Summary Get patient
 // @Description Get patient
 // @Tags patient
@@ -50,9 +57,15 @@ type PatientListResponse struct {
 // @Success 200 {object} PatientListResponse "Patient response"
 // @Router /patient [get]
 func GetPatient(c *gin.Context) {
+	var patientQuery PatientQuery
+	if err := c.ShouldBind(patientQuery); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	patients, err := models.GetPatient(query.Paginate(c),
-		query.OrderBy("NgayTao", false),
-		query.StringSearch("HoTen", c.Query("name")))
+		query.OrderBy(patientQuery.OrderBy, patientQuery.Desc),
+		query.StringSearch("HoTen", patientQuery.Name))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return

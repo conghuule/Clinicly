@@ -24,6 +24,15 @@ type MedicalReportRequest struct {
 	UpdatedBy    *uint                 `json:"updated_by"`
 }
 
+type UpdateMedicalReportRequest struct {
+	PatientID    uint                  `json:"patient_id"`
+	DoctorID     uint                  `json:"doctor_id"`
+	Diagnose     string                `json:"diagnose"`
+	Prescription []PrescriptionRequest `json:"prescription"`
+	Date         *time.Time            `json:"date"`
+	UpdatedBy    *uint                 `json:"updated_by"`
+}
+
 type MedicalReportResponse struct {
 	Response
 	Data models.MedicalReport `json:"data"`
@@ -92,7 +101,6 @@ func CreateMedicalReport(c *gin.Context) {
 	}
 
 	var prescription []models.Prescription
-
 	for _, value := range input.Prescription {
 		prescription = append(prescription, models.Prescription{
 			MedicineID:  value.MedicineID,
@@ -120,5 +128,87 @@ func CreateMedicalReport(c *gin.Context) {
 	c.JSON(http.StatusOK, MedicalReportResponse{
 		Response: SuccessfulResponse,
 		Data:     report,
+	})
+}
+
+// @Summary Update medical report
+// @Description Update medical report
+// @Tags medical report
+// @Accept json
+// @Produce json
+// @Param id path int true "Medical report id"
+// @Param data body UpdateMedicalReportRequest true "Medical report data"
+// @Success 200 {object} MedicalReportResponse "Medical report response"
+// @Router /medical-report/{id} [put]
+func UpdateMedicalReport(c *gin.Context) {
+	id := c.Param("id")
+
+	var input UpdateMedicalReportRequest
+	if err := c.ShouldBind(&input); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	report, err := models.GetMedicalReportByID(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	var prescription []models.Prescription
+	for _, value := range input.Prescription {
+		prescription = append(prescription, models.Prescription{
+			MedicineID:  value.MedicineID,
+			Quantity:    value.Quantity,
+			Instruction: value.Instruction,
+		})
+	}
+
+	updatedTicket := models.MedicalReport{
+		PatientID:    input.PatientID,
+		DoctorID:     input.DoctorID,
+		Diagnose:     input.Diagnose,
+		Prescription: prescription,
+		Date:         input.Date,
+		UpdatedBy:    input.UpdatedBy,
+	}
+
+	report, err = report.Update(updatedTicket)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, MedicalReportResponse{
+		Response: SuccessfulResponse,
+		Data:     *report,
+	})
+}
+
+// @Summary Delete medical report
+// @Description Delete medical report
+// @Tags medical report
+// @Produce json
+// @Param id path int true "Medical report id"
+// @Success 200 {object} MedicalReportResponse "Medical report response"
+// @Router /medical-report/{id} [delete]
+func DeleteMedicalReport(c *gin.Context) {
+	id := c.Param("id")
+
+	report, err := models.GetMedicalReportByID(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	_, err = report.Delete()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, MedicalReportResponse{
+		Response: SuccessfulResponse,
+		Data:     *report,
 	})
 }

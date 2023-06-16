@@ -34,6 +34,26 @@ func (report *MedicalReport) Create() (*MedicalReport, error) {
 	return report, nil
 }
 
+func (report *MedicalReport) Update(updatedReport MedicalReport) (*MedicalReport, error) {
+	err := DB.Model(report).Updates(updatedReport).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return report, nil
+}
+
+func (report *MedicalReport) Delete() (*MedicalReport, error) {
+	err := DB.First(report).Error
+	if err != nil {
+		return nil, err
+	}
+
+	DB.Delete(&report)
+
+	return report, nil
+}
+
 func GetMedicalReport(query ...func(*gorm.DB) *gorm.DB) ([]MedicalReport, error) {
 	reports := []MedicalReport{}
 

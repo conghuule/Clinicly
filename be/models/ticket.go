@@ -1,6 +1,7 @@
 package models
 
 import (
+	"clinic-management/utils"
 	"clinic-management/utils/query"
 	"time"
 
@@ -28,7 +29,7 @@ func (Ticket) TableName() string {
 func (ticket *Ticket) BeforeCreate(tx *gorm.DB) error {
 	lastTicket := &Ticket{}
 
-	err := DB.Scopes(query.QueryByDate("NgayKham", time.Now())).
+	err := DB.Scopes(query.QueryByDate("NgayKham", utils.GetCurrentDateString())).
 		Order(`"NgayTao" desc`).First(lastTicket).Error
 	if err != nil {
 		ticket.Number = 1

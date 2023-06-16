@@ -18,3 +18,8 @@ func ErrorResponse(err string) Response {
 		Message: err,
 	}
 }
+
+type PaginateQuery struct {
+	Page     uint `form:"page,default=1"`
+	PageSize uint `form:"page_size,default=10"`
+}

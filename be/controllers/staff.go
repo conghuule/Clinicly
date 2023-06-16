@@ -50,19 +50,34 @@ type StaffListResponse struct {
 	Data []models.Staff `json:"data"`
 }
 
+type StaffQuery struct {
+	PaginateQuery
+	Name    string `form:"name"`
+	OrderBy string `form:"order_by,default=NgayTao"`
+	Desc    bool   `form:"desc,default=false"`
+}
+
 // @Summary Get staff
 // @Description Get staff
 // @Tags staff
 // @Produce json
 // @Param name query string false "Staff name"
+// @Param order_by query string false "Order by field"
+// @Param desc query bool false "Is descending order"
 // @Param page query int false "Page" default(1)
 // @Param page_size query int false "Page size" default(10)
 // @Success 200 {object} StaffListResponse "Staff response"
 // @Router /staff [get]
 func GetStaff(c *gin.Context) {
+	var staffQuery StaffQuery
+	if err := c.ShouldBind(staffQuery); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	staffs, err := models.GetStaff(query.Paginate(c),
-		query.OrderBy("NgayTao", false),
-		query.StringSearch("HoTen", c.Query("name")))
+		query.OrderBy(staffQuery.OrderBy, staffQuery.Desc),
+		query.StringSearch("HoTen", staffQuery.Name))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return

@@ -3,9 +3,9 @@ package controllers
 import (
 	"clinic-management/models"
 	"clinic-management/types"
+	"clinic-management/utils"
 	"clinic-management/utils/query"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -31,6 +31,14 @@ type TicketListResponse struct {
 	Data []models.Ticket `json:"data"`
 }
 
+type TicketQuery struct {
+	PaginateQuery
+	Status  types.TicketStatus `form:"status,default=0"`
+	Date    *string            `form:"date"`
+	OrderBy string             `form:"order_by,default=STT"`
+	Desc    bool               `form:"desc,default=false"`
+}
+
 // @Summary Get ticket
 // @Description Get ticket
 // @Tags ticket
@@ -43,22 +51,21 @@ type TicketListResponse struct {
 // @Success 200 {object} TicketListResponse "Ticket response"
 // @Router /ticket [get]
 func GetTicket(c *gin.Context) {
-	statusValue, err := strconv.Atoi(c.Query("status"))
-	if err != nil {
-		statusValue = 0
+	var ticketQuery TicketQuery
+	if err := c.ShouldBind(&ticketQuery); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
 	}
-	status := types.TicketStatus(statusValue)
 
-	// var date time.Time
-	date, err := time.Parse("2006-01-02", c.Query("date"))
-	if err != nil {
-		date = time.Now()
+	if ticketQuery.Date == nil {
+		now := utils.GetCurrentDateString()
+		ticketQuery.Date = &now
 	}
 
 	tickets, err := models.GetTicket(query.Paginate(c),
-		query.OrderBy(c.Query("order_by"), false),
-		query.QueryByDate("NgayKham", date),
-		query.QueryByField("TrangThai", status.Value()))
+		query.OrderBy(ticketQuery.OrderBy, ticketQuery.Desc),
+		query.QueryByDate("NgayKham", *ticketQuery.Date),
+		query.QueryByField("TrangThai", ticketQuery.Status.Value()))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
