@@ -6,7 +6,7 @@ import (
 
 const TableNameMedicineImport = "PhieuNhapThuoc"
 
-type MedicineImport struct {
+type MedicineReport struct {
 	ID         uint      `gorm:"column:MaPN" json:"id"`
 	MedicineID *uint     `gorm:"column:MaThuoc" json:"medicine_id"`
 	Quantity   uint      `gorm:"column:Soluong" json:"quantity"`
@@ -16,12 +16,12 @@ type MedicineImport struct {
 	UpdatedBy  *uint     `gorm:"column:CapNhatBoi" json:"updated_by"`
 }
 
-func (MedicineImport) TableName() string {
+func (MedicineReport) TableName() string {
 	return TableNameMedicineImport
 }
 
-func GetMedicineImportList() []MedicineImport {
-	MedicineImports := []MedicineImport{}
+func GetMedicineImportList() []MedicineReport {
+	MedicineImports := []MedicineReport{}
 
 	DB.Find(&MedicineImports)
 

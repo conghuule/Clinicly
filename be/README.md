@@ -1,9 +1,12 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [About the project](#about-the-project)
-  - [Layout](#layout)
-  - [Status](#status)
+- [Clinicly - Backend](#clinicly---backend)
+  - [About the project](#about-the-project)
+    - [Layout](#layout)
+    - [Status](#status)
+    - [Run Project](#run-project)
+    - [Link Server](#link-server)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -38,3 +41,12 @@ A brief description of the layout:
 ### Status
 
 _in progress_
+
+### Run
+
+```bash
+go mod download
+go run main.go
+```
+
+### Link Server

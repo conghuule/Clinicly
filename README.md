@@ -15,9 +15,9 @@
   - Email: 20120294@student.hcmus.edu.vn
 - Lê Tấn Kiệt - 20120312
   - Email: 20120312@student.hcmus.edu.vn
-- Họ tên: Ngô Thanh Lực - 20120325
+- Ngô Thanh Lực - 20120325
   - Email: 20120325@student.hcmus.edu.vn
-- Họ tên: Nguyễn Long Vũ - 20120405
+- Nguyễn Long Vũ - 20120405
   - Email: 20120405@student.hcmus.edu.vn
 
 ## Technologies Used
