@@ -5,11 +5,12 @@ type TicketStatus int
 const (
 	Waiting TicketStatus = iota + 1
 	Processing
+	Done
 )
 
 func (t TicketStatus) IsValid() bool {
 	switch t {
-	case Waiting, Processing:
+	case Waiting, Processing, Done:
 		return true
 	}
 
@@ -22,6 +23,8 @@ func (t TicketStatus) Value() string {
 		return "Đợi khám"
 	case Processing:
 		return "Đang khám"
+	case Done:
+		return "Đã khám"
 	default:
 		return ""
 	}
