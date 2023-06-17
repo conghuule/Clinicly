@@ -35,5 +35,6 @@ func Config(r *gin.Engine) {
 		addRegulationRoute(authorizedRoute)
 		addMedicalReportRoute(authorizedRoute)
 		addMedicineRoute(authorizedRoute)
+		addInvoiceRoute(authorizedRoute)
 	}
 }

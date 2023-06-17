@@ -1,5 +1,25 @@
 basePath: /api/v1
 definitions:
+  controllers.InvoiceListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Invoice'
+        type: array
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  controllers.InvoiceResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Invoice'
+      message:
+        type: string
+      status:
+        type: string
+    type: object
   controllers.LoginRequest:
     properties:
       email:
@@ -285,6 +305,15 @@ definitions:
       status:
         type: string
     type: object
+  controllers.UpdateInvoiceRequest:
+    properties:
+      delivery_status:
+        type: boolean
+      payment_status:
+        type: boolean
+      updated_by:
+        type: integer
+    type: object
   controllers.UpdateMedicalReportRequest:
     properties:
       date:
@@ -378,6 +407,27 @@ definitions:
     properties:
       status:
         $ref: '#/definitions/types.TicketStatus'
+      updated_by:
+        type: integer
+    type: object
+  models.Invoice:
+    properties:
+      created_at:
+        type: string
+      delivery_status:
+        type: boolean
+      id:
+        type: integer
+      medical_report:
+        $ref: '#/definitions/models.MedicalReport'
+      medical_report_id:
+        type: integer
+      payment_status:
+        type: boolean
+      total:
+        type: integer
+      updated_at:
+        type: string
       updated_by:
         type: integer
     type: object
@@ -622,10 +672,105 @@ paths:
       summary: Login
       tags:
       - auth
+  /invoice:
+    get:
+      description: Get invoice
+      parameters:
+      - default: 1
+        description: Page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Invoice response
+          schema:
+            $ref: '#/definitions/controllers.InvoiceListResponse'
+      summary: Get invoice
+      tags:
+      - invoice
+  /invoice/{id}:
+    delete:
+      description: Delete invoice
+      parameters:
+      - description: Invoice id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Invoice response
+          schema:
+            $ref: '#/definitions/controllers.InvoiceResponse'
+      summary: Delete invoice
+      tags:
+      - invoice
+    get:
+      description: Get invoice by id
+      parameters:
+      - description: Invoice id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Invoice response
+          schema:
+            $ref: '#/definitions/controllers.InvoiceResponse'
+      summary: Get invoice by id
+      tags:
+      - invoice
+    put:
+      consumes:
+      - application/json
+      description: Update invoice
+      parameters:
+      - description: Invoice id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Invoice data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdateInvoiceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Invoice response
+          schema:
+            $ref: '#/definitions/controllers.InvoiceResponse'
+      summary: Update invoice
+      tags:
+      - invoice
   /medical-report:
     get:
       description: Get medical report
       parameters:
+      - description: Patient
+        in: query
+        name: patient
+        type: string
+      - description: Date
+        in: query
+        name: date
+        type: string
       - default: 1
         description: Page
         in: query

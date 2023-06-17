@@ -43,16 +43,37 @@ type MedicalReportListResponse struct {
 	Data []models.MedicalReport `json:"data"`
 }
 
+type MedicalReportQuery struct {
+	PaginateQuery
+	Patient string  `form:"patient"`
+	Date    *string `form:"date"`
+}
+
 // @Summary Get medical report
 // @Description Get medical report
 // @Tags medical report
 // @Produce json
+// @Param patient query string false "Patient"
+// @Param date query string false "Date"
 // @Param page query int false "Page" default(1)
 // @Param page_size query int false "Page size" default(10)
 // @Success 200 {object} MedicalReportListResponse "Medical report response"
 // @Router /medical-report [get]
 func GetMedicalReport(c *gin.Context) {
+	var reportQuery MedicalReportQuery
+	if err := c.ShouldBind(&reportQuery); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	if reportQuery.Date == nil {
+		date := ""
+		reportQuery.Date = &date
+	}
+
 	reports, err := models.GetMedicalReport(query.Paginate(c),
+		query.QueryByField("MaBN", reportQuery.Patient),
+		query.QueryByDate("NgayKham", *reportQuery.Date),
 		query.OrderBy("NgayTao", false))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))

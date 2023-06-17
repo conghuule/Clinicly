@@ -48,11 +48,3 @@ func (prescription *Prescription) AfterCreate(db *gorm.DB) (err error) {
 
 	return nil
 }
-
-func GetPrescriptionList() []Prescription {
-	Prescriptions := []Prescription{}
-
-	DB.Find(&Prescriptions)
-
-	return Prescriptions
-}
