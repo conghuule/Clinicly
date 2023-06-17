@@ -16,6 +16,10 @@
 
 RESTful API for clinic management website
 
+## API Documents
+
+> http://localhost:8080/docs
+
 ### Layout
 
 ```tree

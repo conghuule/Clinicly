@@ -11,20 +11,20 @@ const TableNameStaff = "NhanVien"
 
 type Staff struct {
 	ID           uint       `gorm:"column:MaNV" json:"id"`
-	FullName     string     `gorm:"column:HoTen" json:"full_name"`
-	BirthDate    *time.Time `gorm:"column:NgaySinh" json:"birth_date"`
-	Gender       string     `gorm:"column:GioiTinh" json:"gender"`
-	Address      string     `gorm:"column:DiaChi" json:"address"`
-	IdentityCard string     `gorm:"column:CCCD" json:"identity_card"`
-	PhoneNumber  string     `gorm:"column:SDT" json:"phone_number"`
-	Email        string     `gorm:"column:Email" json:"email"`
-	Role         string     `gorm:"column:LoaiNV" json:"role"`
-	Salary       uint       `gorm:"column:MucLuong" json:"salary"`
-	Status       string     `gorm:"column:TrangThai" json:"status"`
+	FullName     string     `gorm:"column:HoTen" json:"full_name,omitempty"`
+	BirthDate    *time.Time `gorm:"column:NgaySinh" json:"birth_date,omitempty"`
+	Gender       string     `gorm:"column:GioiTinh" json:"gender,omitempty"`
+	Address      string     `gorm:"column:DiaChi" json:"address,omitempty"`
+	IdentityCard string     `gorm:"column:CCCD" json:"identity_card,omitempty"`
+	PhoneNumber  string     `gorm:"column:SDT" json:"phone_number,omitempty"`
+	Email        string     `gorm:"column:Email" json:"email,omitempty"`
+	Role         string     `gorm:"column:LoaiNV" json:"role,omitempty"`
+	Salary       uint       `gorm:"column:MucLuong" json:"salary,omitempty"`
+	Status       string     `gorm:"column:TrangThai" json:"status,omitempty"`
 	Password     string     `gorm:"column:Password" json:"-"`
-	CreatedAt    *time.Time `gorm:"column:NgayTao" json:"created_at"`
-	UpdatedAt    *time.Time `gorm:"column:NgayCapNhat" json:"updated_at"`
-	UpdatedBy    *uint      `gorm:"column:CapNhatBoi" json:"updated_by"`
+	CreatedAt    *time.Time `gorm:"column:NgayTao" json:"created_at,omitempty"`
+	UpdatedAt    *time.Time `gorm:"column:NgayCapNhat" json:"updated_at,omitempty"`
+	UpdatedBy    *uint      `gorm:"column:CapNhatBoi" json:"updated_by,omitempty"`
 }
 
 func (Staff) TableName() string {

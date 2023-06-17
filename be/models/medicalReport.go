@@ -10,15 +10,15 @@ const TableNameMedicalReport = "PhieuKham"
 
 type MedicalReport struct {
 	ID           uint           `gorm:"column:MaPK" json:"id"`
-	PatientID    uint           `gorm:"column:MaBN" json:"patient_id"`
-	DoctorID     uint           `gorm:"column:BacSi" json:"doctor_id"`
-	Doctor       *Staff         `gorm:"foreignKey:DoctorID" json:"doctor"`
-	Diagnose     string         `gorm:"column:ChanDoan" json:"diagnose"`
-	Prescription []Prescription `json:"prescription"`
-	Date         *time.Time     `gorm:"column:NgayKham" json:"date"`
-	CreatedAt    *time.Time     `gorm:"column:NgayTao" json:"created_at"`
-	UpdatedAt    *time.Time     `gorm:"column:NgayCapNhat" json:"updated_at"`
-	UpdatedBy    *uint          `gorm:"column:CapNhatBoi" json:"updated_by"`
+	PatientID    uint           `gorm:"column:MaBN" json:"patient_id,omitempty"`
+	DoctorID     uint           `gorm:"column:BacSi" json:"doctor_id,omitempty"`
+	Doctor       *Staff         `gorm:"foreignKey:DoctorID" json:"doctor,omitempty"`
+	Diagnose     string         `gorm:"column:ChanDoan" json:"diagnose,omitempty"`
+	Prescription []Prescription `json:"prescription,omitempty"`
+	Date         *time.Time     `gorm:"column:NgayKham" json:"date,omitempty"`
+	CreatedAt    *time.Time     `gorm:"column:NgayTao" json:"created_at,omitempty"`
+	UpdatedAt    *time.Time     `gorm:"column:NgayCapNhat" json:"updated_at,omitempty"`
+	UpdatedBy    *uint          `gorm:"column:CapNhatBoi" json:"updated_by,omitempty"`
 }
 
 func (MedicalReport) TableName() string {
@@ -69,14 +69,14 @@ func GetMedicalReport(query ...func(*gorm.DB) *gorm.DB) ([]MedicalReport, error)
 }
 
 func GetMedicalReportByID(id string) (*MedicalReport, error) {
-	reports := &MedicalReport{}
+	report := &MedicalReport{}
 
 	err := DB.Where(`"MaPK" = ?`, id).
 		Preload("Prescription").
-		Preload("Doctor").Find(&reports).Error
+		Preload("Doctor").First(&report).Error
 	if err != nil {
 		return nil, err
 	}
 
-	return reports, nil
+	return report, nil
 }

@@ -21,7 +21,7 @@ type MedicalReportRequest struct {
 	Diagnose     string                `json:"diagnose"`
 	Prescription []PrescriptionRequest `json:"prescription"`
 	Date         *time.Time            `json:"date"`
-	UpdatedBy    *uint                 `json:"updated_by"`
+	UpdatedBy    *uint                 `json:"updated_by" binding:"required"`
 }
 
 type UpdateMedicalReportRequest struct {
@@ -106,6 +106,7 @@ func CreateMedicalReport(c *gin.Context) {
 			MedicineID:  value.MedicineID,
 			Quantity:    value.Quantity,
 			Instruction: value.Instruction,
+			UpdatedBy:   input.UpdatedBy,
 		})
 	}
 

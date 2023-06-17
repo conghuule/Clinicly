@@ -258,6 +258,146 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "Create medicine",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicine"
+                ],
+                "summary": "Create medicine",
+                "parameters": [
+                    {
+                        "description": "Medicine data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.MedicineRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medicine response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.MedicineResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/medicine/enums": {
+            "get": {
+                "description": "Get medicine enums",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicine"
+                ],
+                "summary": "Get medicine enums",
+                "responses": {}
+            }
+        },
+        "/medicine/{id}": {
+            "get": {
+                "description": "Get medicine by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicine"
+                ],
+                "summary": "Get medicine by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Medicine id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medicine response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.MedicineResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update medicine",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicine"
+                ],
+                "summary": "Update medicine",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Medicine id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Medicine data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UpdateMedicineRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medicine response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.MedicineResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete medicine",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicine"
+                ],
+                "summary": "Delete medicine",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Medicine id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medicine response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.MedicineResponse"
+                        }
+                    }
+                }
             }
         },
         "/patient": {
@@ -981,7 +1121,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "doctor_id",
-                "patient_id"
+                "patient_id",
+                "updated_by"
             ],
             "properties": {
                 "date": {
@@ -1038,6 +1179,54 @@ const docTemplate = `{
                 }
             }
         },
+        "controllers.MedicineRequest": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "price",
+                "quantity",
+                "unit",
+                "updated_by"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "info": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "unit": {
+                    "$ref": "#/definitions/types.MedicineUnit"
+                },
+                "updated_by": {
+                    "type": "integer"
+                }
+            }
+        },
+        "controllers.MedicineResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/models.Medicine"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "controllers.PatientListResponse": {
             "type": "object",
             "properties": {
@@ -1063,7 +1252,8 @@ const docTemplate = `{
                 "full_name",
                 "gender",
                 "identity_card",
-                "phone_number"
+                "phone_number",
+                "updated_by"
             ],
             "properties": {
                 "address": {
@@ -1203,7 +1393,8 @@ const docTemplate = `{
                 "identity_card",
                 "password",
                 "phone_number",
-                "role"
+                "role",
+                "updated_by"
             ],
             "properties": {
                 "address": {
@@ -1278,7 +1469,8 @@ const docTemplate = `{
         "controllers.TicketRequest": {
             "type": "object",
             "required": [
-                "patient_id"
+                "patient_id",
+                "updated_by"
             ],
             "properties": {
                 "patient_id": {
@@ -1323,6 +1515,32 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/controllers.PrescriptionRequest"
                     }
+                },
+                "updated_by": {
+                    "type": "integer"
+                }
+            }
+        },
+        "controllers.UpdateMedicineRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "info": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "unit": {
+                    "$ref": "#/definitions/types.MedicineUnit"
                 },
                 "updated_by": {
                     "type": "integer"
@@ -1685,6 +1903,17 @@ const docTemplate = `{
                 "Male",
                 "Female",
                 "Other"
+            ]
+        },
+        "types.MedicineUnit": {
+            "type": "integer",
+            "enum": [
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "Pill",
+                "Bottle"
             ]
         },
         "types.Role": {

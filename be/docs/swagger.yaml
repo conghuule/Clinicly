@@ -49,6 +49,7 @@ definitions:
     required:
     - doctor_id
     - patient_id
+    - updated_by
     type: object
   controllers.MedicalReportResponse:
     properties:
@@ -65,6 +66,39 @@ definitions:
         items:
           $ref: '#/definitions/models.Medicine'
         type: array
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  controllers.MedicineRequest:
+    properties:
+      id:
+        type: string
+      info:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+      quantity:
+        type: integer
+      unit:
+        $ref: '#/definitions/types.MedicineUnit'
+      updated_by:
+        type: integer
+    required:
+    - id
+    - name
+    - price
+    - quantity
+    - unit
+    - updated_by
+    type: object
+  controllers.MedicineResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Medicine'
       message:
         type: string
       status:
@@ -104,6 +138,7 @@ definitions:
     - gender
     - identity_card
     - phone_number
+    - updated_by
     type: object
   controllers.PatientResponse:
     properties:
@@ -209,6 +244,7 @@ definitions:
     - password
     - phone_number
     - role
+    - updated_by
     type: object
   controllers.StaffResponse:
     properties:
@@ -238,6 +274,7 @@ definitions:
         type: integer
     required:
     - patient_id
+    - updated_by
     type: object
   controllers.TicketResponse:
     properties:
@@ -262,6 +299,23 @@ definitions:
         items:
           $ref: '#/definitions/controllers.PrescriptionRequest'
         type: array
+      updated_by:
+        type: integer
+    type: object
+  controllers.UpdateMedicineRequest:
+    properties:
+      id:
+        type: string
+      info:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+      quantity:
+        type: integer
+      unit:
+        $ref: '#/definitions/types.MedicineUnit'
       updated_by:
         type: integer
     type: object
@@ -501,6 +555,14 @@ definitions:
     - Male
     - Female
     - Other
+  types.MedicineUnit:
+    enum:
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - Pill
+    - Bottle
   types.Role:
     enum:
     - 1
@@ -698,6 +760,99 @@ paths:
           schema:
             $ref: '#/definitions/controllers.MedicineListResponse'
       summary: Get medicine
+      tags:
+      - medicine
+    post:
+      consumes:
+      - application/json
+      description: Create medicine
+      parameters:
+      - description: Medicine data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.MedicineRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medicine response
+          schema:
+            $ref: '#/definitions/controllers.MedicineResponse'
+      summary: Create medicine
+      tags:
+      - medicine
+  /medicine/{id}:
+    delete:
+      description: Delete medicine
+      parameters:
+      - description: Medicine id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medicine response
+          schema:
+            $ref: '#/definitions/controllers.MedicineResponse'
+      summary: Delete medicine
+      tags:
+      - medicine
+    get:
+      description: Get medicine by id
+      parameters:
+      - description: Medicine id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medicine response
+          schema:
+            $ref: '#/definitions/controllers.MedicineResponse'
+      summary: Get medicine by id
+      tags:
+      - medicine
+    put:
+      consumes:
+      - application/json
+      description: Update medicine
+      parameters:
+      - description: Medicine id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Medicine data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdateMedicineRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medicine response
+          schema:
+            $ref: '#/definitions/controllers.MedicineResponse'
+      summary: Update medicine
+      tags:
+      - medicine
+  /medicine/enums:
+    get:
+      description: Get medicine enums
+      produces:
+      - application/json
+      responses: {}
+      summary: Get medicine enums
       tags:
       - medicine
   /patient:

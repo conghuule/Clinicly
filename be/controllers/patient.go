@@ -17,7 +17,7 @@ type PatientRequest struct {
 	IdentityCard string       `json:"identity_card" binding:"required"`
 	Address      string       `json:"address" binding:"required"`
 	PhoneNumber  string       `json:"phone_number" binding:"required"`
-	UpdatedBy    *uint        `json:"updated_by"`
+	UpdatedBy    *uint        `json:"updated_by" binding:"required"`
 }
 
 type UpdatePatientRequest struct {
@@ -58,7 +58,7 @@ type PatientQuery struct {
 // @Router /patient [get]
 func GetPatient(c *gin.Context) {
 	var patientQuery PatientQuery
-	if err := c.ShouldBind(patientQuery); err != nil {
+	if err := c.ShouldBind(&patientQuery); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
 	}
