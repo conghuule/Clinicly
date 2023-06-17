@@ -3,23 +3,6 @@ import { Button, DatePicker, Form, Input, Select } from 'antd';
 import { Option } from 'antd/es/mentions';
 
 export default function PatientForm({ defaultValue = {}, onSubmit, submitText }) {
-  const [form] = Form.useForm();
-
-  const onGenderChange = (value) => {
-    switch (value) {
-      case 'male':
-        form.setFieldsValue({ note: 'Hi, man!' });
-        break;
-      case 'female':
-        form.setFieldsValue({ note: 'Hi, lady!' });
-        break;
-      case 'other':
-        form.setFieldsValue({ note: 'Hi there!' });
-        break;
-      default:
-    }
-  };
-
   return (
     <Form
       name="patient-form"
@@ -35,7 +18,7 @@ export default function PatientForm({ defaultValue = {}, onSubmit, submitText })
       </Form.Item>
 
       <Form.Item name="gender" label="Giới tính" rules={[{ required: true }]}>
-        <Select placeholder="Chọn giới tính" onChange={onGenderChange} allowClear>
+        <Select placeholder="Chọn giới tính" allowClear>
           <Option value="male">Male</Option>
           <Option value="female">Female</Option>
           <Option value="other">Other</Option>
