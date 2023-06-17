@@ -22,7 +22,7 @@ type StaffRequest struct {
 	Salary       uint              `json:"salary"`
 	Status       types.StaffStatus `json:"status" binding:"enum"`
 	Password     string            `json:"password" binding:"required"`
-	UpdatedBy    *uint             `json:"updated_by"`
+	UpdatedBy    *uint             `json:"updated_by" binding:"required"`
 }
 
 type UpdateStaffRequest struct {
@@ -70,7 +70,7 @@ type StaffQuery struct {
 // @Router /staff [get]
 func GetStaff(c *gin.Context) {
 	var staffQuery StaffQuery
-	if err := c.ShouldBind(staffQuery); err != nil {
+	if err := c.ShouldBind(&staffQuery); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
 	}

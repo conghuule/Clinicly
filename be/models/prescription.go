@@ -12,11 +12,11 @@ const TableNamePrescription = "DonThuoc"
 type Prescription struct {
 	MedicalReportID uint       `gorm:"column:MaPK" json:"medical_report_id"`
 	MedicineID      string     `gorm:"column:MaThuoc" json:"medicine_id"`
-	Quantity        uint       `gorm:"column:SoLuong" json:"quantity"`
-	Instruction     string     `gorm:"column:CachDung" json:"instruction"`
-	CreatedAt       *time.Time `gorm:"column:NgayTao" json:"created_at"`
-	UpdatedAt       *time.Time `gorm:"column:NgayCapNhat" json:"updated_at"`
-	UpdatedBy       *uint      `gorm:"column:CapNhatBoi" json:"updated_by"`
+	Quantity        uint       `gorm:"column:SoLuong" json:"quantity,omitempty"`
+	Instruction     string     `gorm:"column:CachDung" json:"instruction,omitempty"`
+	CreatedAt       *time.Time `gorm:"column:NgayTao" json:"created_at,omitempty"`
+	UpdatedAt       *time.Time `gorm:"column:NgayCapNhat" json:"updated_at,omitempty"`
+	UpdatedBy       *uint      `gorm:"column:CapNhatBoi" json:"updated_by,omitempty"`
 }
 
 func (Prescription) TableName() string {
@@ -31,10 +31,20 @@ func (prescription *Prescription) BeforeCreate(db *gorm.DB) (err error) {
 	return nil
 }
 
-func GetPrescriptionList() []Prescription {
-	Prescriptions := []Prescription{}
+func (prescription *Prescription) AfterCreate(db *gorm.DB) (err error) {
+	medicine, err := GetMedicineByID(prescription.MedicineID)
+	if err != nil {
+		return err
+	}
 
-	DB.Find(&Prescriptions)
+	updatedMedicine := Medicine{
+		Quantity: medicine.Quantity - prescription.Quantity,
+	}
 
-	return Prescriptions
+	_, err = medicine.Update(updatedMedicine)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

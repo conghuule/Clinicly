@@ -11,13 +11,13 @@ const TableNameMedicine = "Thuoc"
 type Medicine struct {
 	ID        string     `gorm:"column:MaThuoc" json:"id"`
 	Name      string     `gorm:"column:TenThuoc" json:"name"`
-	Quantity  uint       `gorm:"column:Soluong" json:"quantity"`
-	Price     uint       `gorm:"column:DonGia" json:"price"`
-	Info      string     `gorm:"column:ThongTin" json:"info"`
-	Unit      string     `gorm:"column:DonVi" json:"unit"`
-	CreatedAt *time.Time `gorm:"column:NgayTao" json:"created_at"`
-	UpdatedAt *time.Time `gorm:"column:NgayCapNhat" json:"updated_at"`
-	UpdatedBy *uint      `gorm:"column:CapNhatBoi" json:"updated_by"`
+	Quantity  uint       `gorm:"column:SoLuong" json:"quantity,omitempty"`
+	Price     uint       `gorm:"column:DonGia" json:"price,omitempty"`
+	Info      string     `gorm:"column:ThongTin" json:"info,omitempty"`
+	Unit      string     `gorm:"column:DonVi" json:"unit,omitempty"`
+	CreatedAt *time.Time `gorm:"column:NgayTao" json:"created_at,omitempty"`
+	UpdatedAt *time.Time `gorm:"column:NgayCapNhat" json:"updated_at,omitempty"`
+	UpdatedBy *uint      `gorm:"column:CapNhatBoi" json:"updated_by,omitempty"`
 }
 
 func (Medicine) TableName() string {
@@ -56,10 +56,21 @@ func (medicine *Medicine) Delete() (*Medicine, error) {
 func GetMedicine(query ...func(*gorm.DB) *gorm.DB) ([]Medicine, error) {
 	medicines := []Medicine{}
 
-	err := DB.Scopes(query...).Find(&medicines).Error
+	err := DB.Select("ID", "Name", "Quantity", "Price").Scopes(query...).Find(&medicines).Error
 	if err != nil {
 		return nil, err
 	}
 
 	return medicines, nil
+}
+
+func GetMedicineByID(id string) (*Medicine, error) {
+	medicine := &Medicine{}
+
+	err := DB.Where(`"MaThuoc" = ?`, id).First(&medicine).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return medicine, nil
 }
