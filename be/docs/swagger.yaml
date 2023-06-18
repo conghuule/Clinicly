@@ -643,7 +643,7 @@ definitions:
     - Waiting
     - Processing
     - Done
-host: localhost:8080
+host: clinicly.fly.dev
 info:
   contact: {}
   description: Clinic Management API
@@ -1445,4 +1445,6 @@ paths:
       summary: Get ticket enums
       tags:
       - ticket
+schemes:
+- https
 swagger: "2.0"

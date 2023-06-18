@@ -13,7 +13,8 @@ import (
 // @title Clinic Management
 // @description Clinic Management API
 // @version 1.0
-// @host localhost:8080
+// @host clinicly.fly.dev
+// @schemes https
 // @BasePath /api/v1
 func main() {
 	err := godotenv.Load(".env")
@@ -27,5 +28,8 @@ func main() {
 	routes.Config(r)
 
 	port := os.Getenv("SV_PORT")
+	if port == "" {
+		port = "8080"
+	}
 	r.Run(":" + port)
 }

@@ -18,7 +18,7 @@ RESTful API for clinic management website
 
 ## API Documents
 
-> http://localhost:8080/docs
+> https://clinicly.fly.dev/docs
 
 ### Layout
 

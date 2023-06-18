@@ -1,8 +1,10 @@
 package routes
 
 import (
+	"clinic-management/controllers"
 	"clinic-management/middlewares"
 	"clinic-management/types"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -19,22 +21,23 @@ func Config(r *gin.Engine) {
 		v.RegisterValidation("enum", ValidateEnum)
 	}
 
-	addSwaggerRoute(r)
-
 	v1 := r.Group("api/v1")
 	{
 		addAuthRoute(v1)
 
-		authorizedRoute := v1.Group("")
+		v1.Use(middlewares.Authorize)
+		v1.Use(middlewares.Cors)
 
-		authorizedRoute.Use(middlewares.Authorize)
-
-		addStaffRoute(authorizedRoute)
-		addPatientRoute(authorizedRoute)
-		addTicketRoute(authorizedRoute)
-		addRegulationRoute(authorizedRoute)
-		addMedicalReportRoute(authorizedRoute)
-		addMedicineRoute(authorizedRoute)
-		addInvoiceRoute(authorizedRoute)
+		addStaffRoute(v1)
+		addPatientRoute(v1)
+		addTicketRoute(v1)
+		addRegulationRoute(v1)
+		addMedicalReportRoute(v1)
+		addMedicineRoute(v1)
+		addInvoiceRoute(v1)
 	}
+
+	addSwaggerRoute(r)
+
+	r.NoRoute(func(c *gin.Context) { c.JSON(http.StatusNotFound, controllers.ErrorResponse("Not found")) })
 }
