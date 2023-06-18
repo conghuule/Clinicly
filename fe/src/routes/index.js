@@ -5,7 +5,8 @@ import MedicineDetail from '../pages/Medicines/MedicineDetail';
 import Patients from '../pages/Patients';
 import NewPatient from '../pages/Patients/NewPatient';
 import PatientDetail from '../pages/Patients/PatientDetail';
-
+import Bills from '../pages/Bills';
+import BillDetail from '../pages/Bills/BillDetail';
 const publicRoutes = [
   { path: config.routes.home, element: Home },
   { path: config.routes.patients, element: Patients },
@@ -13,6 +14,8 @@ const publicRoutes = [
   { path: config.routes.patient_detail, element: PatientDetail },
   { path: config.routes.medicines, element: Medicines },
   { path: config.routes.medicine_detail, element: MedicineDetail },
+  { path: config.routes.bills, element: Bills },
+  { path: config.routes.bill_detail, element: BillDetail },
 ];
 
 const privateRoutes = [];

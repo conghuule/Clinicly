@@ -45,7 +45,7 @@ export const SidebarData = [
   {
     id: 7,
     title: 'Hoá đơn',
-    path: '/',
+    path: '/bills',
     icon: <img src={IMAGES.logoBill} className="sidebar-icon-img" alt="bill" />,
     cName: 'nav-text',
   },
