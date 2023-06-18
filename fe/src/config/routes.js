@@ -5,6 +5,8 @@ const routes = {
   patient_detail: '/patients/:id',
   medicines: '/medicines',
   medicine_detail: '/medicines/:id',
+  bills: '/bills',
+  bill_detail: '/bills/:id',
 };
 
 export default routes;

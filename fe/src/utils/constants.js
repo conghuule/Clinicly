@@ -85,3 +85,45 @@ export const MEDICINE_COLUMNS = [
     ),
   },
 ];
+export const BILL_COLUMNS = [
+  {
+    title: 'Mã hoá đơn',
+    dataIndex: 'id',
+    key: 'id',
+  },
+  {
+    title: 'Trạng thái giao thuốc',
+    dataIndex: 'delivery_status',
+    key: 'delivery_status',
+  },
+  {
+    title: 'Trạng thái thanh toán',
+    dataIndex: 'payment_status',
+    key: 'payment_status',
+  },
+  {
+    title: 'Tổng tiền',
+    dataIndex: 'Total',
+    key: 'Total',
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'actions',
+    key: 'actions',
+    render: (_, { actions }) => (
+      <>
+        {actions.map((tag) => {
+          let color = tag.length > 5 ? 'geekblue' : 'green';
+          if (tag === 'loser') {
+            color = 'volcano';
+          }
+          return (
+            <Tag color={color} key={tag}>
+              {tag.toUpperCase()}
+            </Tag>
+          );
+        })}
+      </>
+    ),
+  },
+];
