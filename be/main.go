@@ -3,11 +3,9 @@ package main
 import (
 	"clinic-management/models"
 	"clinic-management/routes"
-	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 // @title Clinic Management
@@ -17,10 +15,10 @@ import (
 // @schemes https
 // @BasePath /api/v1
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
+	// err := godotenv.Load(".env")
+	// if err != nil {
+	// 	log.Fatalf("Error loading .env file")
+	// }
 
 	models.ConnectDB()
 
