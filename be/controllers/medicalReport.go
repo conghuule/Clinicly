@@ -3,6 +3,7 @@ package controllers
 import (
 	"clinic-management/models"
 	"clinic-management/utils/query"
+	"clinic-management/utils/token"
 	"net/http"
 	"time"
 
@@ -10,27 +11,25 @@ import (
 )
 
 type PrescriptionRequest struct {
-	MedicineID  string `json:"medicine_id" binding:"required"`
+	MedicineID  string `json:"medicine" binding:"required"`
 	Quantity    uint   `json:"quantity" binding:"required"`
 	Instruction string `json:"instruction" binding:"required"`
 }
 
 type MedicalReportRequest struct {
-	PatientID    uint                  `json:"patient_id" binding:"required"`
-	DoctorID     uint                  `json:"doctor_id" binding:"required"`
+	PatientID    uint                  `json:"patient" binding:"required"`
+	DoctorID     uint                  `json:"doctor" binding:"required"`
 	Diagnose     string                `json:"diagnose"`
 	Prescription []PrescriptionRequest `json:"prescription"`
 	Date         *time.Time            `json:"date"`
-	UpdatedBy    *uint                 `json:"updated_by" binding:"required"`
 }
 
 type UpdateMedicalReportRequest struct {
-	PatientID    uint                  `json:"patient_id"`
-	DoctorID     uint                  `json:"doctor_id"`
+	PatientID    uint                  `json:"patient"`
+	DoctorID     uint                  `json:"doctor"`
 	Diagnose     string                `json:"diagnose"`
 	Prescription []PrescriptionRequest `json:"prescription"`
 	Date         *time.Time            `json:"date"`
-	UpdatedBy    *uint                 `json:"updated_by"`
 }
 
 type MedicalReportResponse struct {
@@ -45,8 +44,10 @@ type MedicalReportListResponse struct {
 
 type MedicalReportQuery struct {
 	PaginateQuery
-	Patient string  `form:"patient"`
-	Date    *string `form:"date"`
+	Patient string `form:"patient"`
+	Date    string `form:"date"`
+	OrderBy string `form:"order_by,default=NgayTao"`
+	Desc    bool   `form:"desc,default=false"`
 }
 
 // @Summary Get medical report
@@ -55,6 +56,8 @@ type MedicalReportQuery struct {
 // @Produce json
 // @Param patient query string false "Patient"
 // @Param date query string false "Date"
+// @Param order_by query int false "Order by" default(NgayTao)
+// @Param desc query bool false "Order descending" default(false)
 // @Param page query int false "Page" default(1)
 // @Param page_size query int false "Page size" default(10)
 // @Success 200 {object} MedicalReportListResponse "Medical report response"
@@ -66,15 +69,10 @@ func GetMedicalReport(c *gin.Context) {
 		return
 	}
 
-	if reportQuery.Date == nil {
-		date := ""
-		reportQuery.Date = &date
-	}
-
 	reports, err := models.GetMedicalReport(query.Paginate(c),
 		query.QueryByField("MaBN", reportQuery.Patient),
-		query.QueryByDate("NgayKham", *reportQuery.Date),
-		query.OrderBy("NgayTao", false))
+		query.QueryByDate("NgayKham", reportQuery.Date),
+		query.OrderBy(reportQuery.OrderBy, reportQuery.Desc))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -115,6 +113,12 @@ func GetMedicalReportByID(c *gin.Context) {
 // @Success 200 {object} MedicalReportResponse "Medical report response"
 // @Router /medical-report [post]
 func CreateMedicalReport(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	var input MedicalReportRequest
 	if err := c.ShouldBind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
@@ -127,7 +131,7 @@ func CreateMedicalReport(c *gin.Context) {
 			MedicineID:  value.MedicineID,
 			Quantity:    value.Quantity,
 			Instruction: value.Instruction,
-			UpdatedBy:   input.UpdatedBy,
+			UpdatedBy:   &uid,
 		})
 	}
 
@@ -138,10 +142,10 @@ func CreateMedicalReport(c *gin.Context) {
 		Diagnose:     input.Diagnose,
 		Prescription: prescription,
 		Date:         &now,
-		UpdatedBy:    input.UpdatedBy,
+		UpdatedBy:    &uid,
 	}
 
-	_, err := report.Create()
+	_, err = report.Create()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -163,6 +167,12 @@ func CreateMedicalReport(c *gin.Context) {
 // @Success 200 {object} MedicalReportResponse "Medical report response"
 // @Router /medical-report/{id} [put]
 func UpdateMedicalReport(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	id := c.Param("id")
 
 	var input UpdateMedicalReportRequest
@@ -192,7 +202,7 @@ func UpdateMedicalReport(c *gin.Context) {
 		Diagnose:     input.Diagnose,
 		Prescription: prescription,
 		Date:         input.Date,
-		UpdatedBy:    input.UpdatedBy,
+		UpdatedBy:    &uid,
 	}
 
 	report, err = report.Update(updatedTicket)

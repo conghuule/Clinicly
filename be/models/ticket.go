@@ -3,6 +3,7 @@ package models
 import (
 	"clinic-management/utils"
 	"clinic-management/utils/query"
+	"errors"
 	"time"
 
 	"gorm.io/gorm"
@@ -27,15 +28,20 @@ func (Ticket) TableName() string {
 }
 
 func (ticket *Ticket) BeforeCreate(tx *gorm.DB) error {
-	lastTicket := &Ticket{}
+	todayTicket := []Ticket{}
 
 	err := DB.Scopes(query.QueryByDate("NgayKham", utils.GetCurrentDateString())).
-		Order(`"NgayTao" desc`).First(lastTicket).Error
-	if err != nil {
+		Order(`"NgayTao" desc`).Find(todayTicket).Error
+	if err != nil || len(todayTicket) == 0 {
 		ticket.Number = 1
 	}
 
-	ticket.Number = lastTicket.Number + 1
+	maxTicketReg, err := GetRegulationByID("SLLKTD")
+	if len(todayTicket) >= maxTicketReg.Value || err != nil {
+		return errors.New("the maximum number of tickets per day has been exceeded")
+	}
+
+	ticket.Number = todayTicket[0].Number + 1
 
 	return nil
 }

@@ -3,8 +3,8 @@ package controllers
 import (
 	"clinic-management/models"
 	"clinic-management/types"
-	"clinic-management/utils"
 	"clinic-management/utils/query"
+	"clinic-management/utils/token"
 	"net/http"
 	"time"
 
@@ -12,13 +12,11 @@ import (
 )
 
 type TicketRequest struct {
-	PatientID uint  `json:"patient_id" binding:"required"`
-	UpdatedBy *uint `json:"updated_by" binding:"required"`
+	PatientID uint `json:"patient_id" binding:"required"`
 }
 
 type UpdateTicketRequest struct {
-	Status    types.TicketStatus `json:"status"`
-	UpdatedBy *uint              `json:"updated_by"`
+	Status types.TicketStatus `json:"status" binding:"required"`
 }
 
 type TicketResponse struct {
@@ -34,7 +32,7 @@ type TicketListResponse struct {
 type TicketQuery struct {
 	PaginateQuery
 	Status  types.TicketStatus `form:"status,default=0"`
-	Date    *string            `form:"date"`
+	Date    string             `form:"date"`
 	OrderBy string             `form:"order_by,default=STT"`
 	Desc    bool               `form:"desc,default=false"`
 }
@@ -57,14 +55,9 @@ func GetTicket(c *gin.Context) {
 		return
 	}
 
-	if ticketQuery.Date == nil {
-		now := utils.GetCurrentDateString()
-		ticketQuery.Date = &now
-	}
-
 	tickets, err := models.GetTicket(query.Paginate(c),
 		query.OrderBy(ticketQuery.OrderBy, ticketQuery.Desc),
-		query.QueryByDate("NgayKham", *ticketQuery.Date),
+		query.QueryByDate("NgayKham", ticketQuery.Date),
 		query.QueryByField("TrangThai", ticketQuery.Status.Value()))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
@@ -86,6 +79,12 @@ func GetTicket(c *gin.Context) {
 // @Success 200 {object} TicketResponse "Ticket response"
 // @Router /ticket [post]
 func CreateTicket(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	var input TicketRequest
 	if err := c.ShouldBind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
@@ -97,10 +96,10 @@ func CreateTicket(c *gin.Context) {
 		PatientID: input.PatientID,
 		Status:    types.Waiting.Value(),
 		Date:      &(now),
-		UpdatedBy: input.UpdatedBy,
+		UpdatedBy: &uid,
 	}
 
-	_, err := ticket.Create()
+	_, err = ticket.Create()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -122,6 +121,12 @@ func CreateTicket(c *gin.Context) {
 // @Success 200 {object} TicketResponse "Ticket response"
 // @Router /ticket/{id} [put]
 func UpdateTicket(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	id := c.Param("id")
 
 	var input UpdateTicketRequest
@@ -138,7 +143,7 @@ func UpdateTicket(c *gin.Context) {
 
 	updatedTicket := models.Ticket{
 		Status:    input.Status.Value(),
-		UpdatedBy: input.UpdatedBy,
+		UpdatedBy: &uid,
 	}
 
 	ticket, err = ticket.Update(updatedTicket)

@@ -1,22 +1,20 @@
 package models
 
 import (
-	"strconv"
 	"time"
 
-	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
 const TableNameRegulation = "QuyDinh"
 
 type Regulation struct {
-	ID        uint           `gorm:"column:MaQD" json:"id"`
-	Name      string         `gorm:"column:TenQD" json:"name"`
-	Value     datatypes.JSON `gorm:"column:GiaTri" json:"value"`
-	CreatedAt time.Time      `gorm:"column:NgayTao" json:"created_at"`
-	UpdatedAt time.Time      `gorm:"column:NgayCapNhat" json:"updated_at"`
-	UpdatedBy *uint          `gorm:"column:CapNhatBoi" json:"updated_by"`
+	ID        string     `gorm:"column:MaQD" json:"id"`
+	Name      string     `gorm:"column:TenQD" json:"name"`
+	Value     int        `gorm:"column:GiaTri" json:"value"`
+	CreatedAt *time.Time `gorm:"column:NgayTao" json:"created_at"`
+	UpdatedAt *time.Time `gorm:"column:NgayCapNhat" json:"updated_at"`
+	UpdatedBy *uint      `gorm:"column:CapNhatBoi" json:"updated_by"`
 }
 
 func (Regulation) TableName() string {
@@ -64,13 +62,9 @@ func GetRegulation(query ...func(*gorm.DB) *gorm.DB) ([]Regulation, error) {
 }
 
 func GetRegulationByID(id string) (*Regulation, error) {
-	ID, err := strconv.Atoi(id)
-	if err != nil {
-		return nil, err
-	}
 	regulation := &Regulation{}
 
-	err = DB.Where(Regulation{ID: uint(ID)}).First(regulation).Error
+	err := DB.Where(Regulation{ID: id}).First(regulation).Error
 	if err != nil {
 		return nil, err
 	}

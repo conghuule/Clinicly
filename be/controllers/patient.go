@@ -4,6 +4,7 @@ import (
 	"clinic-management/models"
 	"clinic-management/types"
 	"clinic-management/utils/query"
+	"clinic-management/utils/token"
 	"net/http"
 	"time"
 
@@ -17,7 +18,6 @@ type PatientRequest struct {
 	IdentityCard string       `json:"identity_card" binding:"required"`
 	Address      string       `json:"address" binding:"required"`
 	PhoneNumber  string       `json:"phone_number" binding:"required"`
-	UpdatedBy    *uint        `json:"updated_by" binding:"required"`
 }
 
 type UpdatePatientRequest struct {
@@ -27,7 +27,6 @@ type UpdatePatientRequest struct {
 	IdentityCard string       `json:"identity_card"`
 	Address      string       `json:"address"`
 	PhoneNumber  string       `json:"phone_number"`
-	UpdatedBy    *uint        `json:"updated_by"`
 }
 
 type PatientResponse struct {
@@ -52,6 +51,8 @@ type PatientQuery struct {
 // @Tags patient
 // @Produce json
 // @Param name query string false "Patient name"
+// @Param order_by query int false "Order by" default(NgayTao)
+// @Param desc query bool false "Order descending" default(false)
 // @Param page query int false "Page" default(1)
 // @Param page_size query int false "Page size" default(10)
 // @Success 200 {object} PatientListResponse "Patient response"
@@ -108,6 +109,12 @@ func GetPatientByID(c *gin.Context) {
 // @Success 200 {object} PatientResponse "Patient response"
 // @Router /patient [post]
 func CreatePatient(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	var input PatientRequest
 	if err := c.ShouldBind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
@@ -121,10 +128,10 @@ func CreatePatient(c *gin.Context) {
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,
 		PhoneNumber:  input.PhoneNumber,
-		UpdatedBy:    input.UpdatedBy,
+		UpdatedBy:    &uid,
 	}
 
-	_, err := patient.Create()
+	_, err = patient.Create()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -146,6 +153,12 @@ func CreatePatient(c *gin.Context) {
 // @Success 200 {object} PatientResponse "Patient response"
 // @Router /patient/{id} [put]
 func UpdatePatient(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	id := c.Param("id")
 
 	var input UpdatePatientRequest
@@ -167,7 +180,7 @@ func UpdatePatient(c *gin.Context) {
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,
 		PhoneNumber:  input.PhoneNumber,
-		UpdatedBy:    input.UpdatedBy,
+		UpdatedBy:    &uid,
 	}
 
 	patient, err = patient.Update(updatedPatient)

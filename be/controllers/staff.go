@@ -4,6 +4,7 @@ import (
 	"clinic-management/models"
 	"clinic-management/types"
 	"clinic-management/utils/query"
+	"clinic-management/utils/token"
 	"net/http"
 	"time"
 
@@ -22,7 +23,6 @@ type StaffRequest struct {
 	Salary       uint              `json:"salary"`
 	Status       types.StaffStatus `json:"status" binding:"enum"`
 	Password     string            `json:"password" binding:"required"`
-	UpdatedBy    *uint             `json:"updated_by" binding:"required"`
 }
 
 type UpdateStaffRequest struct {
@@ -37,7 +37,6 @@ type UpdateStaffRequest struct {
 	Salary       uint              `json:"salary"`
 	Status       types.StaffStatus `json:"status" binding:"enum"`
 	Password     string            `json:"password"`
-	UpdatedBy    *uint             `json:"updated_by"`
 }
 
 type StaffResponse struct {
@@ -120,6 +119,12 @@ func GetStaffByID(c *gin.Context) {
 // @Success 200 {object} StaffResponse "Staff response"
 // @Router /staff [post]
 func CreateStaff(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	var input StaffRequest
 	if err := c.ShouldBind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
@@ -140,10 +145,10 @@ func CreateStaff(c *gin.Context) {
 		Salary:       input.Salary,
 		Status:       input.Status.Value(),
 		Password:     input.Password,
-		UpdatedBy:    input.UpdatedBy,
+		UpdatedBy:    &uid,
 	}
 
-	_, err := staff.Create()
+	_, err = staff.Create()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -165,6 +170,12 @@ func CreateStaff(c *gin.Context) {
 // @Success 200 {object} StaffResponse "Staff response"
 // @Router /staff/{id} [put]
 func UpdateStaff(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	id := c.Param("id")
 
 	var input UpdateStaffRequest
@@ -191,7 +202,7 @@ func UpdateStaff(c *gin.Context) {
 		Salary:       input.Salary,
 		Status:       input.Status.Value(),
 		Password:     input.Password,
-		UpdatedBy:    input.UpdatedBy,
+		UpdatedBy:    &uid,
 	}
 
 	staff, err = staff.Update(updatedStaff)

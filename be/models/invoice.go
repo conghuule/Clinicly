@@ -44,9 +44,14 @@ func (invoice *Invoice) Create(report MedicalReport) (*Invoice, error) {
 		total += int(value.Quantity) * int(medicinePrice[value.MedicineID])
 	}
 
-	invoice.Total = uint(total)
+	costReg, err := GetRegulationByID("GK")
+	if err != nil {
+		return nil, err
+	}
 
-	err := DB.Omit("MedicalReport").Create(invoice).Error
+	invoice.Total = uint(total) + uint(costReg.Value)
+
+	err = DB.Omit("MedicalReport").Create(invoice).Error
 	if err != nil {
 		return nil, err
 	}

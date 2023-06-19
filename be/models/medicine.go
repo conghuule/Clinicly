@@ -33,6 +33,21 @@ func (medicine *Medicine) Create() (*Medicine, error) {
 	return medicine, nil
 }
 
+func (medicine *Medicine) AfterCreate() error {
+	report := MedicineReport{
+		MedicineID: medicine.ID,
+		Quantity:   medicine.Quantity,
+		Date:       medicine.CreatedAt,
+		UpdatedBy:  medicine.UpdatedBy,
+	}
+
+	if _, err := report.Create(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (medicine *Medicine) Update(updatedMedicine Medicine) (*Medicine, error) {
 	err := DB.Model(medicine).Updates(updatedMedicine).Error
 	if err != nil {

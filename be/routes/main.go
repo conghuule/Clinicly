@@ -36,6 +36,7 @@ func Config(r *gin.Engine) {
 		addMedicalReportRoute(v1)
 		addMedicineRoute(v1)
 		addInvoiceRoute(v1)
+		addMedicineReportRoute(v1)
 	}
 
 	addSwaggerRoute(r)

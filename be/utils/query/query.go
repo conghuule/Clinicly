@@ -30,7 +30,10 @@ func QueryByDate(field string, date string) func(db *gorm.DB) *gorm.DB {
 			return db
 		}
 
-		startDate, _ := utils.ParseDate(date)
+		startDate, err := utils.ParseDate(date)
+		if err != nil {
+			return db
+		}
 		endDate := startDate.Add(time.Hour * 24 * time.Duration(1))
 
 		return db.Where(fmt.Sprintf(`"%s" BETWEEN ? AND ?`, field), startDate, endDate)

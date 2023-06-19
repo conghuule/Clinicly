@@ -4,29 +4,28 @@ import (
 	"clinic-management/models"
 	"clinic-management/types"
 	"clinic-management/utils/query"
+	"clinic-management/utils/token"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type MedicineRequest struct {
-	ID        string             `json:"id" binding:"required"`
-	Name      string             `json:"name" binding:"required"`
-	Quantity  uint               `json:"quantity" binding:"required"`
-	Price     uint               `json:"price" binding:"required"`
-	Info      string             `json:"info"`
-	Unit      types.MedicineUnit `json:"unit" binding:"required,enum"`
-	UpdatedBy *uint              `json:"updated_by" binding:"required"`
+	ID       string             `json:"id" binding:"required"`
+	Name     string             `json:"name" binding:"required"`
+	Quantity uint               `json:"quantity" binding:"required"`
+	Price    uint               `json:"price" binding:"required"`
+	Info     string             `json:"info"`
+	Unit     types.MedicineUnit `json:"unit" binding:"required,enum"`
 }
 
 type UpdateMedicineRequest struct {
-	ID        string             `json:"id"`
-	Name      string             `json:"name"`
-	Quantity  uint               `json:"quantity"`
-	Price     uint               `json:"price"`
-	Info      string             `json:"info"`
-	Unit      types.MedicineUnit `json:"unit" binding:"enum"`
-	UpdatedBy *uint              `json:"updated_by"`
+	ID       string             `json:"id"`
+	Name     string             `json:"name"`
+	Quantity uint               `json:"quantity"`
+	Price    uint               `json:"price"`
+	Info     string             `json:"info"`
+	Unit     types.MedicineUnit `json:"unit" binding:"enum"`
 }
 
 type MedicineResponse struct {
@@ -41,8 +40,10 @@ type MedicineListResponse struct {
 
 type MedicineQuery struct {
 	PaginateQuery
-	ID   string `form:"id"`
-	Name string `form:"name"`
+	ID      string `form:"id"`
+	Name    string `form:"name"`
+	OrderBy string `form:"order_by,default=NgayTao"`
+	Desc    bool   `form:"desc,default=false"`
 }
 
 // @Summary Get medicine
@@ -51,6 +52,8 @@ type MedicineQuery struct {
 // @Produce json
 // @Param id query string false "Medicine id"
 // @Param name query string false "Medicine name"
+// @Param order_by query int false "Order by" default(NgayTao)
+// @Param desc query bool false "Order descending" default(false)
 // @Param page query int false "Page" default(1)
 // @Param page_size query int false "Page size" default(10)
 // @Success 200 {object} MedicineListResponse "Medicine response"
@@ -63,7 +66,7 @@ func GetMedicine(c *gin.Context) {
 	}
 
 	medicines, err := models.GetMedicine(query.Paginate(c),
-		query.OrderBy("NgayTao", false),
+		query.OrderBy(medicineQuery.OrderBy, medicineQuery.Desc),
 		query.StringSearch("MaThuoc", medicineQuery.ID),
 		query.StringSearch("TenThuoc", medicineQuery.Name))
 	if err != nil {
@@ -108,6 +111,12 @@ func GetMedicineByID(c *gin.Context) {
 // @Success 200 {object} MedicineResponse "Medicine response"
 // @Router /medicine [post]
 func CreateMedicine(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	var input MedicineRequest
 	if err := c.ShouldBind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
@@ -121,10 +130,10 @@ func CreateMedicine(c *gin.Context) {
 		Price:     input.Price,
 		Info:      input.Info,
 		Unit:      input.Unit.Value(),
-		UpdatedBy: input.UpdatedBy,
+		UpdatedBy: &uid,
 	}
 
-	_, err := medicine.Create()
+	_, err = medicine.Create()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -146,6 +155,12 @@ func CreateMedicine(c *gin.Context) {
 // @Success 200 {object} MedicineResponse "Medicine response"
 // @Router /medicine/{id} [put]
 func UpdateMedicine(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	id := c.Param("id")
 
 	var input UpdateMedicineRequest
@@ -154,7 +169,7 @@ func UpdateMedicine(c *gin.Context) {
 		return
 	}
 
-	ticket, err := models.GetMedicineByID(id)
+	medicine, err := models.GetMedicineByID(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -166,10 +181,10 @@ func UpdateMedicine(c *gin.Context) {
 		Price:     input.Price,
 		Info:      input.Info,
 		Unit:      input.Unit.Value(),
-		UpdatedBy: input.UpdatedBy,
+		UpdatedBy: &uid,
 	}
 
-	ticket, err = ticket.Update(updatedMedicine)
+	medicine, err = medicine.Update(updatedMedicine)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -177,7 +192,7 @@ func UpdateMedicine(c *gin.Context) {
 
 	c.JSON(http.StatusOK, MedicineResponse{
 		Response: SuccessfulResponse,
-		Data:     *ticket,
+		Data:     *medicine,
 	})
 }
 

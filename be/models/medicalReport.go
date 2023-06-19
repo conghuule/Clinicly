@@ -72,7 +72,7 @@ func GetMedicalReport(query ...func(*gorm.DB) *gorm.DB) ([]MedicalReport, error)
 
 	err := DB.Scopes(query...).
 		Preload("Doctor", func(db *gorm.DB) *gorm.DB {
-			return db.Select("ID", "FullName")
+			return db.Select("ID", "FullName", "UpdatedBy")
 		}).Find(&reports).Error
 	if err != nil {
 		return nil, err

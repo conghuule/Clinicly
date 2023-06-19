@@ -62,6 +62,43 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
+                        "description": "Patient",
+                        "name": "patient",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Payment status",
+                        "name": "payment_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Delivery status",
+                        "name": "delivery_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date",
+                        "name": "date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Order by",
+                        "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Order descending",
+                        "name": "desc",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "default": 1,
                         "description": "Page",
                         "name": "page",
@@ -201,6 +238,19 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Date",
                         "name": "date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Order by",
+                        "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Order descending",
+                        "name": "desc",
                         "in": "query"
                     },
                     {
@@ -380,6 +430,19 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
+                        "description": "Order by",
+                        "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Order descending",
+                        "name": "desc",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "default": 1,
                         "description": "Page",
                         "name": "page",
@@ -430,6 +493,188 @@ const docTemplate = `{
                         "description": "Medicine response",
                         "schema": {
                             "$ref": "#/definitions/controllers.MedicineResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/medicine-report": {
+            "get": {
+                "description": "Get medicine report",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicine report"
+                ],
+                "summary": "Get medicine report",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Date",
+                        "name": "date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Order by",
+                        "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Order descending",
+                        "name": "desc",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medicine report response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.MedicineReportListResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create medicine report",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicine report"
+                ],
+                "summary": "Create medicine report",
+                "parameters": [
+                    {
+                        "description": "Medicine report data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.MedicineReportRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medicine report response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.MedicineReportResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/medicine-report/{id}": {
+            "get": {
+                "description": "Get medicine report by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicine report"
+                ],
+                "summary": "Get medicine report by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Medicine report id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medicine report response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.MedicineReportResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update medicine report",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicine report"
+                ],
+                "summary": "Update medicine report",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Medicine report id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Medicine report data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UpdateMedicineReportRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medicine report response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.MedicineReportResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete medicine report",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medicine report"
+                ],
+                "summary": "Delete medicine report",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Medicine report id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Medicine report response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.MedicineReportResponse"
                         }
                     }
                 }
@@ -558,6 +803,19 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Patient name",
                         "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Order by",
+                        "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Order descending",
+                        "name": "desc",
                         "in": "query"
                     },
                     {
@@ -735,6 +993,47 @@ const docTemplate = `{
                     "regulation"
                 ],
                 "summary": "Get regulation",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Regulation id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Regulation name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Order by",
+                        "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Order descending",
+                        "name": "desc",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Regulation response",
@@ -1294,9 +1593,8 @@ const docTemplate = `{
         "controllers.MedicalReportRequest": {
             "type": "object",
             "required": [
-                "doctor_id",
-                "patient_id",
-                "updated_by"
+                "doctor",
+                "patient"
             ],
             "properties": {
                 "date": {
@@ -1305,10 +1603,10 @@ const docTemplate = `{
                 "diagnose": {
                     "type": "string"
                 },
-                "doctor_id": {
+                "doctor": {
                     "type": "integer"
                 },
-                "patient_id": {
+                "patient": {
                     "type": "integer"
                 },
                 "prescription": {
@@ -1316,9 +1614,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/controllers.PrescriptionRequest"
                     }
-                },
-                "updated_by": {
-                    "type": "integer"
                 }
             }
         },
@@ -1353,6 +1648,55 @@ const docTemplate = `{
                 }
             }
         },
+        "controllers.MedicineReportListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.MedicineReport"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.MedicineReportRequest": {
+            "type": "object",
+            "required": [
+                "medicine_id",
+                "quantity"
+            ],
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "medicine_id": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "controllers.MedicineReportResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/models.MedicineReport"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "controllers.MedicineRequest": {
             "type": "object",
             "required": [
@@ -1360,8 +1704,7 @@ const docTemplate = `{
                 "name",
                 "price",
                 "quantity",
-                "unit",
-                "updated_by"
+                "unit"
             ],
             "properties": {
                 "id": {
@@ -1381,9 +1724,6 @@ const docTemplate = `{
                 },
                 "unit": {
                     "$ref": "#/definitions/types.MedicineUnit"
-                },
-                "updated_by": {
-                    "type": "integer"
                 }
             }
         },
@@ -1426,8 +1766,7 @@ const docTemplate = `{
                 "full_name",
                 "gender",
                 "identity_card",
-                "phone_number",
-                "updated_by"
+                "phone_number"
             ],
             "properties": {
                 "address": {
@@ -1447,9 +1786,6 @@ const docTemplate = `{
                 },
                 "phone_number": {
                     "type": "string"
-                },
-                "updated_by": {
-                    "type": "integer"
                 }
             }
         },
@@ -1471,14 +1807,14 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "instruction",
-                "medicine_id",
+                "medicine",
                 "quantity"
             ],
             "properties": {
                 "instruction": {
                     "type": "string"
                 },
-                "medicine_id": {
+                "medicine": {
                     "type": "string"
                 },
                 "quantity": {
@@ -1507,21 +1843,14 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "name",
-                "updated_by",
                 "value"
             ],
             "properties": {
                 "name": {
                     "type": "string"
                 },
-                "updated_by": {
-                    "type": "integer"
-                },
                 "value": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "integer"
                 }
             }
         },
@@ -1567,8 +1896,7 @@ const docTemplate = `{
                 "identity_card",
                 "password",
                 "phone_number",
-                "role",
-                "updated_by"
+                "role"
             ],
             "properties": {
                 "address": {
@@ -1603,9 +1931,6 @@ const docTemplate = `{
                 },
                 "status": {
                     "$ref": "#/definitions/types.StaffStatus"
-                },
-                "updated_by": {
-                    "type": "integer"
                 }
             }
         },
@@ -1643,14 +1968,10 @@ const docTemplate = `{
         "controllers.TicketRequest": {
             "type": "object",
             "required": [
-                "patient_id",
-                "updated_by"
+                "patient_id"
             ],
             "properties": {
                 "patient_id": {
-                    "type": "integer"
-                },
-                "updated_by": {
                     "type": "integer"
                 }
             }
@@ -1677,9 +1998,6 @@ const docTemplate = `{
                 },
                 "payment_status": {
                     "type": "boolean"
-                },
-                "updated_by": {
-                    "type": "integer"
                 }
             }
         },
@@ -1692,10 +2010,10 @@ const docTemplate = `{
                 "diagnose": {
                     "type": "string"
                 },
-                "doctor_id": {
+                "doctor": {
                     "type": "integer"
                 },
-                "patient_id": {
+                "patient": {
                     "type": "integer"
                 },
                 "prescription": {
@@ -1703,8 +2021,19 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/controllers.PrescriptionRequest"
                     }
+                }
+            }
+        },
+        "controllers.UpdateMedicineReportRequest": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
                 },
-                "updated_by": {
+                "medicine_id": {
+                    "type": "string"
+                },
+                "quantity": {
                     "type": "integer"
                 }
             }
@@ -1729,9 +2058,6 @@ const docTemplate = `{
                 },
                 "unit": {
                     "$ref": "#/definitions/types.MedicineUnit"
-                },
-                "updated_by": {
-                    "type": "integer"
                 }
             }
         },
@@ -1755,9 +2081,6 @@ const docTemplate = `{
                 },
                 "phone_number": {
                     "type": "string"
-                },
-                "updated_by": {
-                    "type": "integer"
                 }
             }
         },
@@ -1767,14 +2090,8 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "updated_by": {
-                    "type": "integer"
-                },
                 "value": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "integer"
                 }
             }
         },
@@ -1813,20 +2130,17 @@ const docTemplate = `{
                 },
                 "status": {
                     "$ref": "#/definitions/types.StaffStatus"
-                },
-                "updated_by": {
-                    "type": "integer"
                 }
             }
         },
         "controllers.UpdateTicketRequest": {
             "type": "object",
+            "required": [
+                "status"
+            ],
             "properties": {
                 "status": {
                     "$ref": "#/definitions/types.TicketStatus"
-                },
-                "updated_by": {
-                    "type": "integer"
                 }
             }
         },
@@ -1932,6 +2246,35 @@ const docTemplate = `{
                 }
             }
         },
+        "models.MedicineReport": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "medicine": {
+                    "$ref": "#/definitions/models.Medicine"
+                },
+                "medicine_id": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.Patient": {
             "type": "object",
             "properties": {
@@ -2000,7 +2343,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -2012,10 +2355,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "value": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "integer"
                 }
             }
         },

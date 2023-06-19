@@ -24,7 +24,7 @@ type Staff struct {
 	Password     string     `gorm:"column:Password" json:"-"`
 	CreatedAt    *time.Time `gorm:"column:NgayTao" json:"created_at,omitempty"`
 	UpdatedAt    *time.Time `gorm:"column:NgayCapNhat" json:"updated_at,omitempty"`
-	UpdatedBy    *uint      `gorm:"column:CapNhatBoi" json:"updated_by,omitempty"`
+	UpdatedBy    *uint      `gorm:"column:CapNhatBoi" json:"updated_by"`
 }
 
 func (Staff) TableName() string {
