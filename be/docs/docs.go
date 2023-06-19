@@ -553,28 +553,6 @@ const docTemplate = `{
                     "patient"
                 ],
                 "summary": "Get patient",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Patient name",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "default": 1,
-                        "description": "Page",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "default": 10,
-                        "description": "Page size",
-                        "name": "page_size",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Patient response",
@@ -615,19 +593,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/patient/enums": {
-            "get": {
-                "description": "Get patient enums",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "patient"
-                ],
-                "summary": "Get patient enums",
-                "responses": {}
             }
         },
         "/patient/{id}": {
@@ -863,18 +828,6 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "Order by field",
-                        "name": "order_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "boolean",
-                        "description": "Is descending order",
-                        "name": "desc",
-                        "in": "query"
-                    },
-                    {
                         "type": "integer",
                         "default": 1,
                         "description": "Page",
@@ -1051,30 +1004,6 @@ const docTemplate = `{
                 "summary": "Get ticket",
                 "parameters": [
                     {
-                        "enum": [
-                            1,
-                            2,
-                            3
-                        ],
-                        "type": "integer",
-                        "description": "Ticket status",
-                        "name": "status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Date",
-                        "name": "date",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "default": "STT",
-                        "description": "Order by",
-                        "name": "order_by",
-                        "in": "query"
-                    },
-                    {
                         "type": "integer",
                         "default": 1,
                         "description": "Page",
@@ -1099,7 +1028,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Create ticket",
+                "description": "Create waiting ticket",
                 "consumes": [
                     "application/json"
                 ],
@@ -1109,10 +1038,10 @@ const docTemplate = `{
                 "tags": [
                     "ticket"
                 ],
-                "summary": "Create ticket",
+                "summary": "Create waiting ticket",
                 "parameters": [
                     {
-                        "description": "Ticket data",
+                        "description": "Waiting ticket data",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -1123,9 +1052,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Ticket response",
+                        "description": "Waiting ticket response",
                         "schema": {
-                            "$ref": "#/definitions/controllers.TicketResponse"
+                            "$ref": "#/definitions/controllers.TicketListResponse"
                         }
                     }
                 }
@@ -1145,45 +1074,6 @@ const docTemplate = `{
             }
         },
         "/ticket/{id}": {
-            "put": {
-                "description": "Update ticket",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ticket"
-                ],
-                "summary": "Update ticket",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Ticket id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Ticket data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.UpdateTicketRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Ticket response",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.TicketResponse"
-                        }
-                    }
-                }
-            },
             "delete": {
                 "description": "Delete ticket",
                 "produces": [
@@ -1440,7 +1330,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "gender": {
-                    "$ref": "#/definitions/types.Gender"
+                    "type": "string"
                 },
                 "identity_card": {
                     "type": "string"
@@ -1464,25 +1354,6 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "string"
-                }
-            }
-        },
-        "controllers.PrescriptionRequest": {
-            "type": "object",
-            "required": [
-                "instruction",
-                "medicine_id",
-                "quantity"
-            ],
-            "properties": {
-                "instruction": {
-                    "type": "string"
-                },
-                "medicine_id": {
-                    "type": "string"
-                },
-                "quantity": {
-                    "type": "integer"
                 }
             }
         },
@@ -1737,6 +1608,14 @@ const docTemplate = `{
         },
         "controllers.UpdatePatientRequest": {
             "type": "object",
+            "required": [
+                "address",
+                "birth_date",
+                "full_name",
+                "gender",
+                "identity_card",
+                "phone_number"
+            ],
             "properties": {
                 "address": {
                     "type": "string"
@@ -1748,7 +1627,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "gender": {
-                    "$ref": "#/definitions/types.Gender"
+                    "type": "string"
                 },
                 "identity_card": {
                     "type": "string"
@@ -1967,32 +1846,6 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Prescription": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "instruction": {
-                    "type": "string"
-                },
-                "medical_report_id": {
-                    "type": "integer"
-                },
-                "medicine_id": {
-                    "type": "string"
-                },
-                "quantity": {
-                    "type": "integer"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "updated_by": {
-                    "type": "integer"
-                }
-            }
-        },
         "models.Regulation": {
             "type": "object",
             "properties": {
@@ -2160,19 +2013,6 @@ const docTemplate = `{
             "x-enum-varnames": [
                 "Working",
                 "Quit"
-            ]
-        },
-        "types.TicketStatus": {
-            "type": "integer",
-            "enum": [
-                1,
-                2,
-                3
-            ],
-            "x-enum-varnames": [
-                "Waiting",
-                "Processing",
-                "Done"
             ]
         }
     }

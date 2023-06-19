@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strconv"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -43,7 +44,7 @@ func (staff *Staff) BeforeCreate(tx *gorm.DB) error {
 }
 
 func (staff *Staff) Create() (*Staff, error) {
-	err := DB.Create(staff).Error
+	err := DB.Create(&staff).Error
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +62,7 @@ func (staff *Staff) Update(updatedStaff Staff) (*Staff, error) {
 		updatedStaff.Password = hashedPassword
 	}
 
-	err := DB.Model(staff).Updates(updatedStaff).Error
+	err := DB.Model(&staff).Updates(updatedStaff).Error
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +76,7 @@ func (staff *Staff) Delete() (*Staff, error) {
 		return nil, err
 	}
 
-	DB.Delete(staff)
+	DB.Delete(&staff)
 
 	return staff, nil
 }
@@ -92,9 +93,13 @@ func GetStaff(query ...func(*gorm.DB) *gorm.DB) ([]Staff, error) {
 }
 
 func GetStaffByID(id string) (*Staff, error) {
+	ID, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
 	staff := &Staff{}
 
-	err := DB.Where(`"MaNV" = ?`, id).First(staff).Error
+	err = DB.Where(Staff{ID: uint(ID)}).First(staff).Error
 	if err != nil {
 		return nil, err
 	}

@@ -2,8 +2,6 @@ package models
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 const TableNameMedicalReport = "PhieuKham"
@@ -25,14 +23,10 @@ func (MedicalReport) TableName() string {
 	return TableNameMedicalReport
 }
 
-func (report *MedicalReport) Create() (*MedicalReport, error) {
-	err := DB.Create(report).Error
-	if err != nil {
-		return nil, err
-	}
+func GetMedicalReportList() []MedicalReport {
+	medicalReports := []MedicalReport{}
 
-	return report, nil
-}
+	DB.Find(&medicalReports)
 
 func (report *MedicalReport) AfterCreate(db *gorm.DB) (err error) {
 	invoice := Invoice{

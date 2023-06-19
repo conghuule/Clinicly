@@ -12,7 +12,7 @@ import (
 
 type StaffRequest struct {
 	FullName     string            `json:"full_name" binding:"required"`
-	BirthDate    *time.Time        `json:"birth_date" binding:"required"`
+	BirthDate    time.Time         `json:"birth_date" binding:"required"`
 	Gender       types.Gender      `json:"gender" binding:"required,enum"`
 	Address      string            `json:"address" binding:"required"`
 	IdentityCard string            `json:"identity_card" binding:"required"`
@@ -27,7 +27,7 @@ type StaffRequest struct {
 
 type UpdateStaffRequest struct {
 	FullName     string            `json:"full_name"`
-	BirthDate    *time.Time        `json:"birth_date"`
+	BirthDate    time.Time         `json:"birth_date"`
 	Gender       types.Gender      `json:"gender" binding:"enum"`
 	Address      string            `json:"address"`
 	IdentityCard string            `json:"identity_card"`
@@ -223,6 +223,51 @@ func DeleteStaff(c *gin.Context) {
 	}
 
 	_, err = staff.Delete()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, StaffResponse{
+		Response: SuccessfulResponse,
+		Data:     *staff,
+	})
+}
+
+// @Summary Get staff
+// @Description Get staff
+// @Tags staff
+// @Produce json
+// @Param name query string false "Staff name"
+// @Param page query int false "Page" default(1)
+// @Param page_size query int false "Page size" default(10)
+// @Success 200 {object} StaffListResponse "Staff response"
+// @Router /staff [get]
+func GetStaff(c *gin.Context) {
+	staffs, err := models.GetStaff(query.Paginate(c),
+		query.StringSearch("HoTen", c.Query("name")))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, StaffListResponse{
+		Response: SuccessfulResponse,
+		Data:     staffs,
+	})
+}
+
+// @Summary Get staff by id
+// @Description Get staff by id
+// @Tags staff
+// @Produce json
+// @Param id path int true "Staff id"
+// @Success 200 {object} StaffResponse "Staff response"
+// @Router /staff/{id} [get]
+func GetStaffByID(c *gin.Context) {
+	id := c.Param("id")
+
+	staff, err := models.GetStaffByID(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return

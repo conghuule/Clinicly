@@ -21,12 +21,13 @@ func Config(r *gin.Engine) {
 		v.RegisterValidation("enum", ValidateEnum)
 	}
 
+	r.Use(middlewares.Cors)
+
 	v1 := r.Group("api/v1")
 	{
 		addAuthRoute(v1)
 
 		v1.Use(middlewares.Authorize)
-		v1.Use(middlewares.Cors)
 
 		addStaffRoute(v1)
 		addPatientRoute(v1)

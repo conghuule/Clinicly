@@ -144,7 +144,7 @@ definitions:
       full_name:
         type: string
       gender:
-        $ref: '#/definitions/types.Gender'
+        type: string
       identity_card:
         type: string
       phone_number:
@@ -168,19 +168,6 @@ definitions:
         type: string
       status:
         type: string
-    type: object
-  controllers.PrescriptionRequest:
-    properties:
-      instruction:
-        type: string
-      medicine_id:
-        type: string
-      quantity:
-        type: integer
-    required:
-    - instruction
-    - medicine_id
-    - quantity
     type: object
   controllers.RegulationListResponse:
     properties:
@@ -357,13 +344,20 @@ definitions:
       full_name:
         type: string
       gender:
-        $ref: '#/definitions/types.Gender'
+        type: string
       identity_card:
         type: string
       phone_number:
         type: string
       updated_by:
         type: integer
+    required:
+    - address
+    - birth_date
+    - full_name
+    - gender
+    - identity_card
+    - phone_number
     type: object
   controllers.UpdateRegulationRequest:
     properties:
@@ -495,23 +489,6 @@ definitions:
         type: string
       phone_number:
         type: string
-      updated_at:
-        type: string
-      updated_by:
-        type: integer
-    type: object
-  models.Prescription:
-    properties:
-      created_at:
-        type: string
-      instruction:
-        type: string
-      medical_report_id:
-        type: integer
-      medicine_id:
-        type: string
-      quantity:
-        type: integer
       updated_at:
         type: string
       updated_by:
@@ -1003,21 +980,6 @@ paths:
   /patient:
     get:
       description: Get patient
-      parameters:
-      - description: Patient name
-        in: query
-        name: name
-        type: string
-      - default: 1
-        description: Page
-        in: query
-        name: page
-        type: integer
-      - default: 10
-        description: Page size
-        in: query
-        name: page_size
-        type: integer
       produces:
       - application/json
       responses:
@@ -1112,15 +1074,6 @@ paths:
       summary: Update patient
       tags:
       - patient
-  /patient/enums:
-    get:
-      description: Get patient enums
-      produces:
-      - application/json
-      responses: {}
-      summary: Get patient enums
-      tags:
-      - patient
   /regulation:
     get:
       description: Get regulation
@@ -1208,14 +1161,6 @@ paths:
         in: query
         name: name
         type: string
-      - description: Order by field
-        in: query
-        name: order_by
-        type: string
-      - description: Is descending order
-        in: query
-        name: desc
-        type: boolean
       - default: 1
         description: Page
         in: query
@@ -1333,23 +1278,6 @@ paths:
     get:
       description: Get ticket
       parameters:
-      - description: Ticket status
-        enum:
-        - 1
-        - 2
-        - 3
-        in: query
-        name: status
-        type: integer
-      - description: Date
-        in: query
-        name: date
-        type: string
-      - default: STT
-        description: Order by
-        in: query
-        name: order_by
-        type: string
       - default: 1
         description: Page
         in: query
@@ -1373,9 +1301,9 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create ticket
+      description: Create waiting ticket
       parameters:
-      - description: Ticket data
+      - description: Waiting ticket data
         in: body
         name: data
         required: true
@@ -1385,10 +1313,10 @@ paths:
       - application/json
       responses:
         "200":
-          description: Ticket response
+          description: Waiting ticket response
           schema:
-            $ref: '#/definitions/controllers.TicketResponse'
-      summary: Create ticket
+            $ref: '#/definitions/controllers.TicketListResponse'
+      summary: Create waiting ticket
       tags:
       - ticket
   /ticket/{id}:
@@ -1408,32 +1336,6 @@ paths:
           schema:
             $ref: '#/definitions/controllers.TicketResponse'
       summary: Delete ticket
-      tags:
-      - ticket
-    put:
-      consumes:
-      - application/json
-      description: Update ticket
-      parameters:
-      - description: Ticket id
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Ticket data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/controllers.UpdateTicketRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Ticket response
-          schema:
-            $ref: '#/definitions/controllers.TicketResponse'
-      summary: Update ticket
       tags:
       - ticket
   /ticket/enums:

@@ -2,8 +2,6 @@ package controllers
 
 import (
 	"clinic-management/models"
-	"clinic-management/types"
-	"clinic-management/utils/query"
 	"net/http"
 	"time"
 
@@ -21,13 +19,13 @@ type PatientRequest struct {
 }
 
 type UpdatePatientRequest struct {
-	FullName     string       `json:"full_name"`
-	Gender       types.Gender `json:"gender" binding:"enum"`
-	BirthDate    *time.Time   `json:"birth_date"`
-	IdentityCard string       `json:"identity_card"`
-	Address      string       `json:"address"`
-	PhoneNumber  string       `json:"phone_number"`
-	UpdatedBy    *uint        `json:"updated_by"`
+	FullName     string    `json:"full_name" binding:"required"`
+	Gender       string    `json:"gender" binding:"required"`
+	BirthDate    time.Time `json:"birth_date" binding:"required"`
+	IdentityCard string    `json:"identity_card" binding:"required"`
+	Address      string    `json:"address" binding:"required"`
+	PhoneNumber  string    `json:"phone_number" binding:"required"`
+	UpdatedBy    *uint     `json:"updated_by"`
 }
 
 type PatientResponse struct {
@@ -117,7 +115,7 @@ func CreatePatient(c *gin.Context) {
 	patient := models.Patient{
 		FullName:     input.FullName,
 		BirthDate:    input.BirthDate,
-		Gender:       input.Gender.Value(),
+		Gender:       input.Gender,
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,
 		PhoneNumber:  input.PhoneNumber,
@@ -148,7 +146,7 @@ func CreatePatient(c *gin.Context) {
 func UpdatePatient(c *gin.Context) {
 	id := c.Param("id")
 
-	var input UpdatePatientRequest
+	var input PatientRequest
 	if err := c.ShouldBind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -163,7 +161,7 @@ func UpdatePatient(c *gin.Context) {
 	updatedPatient := models.Patient{
 		FullName:     input.FullName,
 		BirthDate:    input.BirthDate,
-		Gender:       input.Gender.Value(),
+		Gender:       input.Gender,
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,
 		PhoneNumber:  input.PhoneNumber,
@@ -210,15 +208,43 @@ func DeletePatient(c *gin.Context) {
 	})
 }
 
-// @Summary Get patient enums
-// @Description Get patient enums
+// @Summary Get patient
+// @Description Get patient
 // @Tags patient
 // @Produce json
-// @Router /patient/enums [get]
-func GetPatientEnums(c *gin.Context) {
-	response := SuccessfulResponse
+// @Success 200 {object} PatientListResponse "Patient response"
+// @Router /patient [get]
+func GetPatient(c *gin.Context) {
+	patients, err := models.GetPatient()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
 
-	response.Data = types.PatientEnums
+	c.JSON(http.StatusOK, PatientListResponse{
+		Response: SuccessfulResponse,
+		Data:     patients,
+	})
+}
 
-	c.JSON(http.StatusOK, response)
+// @Summary Get patient by id
+// @Description Get patient by id
+// @Tags patient
+// @Produce json
+// @Param id path int true "Patient id"
+// @Success 200 {object} PatientResponse "Patient response"
+// @Router /patient/{id} [get]
+func GetPatientByID(c *gin.Context) {
+	id := c.Param("id")
+
+	patient, err := models.GetPatientByID(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, PatientResponse{
+		Response: SuccessfulResponse,
+		Data:     *patient,
+	})
 }

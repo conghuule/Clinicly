@@ -11,7 +11,6 @@ func addTicketRoute(r *gin.RouterGroup) {
 
 	group.GET("", controllers.GetTicket)
 	group.POST("", controllers.CreateTicket)
-	group.PUT(":id", controllers.UpdateTicket)
 	group.DELETE(":id", controllers.DeleteTicket)
 	group.GET("enums", controllers.GetTicketEnums)
 }
