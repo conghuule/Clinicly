@@ -31,7 +31,7 @@ export const SidebarData = [
   {
     id: 5,
     title: 'Bệnh nhân',
-    path: '/',
+    path: '/patients',
     icon: <img src={IMAGES.logoPatient} className="sidebar-icon-img" alt="patient" />,
     cName: 'nav-text',
   },
@@ -45,14 +45,14 @@ export const SidebarData = [
   {
     id: 7,
     title: 'Hoá đơn',
-    path: '/',
+    path: '/bills',
     icon: <img src={IMAGES.logoBill} className="sidebar-icon-img" alt="bill" />,
     cName: 'nav-text',
   },
   {
     id: 8,
     title: 'Quản lý',
-    path: '/',
+    path: '/manage/staffs',
     icon: <img src={IMAGES.logoManage} className="sidebar-icon-img" alt="manage" />,
     cName: 'nav-text',
   },
