@@ -127,3 +127,87 @@ export const BILL_COLUMNS = [
     ),
   },
 ];
+export const STAFF_COLUMNS = [
+  {
+    title: 'Tên nhân viên',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: 'Ngày sinh',
+    dataIndex: 'date_of_birth',
+    key: 'date_of_birth',
+  },
+  {
+    title: 'Địa chỉ',
+    dataIndex: 'address',
+    key: 'address',
+  },
+  {
+    title: 'Số điện thoại',
+    dataIndex: 'phone_number',
+    key: 'phone_number',
+  },
+  {
+    title: 'Loại nhân viên',
+    dataIndex: 'type',
+    key: 'type',
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'actions',
+    key: 'actions',
+    render: (_, { actions }) => (
+      <>
+        {actions.map((tag) => {
+          let color = tag.length > 5 ? 'geekblue' : 'green';
+          if (tag === 'loser') {
+            color = 'volcano';
+          }
+          return (
+            <Tag color={color} key={tag}>
+              {tag.toUpperCase()}
+            </Tag>
+          );
+        })}
+      </>
+    ),
+  },
+];
+export const REGULATION_COLUMNS = [
+  {
+    title: 'Mã quy định',
+    dataIndex: 'id',
+    key: 'id',
+  },
+  {
+    title: 'Tên quy định',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: 'Giá trị',
+    dataIndex: 'value',
+    key: 'value',
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'actions',
+    key: 'actions',
+    render: (_, { actions }) => (
+      <>
+        {actions.map((tag) => {
+          let color = tag.length > 5 ? 'geekblue' : 'green';
+          if (tag === 'loser') {
+            color = 'volcano';
+          }
+          return (
+            <Tag color={color} key={tag}>
+              {tag.toUpperCase()}
+            </Tag>
+          );
+        })}
+      </>
+    ),
+  },
+];

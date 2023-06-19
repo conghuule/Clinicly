@@ -3,14 +3,16 @@ import React, { useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
 import { Input } from 'antd';
 import BillTable from '../../components/Table/BillTable';
-
+import PublishBillModal from '../../components/Modal/PublishBillModal';
 import { Button, Dropdown, Menu } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+
 const { Search } = Input;
 
 export default function Bills() {
   const [searchValue, setSearchValue] = useState('');
   const onSearch = (value) => setSearchValue(value);
+  const [openModal, setOpenModal] = useState(false);
   const handleMenuClick = (e) => {
     setSearchValue(e.key);
   };
@@ -46,6 +48,12 @@ export default function Bills() {
             Trạng thái thanh toán <DownOutlined />
           </Button>
         </Dropdown>
+        <div>
+          <Button type="primary" className="bg-primary-200" onClick={() => setOpenModal(true)}>
+            Xuất hoá đơn
+          </Button>
+          <PublishBillModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
+        </div>
       </div>
       <BillTable searchValue={searchValue} />
     </div>
