@@ -37,7 +37,7 @@ export default function MedicineForm({ defaultValue = {}, onSubmit, submitText, 
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: centered ? 11 : 4, span: 16 }}>
-        <Button type="primary" htmlType="submit" className="bg-primary-200">
+        <Button type="primary" htmlType="submit">
           {submitText}
         </Button>
       </Form.Item>

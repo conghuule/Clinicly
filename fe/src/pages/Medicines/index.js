@@ -1,7 +1,7 @@
 import { faPills } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
-import { Button, Input, Modal } from 'antd';
+import { Button, Input } from 'antd';
 import MedicineTable from '../../components/Table/MedicineTable';
 import MedicineModal from '../../components/Modal/MedicineModal';
 const { Search } = Input;
@@ -20,13 +20,14 @@ export default function Medicines() {
           placeholder="Nhập bệnh nhân cần tìm"
           onSearch={onSearch}
           enterButton
-          className="bg-primary-200 rounded-[4px]"
+          className="rounded-[4px]"
+          size="large"
         />
         <div>
-          <Button type="primary" className="bg-primary-200" onClick={() => setOpenModal(true)}>
+          <Button type="primary" size="large" onClick={() => setOpenModal(true)}>
             Thêm thuốc
           </Button>
-          <MedicineModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
+          <MedicineModal open={openModal} onCancel={() => setOpenModal(false)} />
         </div>
       </div>
       <MedicineTable searchValue={searchValue} />

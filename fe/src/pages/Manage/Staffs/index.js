@@ -17,10 +17,10 @@ export default function Bills() {
       <HeaderBar title="Quản lý" icon={faFileInvoiceDollar} image="" name="Nguyễn Long Vũ" role="Bác sĩ" />
       <div className="flex gap-[2rem] mt-[2rem]">
         <Link to="/manage/staffs">
-          <Button className="h-[6rem] bg-blue text-[#fff]">Quản lý nhân viên</Button>
+          <Button className="h-[40px] bg-blue text-[#fff]">Quản lý nhân viên</Button>
         </Link>
         <Link to="/manage/regulations">
-          <Button className="h-[6rem]">Quản lý quy định</Button>
+          <Button className="h-[40px]">Quản lý quy định</Button>
         </Link>
       </div>
       <div className="flex gap-[20px] mt-[20px] mb-[40px]">
@@ -28,10 +28,11 @@ export default function Bills() {
           placeholder="Nhập nhân viên cần tìm"
           onSearch={onSearch}
           enterButton
-          className="bg-primary-200 rounded-[4px]"
+          className="rounded-[4px]"
+          size="large"
         />
         <div>
-          <Button type="primary" className="bg-primary-200" onClick={() => setOpenModal(true)}>
+          <Button type="primary" className="h-[40px]" onClick={() => setOpenModal(true)}>
             Thêm nhân viên
           </Button>
           <StaffModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
