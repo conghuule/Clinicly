@@ -65,13 +65,7 @@ export const LoginComponent = () => {
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-        <Button
-          type="default"
-          htmlType="submit"
-          size="large"
-          shape="round"
-          className="bg-primary-100 text-white lg:w-[35rem]"
-        >
+        <Button type="default" htmlType="submit" size="large" shape="round" className="text-white lg:w-[35rem]">
           Submit
         </Button>
       </Form.Item>

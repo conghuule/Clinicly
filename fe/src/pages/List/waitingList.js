@@ -1,11 +1,15 @@
+import { faUserClock } from '@fortawesome/free-solid-svg-icons';
 import { Button, Table } from 'antd';
-import { React, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import HeaderBar from '../../components/HeaderBar';
+import ConfirmDeleteModal from '../../components/Modal/ConfirmDeleteModal';
 import { PATIENT_COLUMNS } from '../../utils/constants';
 
 export default function WaitingList() {
-  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
+  const [title, setTitle] = useState('');
 
   // TODO: replace with api response
   const patients = Array(100)
@@ -17,16 +21,25 @@ export default function WaitingList() {
       date_of_birth: 12,
       address: 'Address ' + index,
       phone_number: '123',
-      actions: ['Xoá'],
+      actions: [
+        {
+          value: 'Xoá',
+          onClick: () => {
+            setOpenModal(true);
+            setTitle(' bệnh nhân ở vị trí ' + index);
+          },
+        },
+      ],
     }));
 
   return (
     <div>
+      <HeaderBar title="Danh sách đợi khám" icon={faUserClock} image="" name="Nguyen Long Vu" role="Bac si"></HeaderBar>
       <div className="flex justify-end gap-[35px] mb-[40px] mt-[20px]">
-        <Button type="primary" className="bg-[#004DB6] h-[5rem] w-[20rem]" onClick={() => setOpenModal(true)}>
+        <Button type="primary" className="bg-[#004DB6] h-[5rem] w-[20rem]">
           Người tiếp theo
         </Button>
-        <Button type="primary" className="bg-primary-200 h-[5rem] w-[20rem]" onClick={() => setOpenModal(true)}>
+        <Button type="primary" className="bg-primary-200 h-[5rem] w-[20rem]">
           Thêm vào DSDK
         </Button>
       </div>
@@ -36,6 +49,12 @@ export default function WaitingList() {
         onRow={(record) => ({
           onClick: () => navigate(record.id.toString()),
         })}
+      />
+      <ConfirmDeleteModal
+        title={title}
+        open={openModal}
+        onCancel={() => setOpenModal(false)}
+        onOk={() => setOpenModal(false)}
       />
     </div>
   );

@@ -1,7 +1,7 @@
+import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DefaultLayout from './layouts/DefaultLayout';
 import { publicRoutes } from './routes';
-import WaitingList from './pages/List/waitingList';
 
 function App() {
   return (
@@ -11,7 +11,9 @@ function App() {
           const Comp = route.element;
           let Layout = DefaultLayout;
 
-          if (route.layout) {
+          if (route.layout === null) {
+            Layout = Fragment;
+          } else if (route.layout) {
             Layout = route.layout;
           }
           return (
@@ -21,7 +23,6 @@ function App() {
               element={
                 <Layout>
                   <Comp />
-                  <WaitingList />
                 </Layout>
               }
             />

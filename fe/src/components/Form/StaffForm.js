@@ -50,7 +50,7 @@ export default function StaffForm({ defaultValue = {}, onSubmit, submitText }) {
         <Input defaultValue={defaultValue.type_staff} placeholder="Nhập loại nhân viên" />
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 2, span: 16 }}>
-        <Button type="primary" htmlType="submit" className="bg-primary-200">
+        <Button type="primary" htmlType="submit">
           {submitText}
         </Button>
       </Form.Item>

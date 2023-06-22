@@ -23,9 +23,7 @@ export default function StaffDetail() {
       <HeaderBar title="Quản lý" icon={faFileInvoiceDollar} image="" name="Nguyen Long Vu" role="Bac si" />
       <div className="mt-[20px] flex justify-between">
         <Link to={config.routes.staffs}>
-          <Button type="primary" className="bg-primary-200">
-            Trở về
-          </Button>
+          <Button type="primary">Trở về</Button>
         </Link>
       </div>
       <h3 className="text-[32px] font-semibold mt-[20px]">Chi tiết nhân viên {staff.id}</h3>

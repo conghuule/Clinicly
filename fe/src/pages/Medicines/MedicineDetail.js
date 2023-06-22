@@ -29,9 +29,9 @@ export default function MedicineDetail() {
     <div>
       <HeaderBar title="Kho thuốc" icon={faPills} image="" name="Nguyen Long Vu" role="Bac si" />
       <div className="mt-[20px] flex justify-between">
-        <Button type="primary" className="bg-primary-200">
-          <Link to={config.routes.medicines}>Trở về</Link>
-        </Button>
+        <Link to={config.routes.medicines}>
+          <Button type="primary">Trở về</Button>
+        </Link>
       </div>
       <h3 className="text-[32px] font-semibold mt-[20px]">{medicine.name}</h3>
       <MedicineForm medicine={medicine} onSubmit={onSubmit} submitText="Lưu" />
