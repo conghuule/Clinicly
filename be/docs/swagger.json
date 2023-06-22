@@ -1,5 +1,6 @@
 {
     "schemes": [
+        "http",
         "https"
     ],
     "swagger": "2.0",
@@ -1088,7 +1089,7 @@
                 "summary": "Update regulation",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "Regulation id",
                         "name": "id",
                         "in": "path",
@@ -1124,7 +1125,7 @@
                 "summary": "Delete regulation",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "Regulation id",
                         "name": "id",
                         "in": "path",
@@ -1159,14 +1160,15 @@
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "Order by field",
+                        "type": "integer",
+                        "description": "Order by",
                         "name": "order_by",
                         "in": "query"
                     },
                     {
                         "type": "boolean",
-                        "description": "Is descending order",
+                        "default": false,
+                        "description": "Order descending",
                         "name": "desc",
                         "in": "query"
                     },
@@ -1364,10 +1366,16 @@
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "default": "STT",
+                        "type": "integer",
                         "description": "Order by",
                         "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Order descending",
+                        "name": "desc",
                         "in": "query"
                     },
                     {
@@ -1594,9 +1602,6 @@
                 "patient"
             ],
             "properties": {
-                "date": {
-                    "type": "string"
-                },
                 "diagnose": {
                     "type": "string"
                 },
@@ -1670,7 +1675,8 @@
             ],
             "properties": {
                 "date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "medicine_id": {
                     "type": "string"
@@ -1770,7 +1776,8 @@
                     "type": "string"
                 },
                 "birth_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "full_name": {
                     "type": "string"
@@ -1839,10 +1846,14 @@
         "controllers.RegulationRequest": {
             "type": "object",
             "required": [
+                "id",
                 "name",
                 "value"
             ],
             "properties": {
+                "id": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -1900,7 +1911,8 @@
                     "type": "string"
                 },
                 "birth_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "email": {
                     "type": "string"
@@ -2025,7 +2037,8 @@
             "type": "object",
             "properties": {
                 "date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "medicine_id": {
                     "type": "string"
@@ -2065,7 +2078,8 @@
                     "type": "string"
                 },
                 "birth_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "full_name": {
                     "type": "string"
@@ -2084,6 +2098,9 @@
         "controllers.UpdateRegulationRequest": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -2099,7 +2116,8 @@
                     "type": "string"
                 },
                 "birth_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "email": {
                     "type": "string"

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"clinic-management/models"
+	"clinic-management/utils"
 	"clinic-management/utils/query"
 	"clinic-management/utils/token"
 	"net/http"
@@ -21,7 +22,6 @@ type MedicalReportRequest struct {
 	DoctorID     uint                  `json:"doctor" binding:"required"`
 	Diagnose     string                `json:"diagnose"`
 	Prescription []PrescriptionRequest `json:"prescription"`
-	Date         *time.Time            `json:"date"`
 }
 
 type UpdateMedicalReportRequest struct {
@@ -29,7 +29,7 @@ type UpdateMedicalReportRequest struct {
 	DoctorID     uint                  `json:"doctor"`
 	Diagnose     string                `json:"diagnose"`
 	Prescription []PrescriptionRequest `json:"prescription"`
-	Date         *time.Time            `json:"date"`
+	Date         string                `json:"date"`
 }
 
 type MedicalReportResponse struct {
@@ -145,7 +145,19 @@ func CreateMedicalReport(c *gin.Context) {
 		UpdatedBy:    &uid,
 	}
 
-	_, err = report.Create()
+	res, err := report.Create()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	invoice := models.Invoice{
+		PaymentStatus:   false,
+		DeliveryStatus:  false,
+		MedicalReportID: &res.ID,
+		UpdatedBy:       res.UpdatedBy,
+	}
+	_, err = invoice.Create(*res)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -196,12 +208,17 @@ func UpdateMedicalReport(c *gin.Context) {
 		})
 	}
 
+	date, err := utils.ParseDate(input.Date)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
 	updatedTicket := models.MedicalReport{
 		PatientID:    input.PatientID,
 		DoctorID:     input.DoctorID,
 		Diagnose:     input.Diagnose,
 		Prescription: prescription,
-		Date:         input.Date,
+		Date:         date,
 		UpdatedBy:    &uid,
 	}
 

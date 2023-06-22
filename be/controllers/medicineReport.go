@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"clinic-management/models"
+	"clinic-management/utils"
 	"clinic-management/utils/query"
 	"clinic-management/utils/token"
 	"net/http"
@@ -11,15 +12,15 @@ import (
 )
 
 type MedicineReportRequest struct {
-	MedicineID string     `json:"medicine_id" binding:"required"`
-	Quantity   uint       `json:"quantity" binding:"required"`
-	Date       *time.Time `json:"date"`
+	MedicineID string `json:"medicine_id" binding:"required"`
+	Quantity   uint   `json:"quantity" binding:"required"`
+	Date       string `json:"date" example:"2002-02-28"`
 }
 
 type UpdateMedicineReportRequest struct {
-	MedicineID string     `json:"medicine_id"`
-	Quantity   uint       `json:"quantity"`
-	Date       *time.Time `json:"date"`
+	MedicineID string `json:"medicine_id"`
+	Quantity   uint   `json:"quantity"`
+	Date       string `json:"date" example:"2002-02-28"`
 }
 
 type MedicineReportResponse struct {
@@ -164,9 +165,15 @@ func UpdateMedicineReport(c *gin.Context) {
 		return
 	}
 
+	date, err := utils.ParseDate(input.Date)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
 	updatedReport := models.MedicineReport{
 		MedicineID: input.MedicineID,
 		Quantity:   input.Quantity,
+		Date:       date,
 		UpdatedBy:  &uid,
 	}
 

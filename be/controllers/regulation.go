@@ -10,11 +10,13 @@ import (
 )
 
 type RegulationRequest struct {
+	ID    string `json:"id" binding:"required"`
 	Name  string `json:"name" binding:"required"`
 	Value int    `json:"value" binding:"required"`
 }
 
 type UpdateRegulationRequest struct {
+	ID    string `json:"id"`
 	Name  string `json:"name"`
 	Value int    `json:"value"`
 }
@@ -51,7 +53,7 @@ type RegulationQuery struct {
 // @Router /regulation [get]
 func GetRegulation(c *gin.Context) {
 	var regulationQuery RegulationQuery
-	if err := c.ShouldBind(regulationQuery); err != nil {
+	if err := c.ShouldBind(&regulationQuery); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
 	}
@@ -93,6 +95,7 @@ func CreateRegulation(c *gin.Context) {
 	}
 
 	regulation := models.Regulation{
+		ID:        input.ID,
 		Name:      input.Name,
 		Value:     input.Value,
 		UpdatedBy: &uid,
@@ -115,7 +118,7 @@ func CreateRegulation(c *gin.Context) {
 // @Tags regulation
 // @Accept json
 // @Produce json
-// @Param id path int true "Regulation id"
+// @Param id path string true "Regulation id"
 // @Param data body UpdateRegulationRequest true "Regulation data"
 // @Success 200 {object} RegulationResponse "Regulation response"
 // @Router /regulation/{id} [put]
@@ -141,6 +144,7 @@ func UpdateRegulation(c *gin.Context) {
 	}
 
 	updatedRegulation := models.Regulation{
+		ID:        input.ID,
 		Name:      input.Name,
 		Value:     input.Value,
 		UpdatedBy: &uid,
@@ -162,7 +166,7 @@ func UpdateRegulation(c *gin.Context) {
 // @Description Delete regulation
 // @Tags regulation
 // @Produce json
-// @Param id path int true "Regulation id"
+// @Param id path string true "Regulation id"
 // @Success 200 {object} RegulationResponse "Regulation response"
 // @Router /regulation/{id} [delete]
 func DeleteRegulation(c *gin.Context) {

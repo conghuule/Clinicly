@@ -126,7 +126,7 @@ func CreateMedicine(c *gin.Context) {
 	medicine := models.Medicine{
 		ID:        input.ID,
 		Name:      input.Name,
-		Quantity:  input.Quantity,
+		Quantity:  0,
 		Price:     input.Price,
 		Info:      input.Info,
 		Unit:      input.Unit.Value(),
@@ -135,6 +135,17 @@ func CreateMedicine(c *gin.Context) {
 
 	_, err = medicine.Create()
 	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	report := models.MedicineReport{
+		MedicineID: medicine.ID,
+		Quantity:   input.Quantity,
+		Date:       medicine.CreatedAt,
+		UpdatedBy:  medicine.UpdatedBy,
+	}
+	if _, err := report.Create(); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
 	}

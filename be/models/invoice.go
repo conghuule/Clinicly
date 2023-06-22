@@ -51,21 +51,12 @@ func (invoice *Invoice) Create(report MedicalReport) (*Invoice, error) {
 
 	invoice.Total = uint(total) + uint(costReg.Value)
 
-	err = DB.Omit("MedicalReport").Create(invoice).Error
+	err = DB.Create(invoice).Error
 	if err != nil {
 		return nil, err
 	}
 
 	return invoice, nil
-}
-
-func (invoice *Invoice) AfterCreate(db *gorm.DB) error {
-	err := db.Model(invoice).Update("MaPK", invoice.MedicalReportID).Error
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (invoice *Invoice) Update(updatedInvoice Invoice) (*Invoice, error) {

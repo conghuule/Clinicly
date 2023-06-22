@@ -21,6 +21,7 @@ primary_region = "sin"
 
   TOKEN_HOUR_LIFESPAN = "24"
   API_SECRET = "@clinicly"
+  GIN_MODE = "release"
 
 [http_service]
   internal_port = 8080

@@ -5,6 +5,7 @@ import (
 	"clinic-management/middlewares"
 	"clinic-management/types"
 	"net/http"
+	"reflect"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -12,6 +13,11 @@ import (
 )
 
 func ValidateEnum(fl validator.FieldLevel) bool {
+	field := fl.Field()
+	if !(field.IsValid() && field.Interface() != reflect.Zero(field.Type()).Interface()) {
+		return true
+	}
+
 	value := fl.Field().Interface().(types.Enum)
 	return value.IsValid()
 }

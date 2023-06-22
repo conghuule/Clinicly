@@ -1091,7 +1091,7 @@ const docTemplate = `{
                 "summary": "Update regulation",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "Regulation id",
                         "name": "id",
                         "in": "path",
@@ -1127,7 +1127,7 @@ const docTemplate = `{
                 "summary": "Delete regulation",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "Regulation id",
                         "name": "id",
                         "in": "path",
@@ -1162,14 +1162,15 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "Order by field",
+                        "type": "integer",
+                        "description": "Order by",
                         "name": "order_by",
                         "in": "query"
                     },
                     {
                         "type": "boolean",
-                        "description": "Is descending order",
+                        "default": false,
+                        "description": "Order descending",
                         "name": "desc",
                         "in": "query"
                     },
@@ -1367,10 +1368,16 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "default": "STT",
+                        "type": "integer",
                         "description": "Order by",
                         "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Order descending",
+                        "name": "desc",
                         "in": "query"
                     },
                     {
@@ -1597,9 +1604,6 @@ const docTemplate = `{
                 "patient"
             ],
             "properties": {
-                "date": {
-                    "type": "string"
-                },
                 "diagnose": {
                     "type": "string"
                 },
@@ -1673,7 +1677,8 @@ const docTemplate = `{
             ],
             "properties": {
                 "date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "medicine_id": {
                     "type": "string"
@@ -1773,7 +1778,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "birth_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "full_name": {
                     "type": "string"
@@ -1842,10 +1848,14 @@ const docTemplate = `{
         "controllers.RegulationRequest": {
             "type": "object",
             "required": [
+                "id",
                 "name",
                 "value"
             ],
             "properties": {
+                "id": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -1903,7 +1913,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "birth_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "email": {
                     "type": "string"
@@ -2028,7 +2039,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "medicine_id": {
                     "type": "string"
@@ -2068,7 +2080,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "birth_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "full_name": {
                     "type": "string"
@@ -2087,6 +2100,9 @@ const docTemplate = `{
         "controllers.UpdateRegulationRequest": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -2102,7 +2118,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "birth_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2002-02-28"
                 },
                 "email": {
                     "type": "string"
@@ -2523,7 +2540,7 @@ var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "clinicly.fly.dev",
 	BasePath:         "/api/v1",
-	Schemes:          []string{"https"},
+	Schemes:          []string{"http", "https"},
 	Title:            "Clinic Management",
 	Description:      "Clinic Management API",
 	InfoInstanceName: "swagger",

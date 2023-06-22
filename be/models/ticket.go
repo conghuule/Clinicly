@@ -14,7 +14,7 @@ const TableNameWaitingTicket = "PhieuDoiKham"
 type Ticket struct {
 	ID        uint       `gorm:"column:MaPDK" json:"id"`
 	PatientID uint       `gorm:"column:MaBN" json:"patient_id"`
-	Patient   *Patient   `gorm:"foreignKey:PatientID" json:"patient"`
+	Patient   *Patient   `gorm:"foreignKey:PatientID" json:"patient,omitempty"`
 	Number    uint       `gorm:"column:STT" json:"number"`
 	Status    string     `gorm:"column:TrangThai" json:"status"`
 	Date      *time.Time `gorm:"column:NgayKham" json:"date"`
@@ -31,17 +31,17 @@ func (ticket *Ticket) BeforeCreate(tx *gorm.DB) error {
 	todayTicket := []Ticket{}
 
 	err := DB.Scopes(query.QueryByDate("NgayKham", utils.GetCurrentDateString())).
-		Order(`"NgayTao" desc`).Find(todayTicket).Error
+		Order(`"NgayTao" desc`).Find(&todayTicket).Error
 	if err != nil || len(todayTicket) == 0 {
 		ticket.Number = 1
+	} else {
+		ticket.Number = todayTicket[0].Number + 1
 	}
 
 	maxTicketReg, err := GetRegulationByID("SLLKTD")
 	if len(todayTicket) >= maxTicketReg.Value || err != nil {
 		return errors.New("the maximum number of tickets per day has been exceeded")
 	}
-
-	ticket.Number = todayTicket[0].Number + 1
 
 	return nil
 }

@@ -3,10 +3,10 @@ package controllers
 import (
 	"clinic-management/models"
 	"clinic-management/types"
+	"clinic-management/utils"
 	"clinic-management/utils/query"
 	"clinic-management/utils/token"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +14,7 @@ import (
 type PatientRequest struct {
 	FullName     string       `json:"full_name" binding:"required"`
 	Gender       types.Gender `json:"gender" binding:"required,enum"`
-	BirthDate    *time.Time   `json:"birth_date" binding:"required"`
+	BirthDate    string       `json:"birth_date" binding:"required" example:"2002-02-28"`
 	IdentityCard string       `json:"identity_card" binding:"required"`
 	Address      string       `json:"address" binding:"required"`
 	PhoneNumber  string       `json:"phone_number" binding:"required"`
@@ -23,7 +23,7 @@ type PatientRequest struct {
 type UpdatePatientRequest struct {
 	FullName     string       `json:"full_name"`
 	Gender       types.Gender `json:"gender" binding:"enum"`
-	BirthDate    *time.Time   `json:"birth_date"`
+	BirthDate    string       `json:"birth_date" example:"2002-02-28"`
 	IdentityCard string       `json:"identity_card"`
 	Address      string       `json:"address"`
 	PhoneNumber  string       `json:"phone_number"`
@@ -121,9 +121,14 @@ func CreatePatient(c *gin.Context) {
 		return
 	}
 
+	date, err := utils.ParseDate(input.BirthDate)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
 	patient := models.Patient{
 		FullName:     input.FullName,
-		BirthDate:    input.BirthDate,
+		BirthDate:    date,
 		Gender:       input.Gender.Value(),
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,
@@ -173,9 +178,14 @@ func UpdatePatient(c *gin.Context) {
 		return
 	}
 
+	date, err := utils.ParseDate(input.BirthDate)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
 	updatedPatient := models.Patient{
 		FullName:     input.FullName,
-		BirthDate:    input.BirthDate,
+		BirthDate:    date,
 		Gender:       input.Gender.Value(),
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,

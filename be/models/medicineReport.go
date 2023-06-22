@@ -12,7 +12,7 @@ type MedicineReport struct {
 	ID         uint       `gorm:"column:MaPN" json:"id"`
 	MedicineID string     `gorm:"column:MaThuoc" json:"medicine_id"`
 	Medicine   *Medicine  `json:"medicine,omitempty"`
-	Quantity   uint       `gorm:"column:Soluong" json:"quantity"`
+	Quantity   uint       `gorm:"column:SoLuong" json:"quantity"`
 	Date       *time.Time `gorm:"column:NgayNhap" json:"date"`
 	CreatedAt  *time.Time `gorm:"column:NgayTao" json:"created_at"`
 	UpdatedAt  *time.Time `gorm:"column:NgayCapNhat" json:"updated_at"`
@@ -32,7 +32,7 @@ func (report *MedicineReport) Create() (*MedicineReport, error) {
 	return report, nil
 }
 
-func (report *MedicineReport) AfterCreate() error {
+func (report *MedicineReport) AfterCreate(db *gorm.DB) error {
 	medicine, err := GetMedicineByID(report.MedicineID)
 	if err != nil {
 		return err

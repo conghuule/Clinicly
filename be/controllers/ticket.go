@@ -43,7 +43,8 @@ type TicketQuery struct {
 // @Produce json
 // @Param status query types.TicketStatus false "Ticket status"
 // @Param date query string false "Date"
-// @Param order_by query string false "Order by" default(STT)
+// @Param order_by query int false "Order by" default(NgayTao)
+// @Param desc query bool false "Order descending" default(false)
 // @Param page query int false "Page" default(1)
 // @Param page_size query int false "Page size" default(10)
 // @Success 200 {object} TicketListResponse "Ticket response"

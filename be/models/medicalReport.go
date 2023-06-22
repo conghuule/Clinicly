@@ -34,19 +34,6 @@ func (report *MedicalReport) Create() (*MedicalReport, error) {
 	return report, nil
 }
 
-func (report *MedicalReport) AfterCreate(db *gorm.DB) (err error) {
-	invoice := Invoice{
-		PaymentStatus:   false,
-		DeliveryStatus:  false,
-		MedicalReportID: &report.ID,
-		UpdatedBy:       report.UpdatedBy,
-	}
-
-	invoice.Create(*report)
-
-	return nil
-}
-
 func (report *MedicalReport) Update(updatedReport MedicalReport) (*MedicalReport, error) {
 	err := DB.Model(report).Updates(updatedReport).Error
 	if err != nil {
@@ -72,7 +59,7 @@ func GetMedicalReport(query ...func(*gorm.DB) *gorm.DB) ([]MedicalReport, error)
 
 	err := DB.Scopes(query...).
 		Preload("Doctor", func(db *gorm.DB) *gorm.DB {
-			return db.Select("ID", "FullName", "UpdatedBy")
+			return db.Select("ID", "FullName")
 		}).Find(&reports).Error
 	if err != nil {
 		return nil, err
