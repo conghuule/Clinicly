@@ -1,31 +1,43 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import React, { useState } from 'react';
-import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+import config from '../../config';
+import authApi from '../../services/authApi';
 
 export const LoginComponent = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e) => {
-    const response = await fetch('https://clinicly.fly.dev/api/v1/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
+  const navigate = useNavigate();
 
-    if (response.ok) {
-      // if authentication succeeds, set a cookie with the token
-      const { token } = await response.json();
-      Cookies.set('auth_token', token);
-      console.log('Authentication succeeded!');
-    } else {
-      // if authentication fails, display an error message
-      const { message } = await response.json();
-      alert(message);
-      console.error('Authentication failed!');
+  const handleSubmit = async (values) => {
+    console.log('values: ', values);
+    // TODO: handle remember account here
+    const { email, password } = values;
+
+    try {
+      await authApi.login(email, password);
+      navigate(config.routes.home);
+    } catch (error) {
+      console.log('error: ', error);
+      const {
+        response: {
+          data: { message },
+        },
+      } = error;
+      setErrorMessage(message);
     }
+
+    // fetch('https://clinicly.fly.dev/api/v1/auth/login', {
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     email,
+    //     password,
+    //   }),
+    //   credentials: 'include',
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => console.log(data))
+    //   .catch((err) => console.log(err));
   };
 
   return (
@@ -36,14 +48,12 @@ export const LoginComponent = () => {
       style={{ maxWidth: 600 }}
       initialValues={{ remember: true }}
       autoComplete="off"
-      onFinish={handleSubmit}
+      onFinish={(values) => handleSubmit(values)}
     >
       <Form.Item
         label="Email"
         name="email"
         type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
         rules={[{ required: true, message: 'Please input your email!' }]}
       >
         <Input className="lg:w-[35rem]" />
@@ -53,19 +63,19 @@ export const LoginComponent = () => {
         label="Password"
         name="password"
         type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
         rules={[{ required: true, message: 'Please input your password!' }]}
       >
         <Input.Password className="lg:w-[35rem]" />
       </Form.Item>
+
+      <p className="ml-[110px] text-danger">{errorMessage}</p>
 
       <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 6, span: 16 }}>
         <Checkbox>Remember me</Checkbox>
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-        <Button type="default" htmlType="submit" size="large" shape="round" className="text-white lg:w-[35rem]">
+        <Button type="primary" htmlType="submit" size="large" shape="round" className="text-white lg:w-[35rem]">
           Submit
         </Button>
       </Form.Item>
