@@ -54,3 +54,5 @@ go run main.go
 ```
 
 ### Link Server
+
+> https://clinicly.fly.dev

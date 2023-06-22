@@ -11,7 +11,17 @@ primary_region = "sin"
   buildpacks = ["gcr.io/paketo-buildpacks/go"]
 
 [env]
-  PORT = "8080"
+  SV_PORT = "8080"
+
+  DB_HOST ="satao.db.elephantsql.com"
+  DB_PORT = "5432"
+  DB_NAME = "gvimylkm"
+  DB_USER = "gvimylkm"
+  DB_PASSWORD = "rcvQzPmitrcA1Uj4XoXs_uKzyvOkS_VJ"
+
+  TOKEN_HOUR_LIFESPAN = "24"
+  API_SECRET = "@clinicly"
+  GIN_MODE = "release"
 
 [http_service]
   internal_port = 8080

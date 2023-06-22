@@ -28,6 +28,7 @@ func GetUserByEmail(email string) (*User, error) {
 }
 
 func initAdminAccount() {
+	updatedBy := uint(1)
 	var adminAccount = Staff{
 		Email:        "admin",
 		Role:         types.Admin.Value(),
@@ -38,6 +39,7 @@ func initAdminAccount() {
 		Status:       types.Working.Value(),
 		Gender:       types.Male.Value(),
 		Address:      "TP HCM",
+		UpdatedBy:    &updatedBy,
 	}
 
 	if _, err := GetUserByEmail(adminAccount.Email); err != nil {

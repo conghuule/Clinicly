@@ -3,15 +3,15 @@ package controllers
 import (
 	"clinic-management/models"
 	"clinic-management/utils/query"
+	"clinic-management/utils/token"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type UpdateInvoiceRequest struct {
-	PaymentStatus  bool  `json:"payment_status"`
-	DeliveryStatus bool  `json:"delivery_status"`
-	UpdatedBy      *uint `json:"updated_by"`
+	PaymentStatus  bool `json:"payment_status"`
+	DeliveryStatus bool `json:"delivery_status"`
 }
 
 type InvoiceResponse struct {
@@ -26,12 +26,24 @@ type InvoiceListResponse struct {
 
 type InvoiceQuery struct {
 	PaginateQuery
+	Patient        string `form:"patient"`
+	PaymentStatus  string `form:"payment_status"`
+	DeliveryStatus string `form:"delivery_status"`
+	Date           string `form:"date"`
+	OrderBy        string `form:"order_by,default=NgayTao"`
+	Desc           bool   `form:"desc,default=false"`
 }
 
 // @Summary Get invoice
 // @Description Get invoice
 // @Tags invoice
 // @Produce json
+// @Param patient query int false "Patient"
+// @Param payment_status query bool false "Payment status"
+// @Param delivery_status query bool false "Delivery status"
+// @Param date query string false "Date"
+// @Param order_by query int false "Order by" default(NgayTao)
+// @Param desc query bool false "Order descending" default(false)
 // @Param page query int false "Page" default(1)
 // @Param page_size query int false "Page size" default(10)
 // @Success 200 {object} InvoiceListResponse "Invoice response"
@@ -43,7 +55,12 @@ func GetInvoice(c *gin.Context) {
 		return
 	}
 
-	invoices, err := models.GetInvoice(query.Paginate(c))
+	invoices, err := models.GetInvoice(query.Paginate(c),
+		query.OrderBy(invoiceQuery.OrderBy, invoiceQuery.Desc),
+		query.QueryByDate("NgayTao", invoiceQuery.Date),
+		query.QueryByField("MaBN", invoiceQuery.Patient),
+		query.QueryByField("TTThanhToan", invoiceQuery.PaymentStatus),
+		query.QueryByField("TTGiaoThuoc", invoiceQuery.DeliveryStatus))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -87,6 +104,12 @@ func GetInvoiceByID(c *gin.Context) {
 // @Success 200 {object} InvoiceResponse "Invoice response"
 // @Router /invoice/{id} [put]
 func UpdateInvoice(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	id := c.Param("id")
 
 	var input UpdateInvoiceRequest
@@ -104,7 +127,7 @@ func UpdateInvoice(c *gin.Context) {
 	updatedInvoice := models.Invoice{
 		PaymentStatus:  input.PaymentStatus,
 		DeliveryStatus: input.DeliveryStatus,
-		UpdatedBy:      input.UpdatedBy,
+		UpdatedBy:      &uid,
 	}
 
 	invoice, err = invoice.Update(updatedInvoice)

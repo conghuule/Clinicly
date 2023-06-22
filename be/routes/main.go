@@ -5,6 +5,7 @@ import (
 	"clinic-management/middlewares"
 	"clinic-management/types"
 	"net/http"
+	"reflect"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -12,6 +13,11 @@ import (
 )
 
 func ValidateEnum(fl validator.FieldLevel) bool {
+	field := fl.Field()
+	if !(field.IsValid() && field.Interface() != reflect.Zero(field.Type()).Interface()) {
+		return true
+	}
+
 	value := fl.Field().Interface().(types.Enum)
 	return value.IsValid()
 }
@@ -21,12 +27,13 @@ func Config(r *gin.Engine) {
 		v.RegisterValidation("enum", ValidateEnum)
 	}
 
+	r.Use(middlewares.Cors)
+
 	v1 := r.Group("api/v1")
 	{
 		addAuthRoute(v1)
 
 		v1.Use(middlewares.Authorize)
-		v1.Use(middlewares.Cors)
 
 		addStaffRoute(v1)
 		addPatientRoute(v1)
@@ -35,6 +42,7 @@ func Config(r *gin.Engine) {
 		addMedicalReportRoute(v1)
 		addMedicineRoute(v1)
 		addInvoiceRoute(v1)
+		addMedicineReportRoute(v1)
 	}
 
 	addSwaggerRoute(r)

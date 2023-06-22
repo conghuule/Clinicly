@@ -3,9 +3,10 @@ package controllers
 import (
 	"clinic-management/models"
 	"clinic-management/types"
+	"clinic-management/utils"
 	"clinic-management/utils/query"
+	"clinic-management/utils/token"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,21 +14,19 @@ import (
 type PatientRequest struct {
 	FullName     string       `json:"full_name" binding:"required"`
 	Gender       types.Gender `json:"gender" binding:"required,enum"`
-	BirthDate    *time.Time   `json:"birth_date" binding:"required"`
+	BirthDate    string       `json:"birth_date" binding:"required" example:"2002-02-28"`
 	IdentityCard string       `json:"identity_card" binding:"required"`
 	Address      string       `json:"address" binding:"required"`
 	PhoneNumber  string       `json:"phone_number" binding:"required"`
-	UpdatedBy    *uint        `json:"updated_by" binding:"required"`
 }
 
 type UpdatePatientRequest struct {
 	FullName     string       `json:"full_name"`
 	Gender       types.Gender `json:"gender" binding:"enum"`
-	BirthDate    *time.Time   `json:"birth_date"`
+	BirthDate    string       `json:"birth_date" example:"2002-02-28"`
 	IdentityCard string       `json:"identity_card"`
 	Address      string       `json:"address"`
 	PhoneNumber  string       `json:"phone_number"`
-	UpdatedBy    *uint        `json:"updated_by"`
 }
 
 type PatientResponse struct {
@@ -52,6 +51,8 @@ type PatientQuery struct {
 // @Tags patient
 // @Produce json
 // @Param name query string false "Patient name"
+// @Param order_by query int false "Order by" default(NgayTao)
+// @Param desc query bool false "Order descending" default(false)
 // @Param page query int false "Page" default(1)
 // @Param page_size query int false "Page size" default(10)
 // @Success 200 {object} PatientListResponse "Patient response"
@@ -108,23 +109,34 @@ func GetPatientByID(c *gin.Context) {
 // @Success 200 {object} PatientResponse "Patient response"
 // @Router /patient [post]
 func CreatePatient(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	var input PatientRequest
 	if err := c.ShouldBind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
 	}
 
+	date, err := utils.ParseDate(input.BirthDate)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
 	patient := models.Patient{
 		FullName:     input.FullName,
-		BirthDate:    input.BirthDate,
+		BirthDate:    date,
 		Gender:       input.Gender.Value(),
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,
 		PhoneNumber:  input.PhoneNumber,
-		UpdatedBy:    input.UpdatedBy,
+		UpdatedBy:    &uid,
 	}
 
-	_, err := patient.Create()
+	_, err = patient.Create()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -146,6 +158,12 @@ func CreatePatient(c *gin.Context) {
 // @Success 200 {object} PatientResponse "Patient response"
 // @Router /patient/{id} [put]
 func UpdatePatient(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	id := c.Param("id")
 
 	var input UpdatePatientRequest
@@ -160,14 +178,19 @@ func UpdatePatient(c *gin.Context) {
 		return
 	}
 
+	date, err := utils.ParseDate(input.BirthDate)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
 	updatedPatient := models.Patient{
 		FullName:     input.FullName,
-		BirthDate:    input.BirthDate,
+		BirthDate:    date,
 		Gender:       input.Gender.Value(),
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,
 		PhoneNumber:  input.PhoneNumber,
-		UpdatedBy:    input.UpdatedBy,
+		UpdatedBy:    &uid,
 	}
 
 	patient, err = patient.Update(updatedPatient)

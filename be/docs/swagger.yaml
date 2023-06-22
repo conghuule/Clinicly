@@ -52,24 +52,19 @@ definitions:
     type: object
   controllers.MedicalReportRequest:
     properties:
-      date:
-        type: string
       diagnose:
         type: string
-      doctor_id:
+      doctor:
         type: integer
-      patient_id:
+      patient:
         type: integer
       prescription:
         items:
           $ref: '#/definitions/controllers.PrescriptionRequest'
         type: array
-      updated_by:
-        type: integer
     required:
-    - doctor_id
-    - patient_id
-    - updated_by
+    - doctor
+    - patient
     type: object
   controllers.MedicalReportResponse:
     properties:
@@ -91,6 +86,39 @@ definitions:
       status:
         type: string
     type: object
+  controllers.MedicineReportListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.MedicineReport'
+        type: array
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  controllers.MedicineReportRequest:
+    properties:
+      date:
+        example: "2002-02-28"
+        type: string
+      medicine_id:
+        type: string
+      quantity:
+        type: integer
+    required:
+    - medicine_id
+    - quantity
+    type: object
+  controllers.MedicineReportResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.MedicineReport'
+      message:
+        type: string
+      status:
+        type: string
+    type: object
   controllers.MedicineRequest:
     properties:
       id:
@@ -105,15 +133,12 @@ definitions:
         type: integer
       unit:
         $ref: '#/definitions/types.MedicineUnit'
-      updated_by:
-        type: integer
     required:
     - id
     - name
     - price
     - quantity
     - unit
-    - updated_by
     type: object
   controllers.MedicineResponse:
     properties:
@@ -140,6 +165,7 @@ definitions:
       address:
         type: string
       birth_date:
+        example: "2002-02-28"
         type: string
       full_name:
         type: string
@@ -149,8 +175,6 @@ definitions:
         type: string
       phone_number:
         type: string
-      updated_by:
-        type: integer
     required:
     - address
     - birth_date
@@ -158,7 +182,6 @@ definitions:
     - gender
     - identity_card
     - phone_number
-    - updated_by
     type: object
   controllers.PatientResponse:
     properties:
@@ -173,13 +196,13 @@ definitions:
     properties:
       instruction:
         type: string
-      medicine_id:
+      medicine:
         type: string
       quantity:
         type: integer
     required:
     - instruction
-    - medicine_id
+    - medicine
     - quantity
     type: object
   controllers.RegulationListResponse:
@@ -195,17 +218,15 @@ definitions:
     type: object
   controllers.RegulationRequest:
     properties:
+      id:
+        type: string
       name:
         type: string
-      updated_by:
-        type: integer
       value:
-        items:
-          type: integer
-        type: array
+        type: integer
     required:
+    - id
     - name
-    - updated_by
     - value
     type: object
   controllers.RegulationResponse:
@@ -233,6 +254,7 @@ definitions:
       address:
         type: string
       birth_date:
+        example: "2002-02-28"
         type: string
       email:
         type: string
@@ -252,8 +274,6 @@ definitions:
         type: integer
       status:
         $ref: '#/definitions/types.StaffStatus'
-      updated_by:
-        type: integer
     required:
     - address
     - birth_date
@@ -264,7 +284,6 @@ definitions:
     - password
     - phone_number
     - role
-    - updated_by
     type: object
   controllers.StaffResponse:
     properties:
@@ -290,11 +309,8 @@ definitions:
     properties:
       patient_id:
         type: integer
-      updated_by:
-        type: integer
     required:
     - patient_id
-    - updated_by
     type: object
   controllers.TicketResponse:
     properties:
@@ -311,8 +327,6 @@ definitions:
         type: boolean
       payment_status:
         type: boolean
-      updated_by:
-        type: integer
     type: object
   controllers.UpdateMedicalReportRequest:
     properties:
@@ -320,15 +334,23 @@ definitions:
         type: string
       diagnose:
         type: string
-      doctor_id:
+      doctor:
         type: integer
-      patient_id:
+      patient:
         type: integer
       prescription:
         items:
           $ref: '#/definitions/controllers.PrescriptionRequest'
         type: array
-      updated_by:
+    type: object
+  controllers.UpdateMedicineReportRequest:
+    properties:
+      date:
+        example: "2002-02-28"
+        type: string
+      medicine_id:
+        type: string
+      quantity:
         type: integer
     type: object
   controllers.UpdateMedicineRequest:
@@ -345,14 +367,13 @@ definitions:
         type: integer
       unit:
         $ref: '#/definitions/types.MedicineUnit'
-      updated_by:
-        type: integer
     type: object
   controllers.UpdatePatientRequest:
     properties:
       address:
         type: string
       birth_date:
+        example: "2002-02-28"
         type: string
       full_name:
         type: string
@@ -362,25 +383,22 @@ definitions:
         type: string
       phone_number:
         type: string
-      updated_by:
-        type: integer
     type: object
   controllers.UpdateRegulationRequest:
     properties:
+      id:
+        type: string
       name:
         type: string
-      updated_by:
-        type: integer
       value:
-        items:
-          type: integer
-        type: array
+        type: integer
     type: object
   controllers.UpdateStaffRequest:
     properties:
       address:
         type: string
       birth_date:
+        example: "2002-02-28"
         type: string
       email:
         type: string
@@ -400,15 +418,13 @@ definitions:
         type: integer
       status:
         $ref: '#/definitions/types.StaffStatus'
-      updated_by:
-        type: integer
     type: object
   controllers.UpdateTicketRequest:
     properties:
       status:
         $ref: '#/definitions/types.TicketStatus'
-      updated_by:
-        type: integer
+    required:
+    - status
     type: object
   models.Invoice:
     properties:
@@ -477,6 +493,25 @@ definitions:
       updated_by:
         type: integer
     type: object
+  models.MedicineReport:
+    properties:
+      created_at:
+        type: string
+      date:
+        type: string
+      id:
+        type: integer
+      medicine:
+        $ref: '#/definitions/models.Medicine'
+      medicine_id:
+        type: string
+      quantity:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: integer
+    type: object
   models.Patient:
     properties:
       address:
@@ -522,7 +557,7 @@ definitions:
       created_at:
         type: string
       id:
-        type: integer
+        type: string
       name:
         type: string
       updated_at:
@@ -530,9 +565,7 @@ definitions:
       updated_by:
         type: integer
       value:
-        items:
-          type: integer
-        type: array
+        type: integer
     type: object
   models.Staff:
     properties:
@@ -676,6 +709,31 @@ paths:
     get:
       description: Get invoice
       parameters:
+      - description: Patient
+        in: query
+        name: patient
+        type: integer
+      - description: Payment status
+        in: query
+        name: payment_status
+        type: boolean
+      - description: Delivery status
+        in: query
+        name: delivery_status
+        type: boolean
+      - description: Date
+        in: query
+        name: date
+        type: string
+      - description: Order by
+        in: query
+        name: order_by
+        type: integer
+      - default: false
+        description: Order descending
+        in: query
+        name: desc
+        type: boolean
       - default: 1
         description: Page
         in: query
@@ -771,6 +829,15 @@ paths:
         in: query
         name: date
         type: string
+      - description: Order by
+        in: query
+        name: order_by
+        type: integer
+      - default: false
+        description: Order descending
+        in: query
+        name: desc
+        type: boolean
       - default: 1
         description: Page
         in: query
@@ -887,6 +954,15 @@ paths:
         in: query
         name: name
         type: string
+      - description: Order by
+        in: query
+        name: order_by
+        type: integer
+      - default: false
+        description: Order descending
+        in: query
+        name: desc
+        type: boolean
       - default: 1
         description: Page
         in: query
@@ -928,6 +1004,127 @@ paths:
       summary: Create medicine
       tags:
       - medicine
+  /medicine-report:
+    get:
+      description: Get medicine report
+      parameters:
+      - description: Date
+        in: query
+        name: date
+        type: string
+      - description: Order by
+        in: query
+        name: order_by
+        type: integer
+      - default: false
+        description: Order descending
+        in: query
+        name: desc
+        type: boolean
+      - default: 1
+        description: Page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medicine report response
+          schema:
+            $ref: '#/definitions/controllers.MedicineReportListResponse'
+      summary: Get medicine report
+      tags:
+      - medicine report
+    post:
+      consumes:
+      - application/json
+      description: Create medicine report
+      parameters:
+      - description: Medicine report data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.MedicineReportRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medicine report response
+          schema:
+            $ref: '#/definitions/controllers.MedicineReportResponse'
+      summary: Create medicine report
+      tags:
+      - medicine report
+  /medicine-report/{id}:
+    delete:
+      description: Delete medicine report
+      parameters:
+      - description: Medicine report id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medicine report response
+          schema:
+            $ref: '#/definitions/controllers.MedicineReportResponse'
+      summary: Delete medicine report
+      tags:
+      - medicine report
+    get:
+      description: Get medicine report by id
+      parameters:
+      - description: Medicine report id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medicine report response
+          schema:
+            $ref: '#/definitions/controllers.MedicineReportResponse'
+      summary: Get medicine report by id
+      tags:
+      - medicine report
+    put:
+      consumes:
+      - application/json
+      description: Update medicine report
+      parameters:
+      - description: Medicine report id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Medicine report data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdateMedicineReportRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Medicine report response
+          schema:
+            $ref: '#/definitions/controllers.MedicineReportResponse'
+      summary: Update medicine report
+      tags:
+      - medicine report
   /medicine/{id}:
     delete:
       description: Delete medicine
@@ -1008,6 +1205,15 @@ paths:
         in: query
         name: name
         type: string
+      - description: Order by
+        in: query
+        name: order_by
+        type: integer
+      - default: false
+        description: Order descending
+        in: query
+        name: desc
+        type: boolean
       - default: 1
         description: Page
         in: query
@@ -1124,6 +1330,34 @@ paths:
   /regulation:
     get:
       description: Get regulation
+      parameters:
+      - description: Regulation id
+        in: query
+        name: id
+        type: string
+      - description: Regulation name
+        in: query
+        name: name
+        type: string
+      - description: Order by
+        in: query
+        name: order_by
+        type: integer
+      - default: false
+        description: Order descending
+        in: query
+        name: desc
+        type: boolean
+      - default: 1
+        description: Page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
       produces:
       - application/json
       responses:
@@ -1163,7 +1397,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -1183,7 +1417,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Regulation data
         in: body
         name: data
@@ -1208,11 +1442,12 @@ paths:
         in: query
         name: name
         type: string
-      - description: Order by field
+      - description: Order by
         in: query
         name: order_by
-        type: string
-      - description: Is descending order
+        type: integer
+      - default: false
+        description: Order descending
         in: query
         name: desc
         type: boolean
@@ -1345,11 +1580,15 @@ paths:
         in: query
         name: date
         type: string
-      - default: STT
-        description: Order by
+      - description: Order by
         in: query
         name: order_by
-        type: string
+        type: integer
+      - default: false
+        description: Order descending
+        in: query
+        name: desc
+        type: boolean
       - default: 1
         description: Page
         in: query
@@ -1446,5 +1685,6 @@ paths:
       tags:
       - ticket
 schemes:
+- http
 - https
 swagger: "2.0"

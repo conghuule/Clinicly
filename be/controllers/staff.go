@@ -3,16 +3,17 @@ package controllers
 import (
 	"clinic-management/models"
 	"clinic-management/types"
+	"clinic-management/utils"
 	"clinic-management/utils/query"
+	"clinic-management/utils/token"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 type StaffRequest struct {
 	FullName     string            `json:"full_name" binding:"required"`
-	BirthDate    *time.Time        `json:"birth_date" binding:"required"`
+	BirthDate    string            `json:"birth_date" binding:"required" example:"2002-02-28"`
 	Gender       types.Gender      `json:"gender" binding:"required,enum"`
 	Address      string            `json:"address" binding:"required"`
 	IdentityCard string            `json:"identity_card" binding:"required"`
@@ -22,12 +23,11 @@ type StaffRequest struct {
 	Salary       uint              `json:"salary"`
 	Status       types.StaffStatus `json:"status" binding:"enum"`
 	Password     string            `json:"password" binding:"required"`
-	UpdatedBy    *uint             `json:"updated_by" binding:"required"`
 }
 
 type UpdateStaffRequest struct {
 	FullName     string            `json:"full_name"`
-	BirthDate    *time.Time        `json:"birth_date"`
+	BirthDate    string            `json:"birth_date" example:"2002-02-28"`
 	Gender       types.Gender      `json:"gender" binding:"enum"`
 	Address      string            `json:"address"`
 	IdentityCard string            `json:"identity_card"`
@@ -37,7 +37,6 @@ type UpdateStaffRequest struct {
 	Salary       uint              `json:"salary"`
 	Status       types.StaffStatus `json:"status" binding:"enum"`
 	Password     string            `json:"password"`
-	UpdatedBy    *uint             `json:"updated_by"`
 }
 
 type StaffResponse struct {
@@ -62,8 +61,8 @@ type StaffQuery struct {
 // @Tags staff
 // @Produce json
 // @Param name query string false "Staff name"
-// @Param order_by query string false "Order by field"
-// @Param desc query bool false "Is descending order"
+// @Param order_by query int false "Order by" default(NgayTao)
+// @Param desc query bool false "Order descending" default(false)
 // @Param page query int false "Page" default(1)
 // @Param page_size query int false "Page size" default(10)
 // @Success 200 {object} StaffListResponse "Staff response"
@@ -120,6 +119,12 @@ func GetStaffByID(c *gin.Context) {
 // @Success 200 {object} StaffResponse "Staff response"
 // @Router /staff [post]
 func CreateStaff(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	var input StaffRequest
 	if err := c.ShouldBind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
@@ -128,9 +133,14 @@ func CreateStaff(c *gin.Context) {
 
 	input.Status = types.Working
 
+	date, err := utils.ParseDate(input.BirthDate)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
 	staff := models.Staff{
 		FullName:     input.FullName,
-		BirthDate:    input.BirthDate,
+		BirthDate:    date,
 		Gender:       input.Gender.Value(),
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,
@@ -140,10 +150,10 @@ func CreateStaff(c *gin.Context) {
 		Salary:       input.Salary,
 		Status:       input.Status.Value(),
 		Password:     input.Password,
-		UpdatedBy:    input.UpdatedBy,
+		UpdatedBy:    &uid,
 	}
 
-	_, err := staff.Create()
+	_, err = staff.Create()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
@@ -165,6 +175,12 @@ func CreateStaff(c *gin.Context) {
 // @Success 200 {object} StaffResponse "Staff response"
 // @Router /staff/{id} [put]
 func UpdateStaff(c *gin.Context) {
+	uid, err := token.ExtractUID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
 	id := c.Param("id")
 
 	var input UpdateStaffRequest
@@ -179,9 +195,14 @@ func UpdateStaff(c *gin.Context) {
 		return
 	}
 
+	date, err := utils.ParseDate(input.BirthDate)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
 	updatedStaff := models.Staff{
 		FullName:     input.FullName,
-		BirthDate:    input.BirthDate,
+		BirthDate:    date,
 		Gender:       input.Gender.Value(),
 		Address:      input.Address,
 		IdentityCard: input.IdentityCard,
@@ -191,7 +212,7 @@ func UpdateStaff(c *gin.Context) {
 		Salary:       input.Salary,
 		Status:       input.Status.Value(),
 		Password:     input.Password,
-		UpdatedBy:    input.UpdatedBy,
+		UpdatedBy:    &uid,
 	}
 
 	staff, err = staff.Update(updatedStaff)

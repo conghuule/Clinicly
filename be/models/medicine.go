@@ -11,8 +11,8 @@ const TableNameMedicine = "Thuoc"
 type Medicine struct {
 	ID        string     `gorm:"column:MaThuoc" json:"id"`
 	Name      string     `gorm:"column:TenThuoc" json:"name"`
-	Quantity  uint       `gorm:"column:SoLuong" json:"quantity,omitempty"`
-	Price     uint       `gorm:"column:DonGia" json:"price,omitempty"`
+	Quantity  uint       `gorm:"column:SoLuong" json:"quantity"`
+	Price     uint       `gorm:"column:DonGia" json:"price"`
 	Info      string     `gorm:"column:ThongTin" json:"info,omitempty"`
 	Unit      string     `gorm:"column:DonVi" json:"unit,omitempty"`
 	CreatedAt *time.Time `gorm:"column:NgayTao" json:"created_at,omitempty"`

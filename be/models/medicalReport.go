@@ -34,19 +34,6 @@ func (report *MedicalReport) Create() (*MedicalReport, error) {
 	return report, nil
 }
 
-func (report *MedicalReport) AfterCreate(db *gorm.DB) (err error) {
-	invoice := Invoice{
-		PaymentStatus:   false,
-		DeliveryStatus:  false,
-		MedicalReportID: &report.ID,
-		UpdatedBy:       report.UpdatedBy,
-	}
-
-	invoice.Create(*report)
-
-	return nil
-}
-
 func (report *MedicalReport) Update(updatedReport MedicalReport) (*MedicalReport, error) {
 	err := DB.Model(report).Updates(updatedReport).Error
 	if err != nil {

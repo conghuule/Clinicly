@@ -12,4 +12,6 @@ func addMedicalReportRoute(r *gin.RouterGroup) {
 	group.GET("", controllers.GetMedicalReport)
 	group.GET(":id", controllers.GetMedicalReportByID)
 	group.POST("", controllers.CreateMedicalReport)
+	group.PUT(":id", controllers.UpdateMedicalReport)
+	group.DELETE(":id", controllers.DeleteMedicalReport)
 }
