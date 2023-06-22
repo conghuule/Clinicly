@@ -1,28 +1,29 @@
 import './Sidebar.css';
 import { SidebarData } from './SidebarData';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import React from 'react';
-import { useState } from 'react';
+import config from '../../config';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
 const Sidebar = () => {
-  const [selectedItem, setSelectedItem] = useState(null);
   return (
     <div className="sidebar">
-      <Link className="sidebar-logo">
+      <Link className="sidebar-logo" to={config.routes.home}>
         <div className="sidebar-logo-icon">{SidebarData[0].icon}</div>
         <div className="sidebar-logo-title">{SidebarData[0].title}</div>
       </Link>
       <div className="sidebar-items">
-        {SidebarData.slice(1).map((item, index) => {
+        {SidebarData.slice(1).map((item) => {
           return (
-            <Link
+            <NavLink
               key={item.id}
               to={item.path}
-              className={`sidebar-link ${selectedItem === item.id ? 'selected' : ''}`}
-              onClick={() => setSelectedItem(item.id)}
+              className={({isActive}) => isActive ? 'sidebar-link selected text-primary-300' : 'sidebar-link text-primary-100 hover:text-primary-300'}
             >
-              <div className="sidebar-icon">{item.icon}</div>
+              <FontAwesomeIcon icon={item.icon} className="w-[32px] h-[32px] pr-[16px]" />
               <div className="sidebar-title">{item.title}</div>
-            </Link>
+            </NavLink>
           );
         })}
       </div>

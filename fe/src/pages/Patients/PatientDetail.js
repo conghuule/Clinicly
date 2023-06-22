@@ -31,16 +31,12 @@ export default function PatientDetail() {
     <div>
       <HeaderBar title="Bệnh nhân" icon={faHospitalUser} image="" name="Nguyen Long Vu" role="Bac si" />
       <div className="mt-[20px] flex justify-between">
-        <Button type="primary" className="bg-primary-200">
-          <Link to={config.routes.patients}>Trở về</Link>
-        </Button>
+        <Link to={config.routes.patients}>
+          <Button type="primary">Trở về</Button>
+        </Link>
         <div className="flex gap-[20px]">
-          <Button type="primary" className="bg-primary-200">
-            Tạo phiếu khám
-          </Button>
-          <Button type="primary" className="bg-primary-200">
-            Lịch sử khám
-          </Button>
+          <Button type="primary">Tạo phiếu khám</Button>
+          <Button type="primary">Lịch sử khám</Button>
         </div>
       </div>
       <h3 className="text-[32px] font-semibold mt-[20px]">{patient.name}</h3>

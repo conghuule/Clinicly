@@ -18,14 +18,22 @@ export default function Bills() {
   };
   const menuDelivery = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="Đã giao">Đã giao</Menu.Item>
-      <Menu.Item key="Chưa giao">Chưa giao</Menu.Item>
+      <Menu.Item key="Đã giao" className="h-[40px]">
+        Đã giao
+      </Menu.Item>
+      <Menu.Item key="Chưa giao" className="h-[40px]">
+        Chưa giao
+      </Menu.Item>
     </Menu>
   );
   const menuPayment = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="Đã thanh toán">Đã thanh toán</Menu.Item>
-      <Menu.Item key="Chưa thanh toán">Chưa thanh toán</Menu.Item>
+      <Menu.Item key="Đã thanh toán" className="h-[40px]">
+        Đã thanh toán
+      </Menu.Item>
+      <Menu.Item key="Chưa thanh toán" className="h-[40px]">
+        Chưa thanh toán
+      </Menu.Item>
     </Menu>
   );
   return (
@@ -36,20 +44,21 @@ export default function Bills() {
           placeholder="Nhập hoá đơn cần tìm"
           onSearch={onSearch}
           enterButton
-          className="bg-primary-200 rounded-[4px]"
+          className="rounded-[4px]"
+          size="large"
         />
-        <Dropdown overlay={menuDelivery}>
+        <Dropdown overlay={menuDelivery} className="h-[40px]">
           <Button>
             Trạng thái giao hàng <DownOutlined />
           </Button>
         </Dropdown>
-        <Dropdown overlay={menuPayment}>
+        <Dropdown overlay={menuPayment} className="h-[40px]">
           <Button>
             Trạng thái thanh toán <DownOutlined />
           </Button>
         </Dropdown>
         <div>
-          <Button type="primary" className="bg-primary-200" onClick={() => setOpenModal(true)}>
+          <Button type="primary" onClick={() => setOpenModal(true)} size="large">
             Xuất hoá đơn
           </Button>
           <PublishBillModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />

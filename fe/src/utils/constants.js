@@ -27,14 +27,17 @@ export const PATIENT_COLUMNS = [
     key: 'actions',
     render: (_, { actions }) => (
       <>
-        {actions.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
+        {actions.map((action) => {
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+            <Tag
+              color="error"
+              key={action.value}
+              onClick={(e) => {
+                e.stopPropagation();
+                action.onClick(e);
+              }}
+            >
+              {action.value.toUpperCase()}
             </Tag>
           );
         })}
@@ -70,14 +73,17 @@ export const MEDICINE_COLUMNS = [
     key: 'actions',
     render: (_, { actions }) => (
       <>
-        {actions.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
+        {actions.map((action) => {
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+            <Tag
+              color="error"
+              key={action.value}
+              onClick={(e) => {
+                e.stopPropagation();
+                action.onClick(e);
+              }}
+            >
+              {action.value.toUpperCase()}
             </Tag>
           );
         })}

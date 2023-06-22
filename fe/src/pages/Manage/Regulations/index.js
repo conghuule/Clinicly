@@ -15,10 +15,10 @@ export default function Bills() {
       <HeaderBar title="Quản lý" icon={faFileInvoiceDollar} image="" name="Nguyễn Long Vũ" role="Bác sĩ" />
       <div className="flex gap-[2rem] mt-[2rem]">
         <Link to="/manage/staffs">
-          <Button className="h-[6rem] ">Quản lý nhân viên</Button>
+          <Button className="h-[40px] ">Quản lý nhân viên</Button>
         </Link>
         <Link to="/manage/regulations">
-          <Button className="h-[6rem] bg-blue text-[#fff]">Quản lý quy định</Button>
+          <Button className="h-[40px] bg-blue text-[#fff]">Quản lý quy định</Button>
         </Link>
       </div>
       <div className="flex gap-[20px] mt-[20px] mb-[40px]">
@@ -26,7 +26,8 @@ export default function Bills() {
           placeholder="Nhập quy định cần tìm"
           onSearch={onSearch}
           enterButton
-          className="bg-primary-200 rounded-[4px]"
+          className="rounded-[4px]"
+          size="large"
         />
       </div>
       <RegulationTable searchValue={searchValue} />
