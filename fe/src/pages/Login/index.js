@@ -1,10 +1,10 @@
 import { Layout } from 'antd';
 import React from 'react';
-import { LoginComponent } from '../../components/Login/loginComponent';
+import { LoginComponent } from '../../components/Login/LoginComponent';
 import IMAGES from '../../components/assets/images/index';
 const { Content } = Layout;
 
-const LoginPage = () => {
+const Login = () => {
   return (
     <Layout>
       <Content className="min-h-full h-screen flex !flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -20,4 +20,4 @@ const LoginPage = () => {
     </Layout>
   );
 };
-export default LoginPage;
+export default Login;

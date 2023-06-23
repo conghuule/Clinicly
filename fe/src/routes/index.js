@@ -13,6 +13,7 @@ import RegulationDetail from '../pages/Manage/Regulations/RegulationDetail';
 import WaitingList from '../pages/List/WaitingList';
 import ExaminationList from '../pages/List/ExaminationList';
 import Logout from '../pages/Logout';
+import Login from '../pages/Login';
 
 const publicRoutes = [
   { path: config.routes.home, element: Home },
@@ -28,6 +29,7 @@ const publicRoutes = [
   { path: config.routes.regulation_detail, element: RegulationDetail },
   { path: config.routes.waiting_list, element: WaitingList },
   { path: config.routes.examination_list, element: ExaminationList },
+  { path: config.routes.login, element: Login, layout: null },
   { path: config.routes.logout, element: Logout, layout: null },
 ];
 
