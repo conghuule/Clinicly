@@ -1,5 +1,49 @@
 basePath: /api/v1
 definitions:
+  controllers.DashboardReport:
+    properties:
+      medicine_data:
+        items:
+          type: integer
+        type: array
+      new_medicine:
+        type: integer
+      new_patient:
+        type: integer
+      new_revenue:
+        type: integer
+      new_ticket:
+        type: integer
+      patient_data:
+        items:
+          type: integer
+        type: array
+      revenue_data:
+        items:
+          type: integer
+        type: array
+      ticket_data:
+        items:
+          type: integer
+        type: array
+      total_medicine:
+        type: integer
+      total_patient:
+        type: integer
+      total_revenue:
+        type: integer
+      total_ticket:
+        type: integer
+    type: object
+  controllers.DashboardReportResponse:
+    properties:
+      data:
+        $ref: '#/definitions/controllers.DashboardReport'
+      message:
+        type: string
+      status:
+        type: string
+    type: object
   controllers.InvoiceListResponse:
     properties:
       data:
@@ -676,7 +720,7 @@ definitions:
     - Waiting
     - Processing
     - Done
-host: clinicly.fly.dev
+host: localhost:8080
 info:
   contact: {}
   description: Clinic Management API
@@ -705,6 +749,32 @@ paths:
       summary: Login
       tags:
       - auth
+  /dashboard:
+    get:
+      description: Get dashboard
+      parameters:
+      - description: Start date
+        example: "2002-02-20"
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: End date
+        example: "2002-02-28"
+        in: query
+        name: end_date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Dashboard response
+          schema:
+            $ref: '#/definitions/controllers.DashboardReportResponse'
+      summary: Get dashboard
+      tags:
+      - dashboard
   /invoice:
     get:
       description: Get invoice
@@ -1442,6 +1512,22 @@ paths:
         in: query
         name: name
         type: string
+      - description: Staff status
+        enum:
+        - 1
+        - 2
+        in: query
+        name: status
+        type: integer
+      - description: Staff role
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        in: query
+        name: role
+        type: integer
       - description: Order by
         in: query
         name: order_by

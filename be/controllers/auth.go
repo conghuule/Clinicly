@@ -45,8 +45,8 @@ func Login(c *gin.Context) {
 
 	user, _ = models.GetUserByEmail(input.Email)
 
-	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("Authorization", token, 3600*24, "", "", false, true)
+	c.SetSameSite(http.SameSiteNoneMode)
+	c.SetCookie("Authorization", token, 3600*24, "/", "", true, true)
 	c.JSON(http.StatusOK, LoginResponse{
 		Response: SuccessfulResponse,
 		Data:     *user,

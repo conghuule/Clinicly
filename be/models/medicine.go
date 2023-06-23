@@ -1,6 +1,7 @@
 package models
 
 import (
+	"clinic-management/types"
 	"time"
 
 	"gorm.io/gorm"
@@ -73,4 +74,49 @@ func GetMedicineByID(id string) (*Medicine, error) {
 	}
 
 	return medicine, nil
+}
+
+func GetMedicineMetric(startDate, endDate time.Time) (medicineData []int, newMedicine *int, totalMedicine *int, err error) {
+	medicineData = []int{}
+	newMedicine = new(int)
+	totalMedicine = new(int)
+
+	var result []struct {
+		Count int
+		Date  time.Time
+	}
+
+	err = DB.Raw(`SELECT coalesce(SUM("SoLuong"), 0), Date(hd."NgayTao") FROM "HoaDon" hd
+	JOIN "DonThuoc" dt ON hd."MaPK" = dt."MaPK"
+	WHERE hd."NgayTao" BETWEEN ? AND ?
+	AND "TTGiaoThuoc" = true
+	GROUP BY Date(hd."NgayTao")
+	ORDER BY DATE(hd."NgayTao")`, startDate, endDate).Scan(&result).Error
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	err = DB.Raw(`SELECT coalesce(SUM("SoLuong"), 0) FROM "HoaDon" hd
+	JOIN "DonThuoc" dt ON hd."MaPK" = dt."MaPK"
+	WHERE "TTGiaoThuoc" = true`).Scan(totalMedicine).Error
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	i := 0
+	for date := startDate; date.Before(endDate.Add(time.Hour * 24 * time.Duration(1))); date = date.Add(time.Hour * 24 * time.Duration(1)) {
+		if i < len(result) && date.Format(types.DateFormat) == result[i].Date.Format(types.DateFormat) {
+			medicineData = append(medicineData, result[i].Count)
+			i++
+		} else {
+			medicineData = append(medicineData, 0)
+		}
+	}
+
+	*newMedicine = 0
+	for _, v := range medicineData {
+		*newMedicine += v
+	}
+
+	return medicineData, newMedicine, totalMedicine, nil
 }

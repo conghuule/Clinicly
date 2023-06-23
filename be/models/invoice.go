@@ -1,6 +1,7 @@
 package models
 
 import (
+	"clinic-management/types"
 	"time"
 
 	"gorm.io/gorm"
@@ -99,4 +100,47 @@ func GetInvoiceByID(id string) (*Invoice, error) {
 	}
 
 	return invoice, nil
+}
+
+func GetRevenueMetric(startDate, endDate time.Time) (revenueData []int, newRevenue *int, totalRevenue *int, err error) {
+	revenueData = []int{}
+	newRevenue = new(int)
+	totalRevenue = new(int)
+
+	var result []struct {
+		Revenue int
+		Date    time.Time
+	}
+
+	err = DB.Raw(`SELECT coalesce(SUM("TongTien"), 0), Date("NgayTao") FROM "HoaDon" 
+	WHERE "NgayTao" BETWEEN ? AND ?
+	AND "TTThanhToan" = true
+	GROUP BY Date("NgayTao")
+	ORDER BY DATE("NgayTao")`, startDate, endDate).Scan(&result).Error
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	err = DB.Raw(`SELECT coalesce(SUM("TongTien"), 0) FROM "HoaDon"
+	WHERE "TTThanhToan" = true`).Scan(totalRevenue).Error
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	i := 0
+	for date := startDate; date.Before(endDate.Add(time.Hour * 24 * time.Duration(1))); date = date.Add(time.Hour * 24 * time.Duration(1)) {
+		if i < len(result) && date.Format(types.DateFormat) == result[i].Date.Format(types.DateFormat) {
+			revenueData = append(revenueData, result[i].Revenue)
+			i++
+		} else {
+			revenueData = append(revenueData, 0)
+		}
+	}
+
+	*newRevenue = 0
+	for _, v := range revenueData {
+		*newRevenue += v
+	}
+
+	return revenueData, newRevenue, totalRevenue, nil
 }
