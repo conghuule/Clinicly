@@ -1,8 +1,6 @@
 import axios from 'axios';
-import config from '../config';
 
 const axiosClient = axios.create({
-  baseURL: config.api.baseUrl,
   headers: {
     'Content-Type': 'application/json; charset=utf-8',
   },
