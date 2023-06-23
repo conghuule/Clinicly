@@ -1,6 +1,7 @@
 package models
 
 import (
+	"clinic-management/types"
 	"clinic-management/utils"
 	"clinic-management/utils/query"
 	"errors"
@@ -95,4 +96,45 @@ func GetTicketByID(id string) (*Ticket, error) {
 	}
 
 	return ticket, nil
+}
+
+func GetTicketMetric(startDate, endDate time.Time) (ticketData []int, newTicket *int, totalTicket *int, err error) {
+	ticketData = []int{}
+	newTicket = new(int)
+	totalTicket = new(int)
+
+	var result []struct {
+		Count int
+		Date  time.Time
+	}
+
+	err = DB.Raw(`SELECT Count(*), Date("NgayTao") FROM "PhieuDoiKham" 
+	WHERE "NgayTao" BETWEEN ? AND ?
+	GROUP BY Date("NgayTao")
+	ORDER BY DATE("NgayTao")`, startDate, endDate).Scan(&result).Error
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	err = DB.Raw(`SELECT Count(*) FROM "PhieuDoiKham"`).Scan(totalTicket).Error
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	i := 0
+	for date := startDate; date.Before(endDate.Add(time.Hour * 24 * time.Duration(1))); date = date.Add(time.Hour * 24 * time.Duration(1)) {
+		if i < len(result) && date.Format(types.DateFormat) == result[i].Date.Format(types.DateFormat) {
+			ticketData = append(ticketData, result[i].Count)
+			i++
+		} else {
+			ticketData = append(ticketData, 0)
+		}
+	}
+
+	*newTicket = 0
+	for _, v := range ticketData {
+		*newTicket += v
+	}
+
+	return ticketData, newTicket, totalTicket, nil
 }

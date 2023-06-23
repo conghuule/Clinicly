@@ -1,13 +1,16 @@
 package utils
 
 import (
-	"fmt"
 	"log"
 	"time"
 )
 
 // Date format "yyyy-mm-dd"
 func ParseDate(date string) (*time.Time, error) {
+	if date == "" {
+		return nil, nil
+	}
+
 	var res time.Time
 
 	loc, err := time.LoadLocation("Asia/Ho_Chi_Minh")
@@ -18,8 +21,6 @@ func ParseDate(date string) (*time.Time, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(res)
 
 	return &res, nil
 }

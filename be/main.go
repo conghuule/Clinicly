@@ -22,6 +22,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
+
 	gin.SetMode(os.Getenv("GIN_MODE"))
 
 	configTimezone()

@@ -49,6 +49,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/dashboard": {
+            "get": {
+                "description": "Get dashboard",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get dashboard",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "2002-02-20",
+                        "description": "Start date",
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "2002-02-28",
+                        "description": "End date",
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard response",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.DashboardReportResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/invoice": {
             "get": {
                 "description": "Get invoice",
@@ -1162,6 +1200,28 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "type": "integer",
+                        "description": "Staff status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+                        "type": "integer",
+                        "description": "Staff role",
+                        "name": "role",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "Order by",
                         "name": "order_by",
@@ -1520,6 +1580,73 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "controllers.DashboardReport": {
+            "type": "object",
+            "properties": {
+                "medicine_data": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "new_medicine": {
+                    "type": "integer"
+                },
+                "new_patient": {
+                    "type": "integer"
+                },
+                "new_revenue": {
+                    "type": "integer"
+                },
+                "new_ticket": {
+                    "type": "integer"
+                },
+                "patient_data": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "revenue_data": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "ticket_data": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "total_medicine": {
+                    "type": "integer"
+                },
+                "total_patient": {
+                    "type": "integer"
+                },
+                "total_revenue": {
+                    "type": "integer"
+                },
+                "total_ticket": {
+                    "type": "integer"
+                }
+            }
+        },
+        "controllers.DashboardReportResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/controllers.DashboardReport"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "controllers.InvoiceListResponse": {
             "type": "object",
             "properties": {
@@ -2538,7 +2665,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "clinicly.fly.dev",
+	Host:             "localhost:8080",
 	BasePath:         "/api/v1",
 	Schemes:          []string{"http", "https"},
 	Title:            "Clinic Management",

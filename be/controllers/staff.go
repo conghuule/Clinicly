@@ -51,9 +51,11 @@ type StaffListResponse struct {
 
 type StaffQuery struct {
 	PaginateQuery
-	Name    string `form:"name"`
-	OrderBy string `form:"order_by,default=NgayTao"`
-	Desc    bool   `form:"desc,default=false"`
+	Name    string            `form:"name"`
+	Status  types.StaffStatus `form:"status, default=0"`
+	Role    types.Role        `form:"role, default=0"`
+	OrderBy string            `form:"order_by,default=NgayTao"`
+	Desc    bool              `form:"desc,default=false"`
 }
 
 // @Summary Get staff
@@ -61,6 +63,8 @@ type StaffQuery struct {
 // @Tags staff
 // @Produce json
 // @Param name query string false "Staff name"
+// @Param status query types.StaffStatus false "Staff status"
+// @Param role query types.Role false "Staff role"
 // @Param order_by query int false "Order by" default(NgayTao)
 // @Param desc query bool false "Order descending" default(false)
 // @Param page query int false "Page" default(1)
@@ -76,7 +80,9 @@ func GetStaff(c *gin.Context) {
 
 	staffs, err := models.GetStaff(query.Paginate(c),
 		query.OrderBy(staffQuery.OrderBy, staffQuery.Desc),
-		query.StringSearch("HoTen", staffQuery.Name))
+		query.StringSearch("HoTen", staffQuery.Name),
+		query.QueryByField("TrangThai", staffQuery.Status.Value()),
+		query.QueryByField("LoaiNV", staffQuery.Role.Value()))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return

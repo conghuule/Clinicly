@@ -5,11 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// var origins = []string{}
+var allowOrigins = []string{"http://localhost:3000"}
 
 func Cors(c *gin.Context) {
 	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
+	config.AllowCredentials = true
+	config.AllowOrigins = allowOrigins
 
 	cors.New(config)(c)
 }
