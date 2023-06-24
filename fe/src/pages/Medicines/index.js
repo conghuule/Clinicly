@@ -2,6 +2,7 @@ import { faPills } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
 import { Button, Input } from 'antd';
+import Modal from '../../components/Modal/Modal';
 import MedicineTable from '../../components/Table/MedicineTable';
 import MedicineModal from '../../components/Modal/MedicineModal';
 const { Search } = Input;
@@ -27,7 +28,11 @@ export default function Medicines() {
           <Button type="primary" size="large" onClick={() => setOpenModal(true)}>
             Thêm thuốc
           </Button>
-          <MedicineModal open={openModal} onCancel={() => setOpenModal(false)} />
+          {openModal ? (
+            <Modal>
+              <MedicineModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
+            </Modal>
+          ) : null}
         </div>
       </div>
       <MedicineTable searchValue={searchValue} />

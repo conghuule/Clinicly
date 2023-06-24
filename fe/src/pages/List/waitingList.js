@@ -3,6 +3,7 @@ import { Button, Table } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HeaderBar from '../../components/HeaderBar';
+import Modal from '../../components/Modal/Modal';
 import ConfirmDeleteModal from '../../components/Modal/ConfirmDeleteModal';
 import { PATIENT_COLUMNS } from '../../utils/constants';
 import AddWaitListModal from '../../components/Modal/AddWaitListModal';
@@ -56,12 +57,16 @@ export default function WaitingList() {
           onClick: () => navigate(record.id.toString()),
         })}
       />
-      <ConfirmDeleteModal
-        title={title}
-        open={openModalDel}
-        onCancel={() => setOpenModalDel(false)}
-        onOk={() => setOpenModalDel(false)}
-      />
+      {openModal ? (
+        <Modal>
+          <ConfirmDeleteModal
+            title={title}
+            open={openModal}
+            onOk={() => setOpenModal(false)}
+            onCancel={() => setOpenModal(false)}
+          />
+        </Modal>
+      ) : null}
     </div>
   );
 }

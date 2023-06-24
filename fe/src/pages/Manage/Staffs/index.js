@@ -2,6 +2,7 @@ import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import HeaderBar from '../../../components/HeaderBar';
 import { Input } from 'antd';
+import Modal from '../../../components/Modal/Modal';
 import StaffModal from '../../../components/Modal/StaffModal';
 import { Button } from 'antd';
 import StaffTable from '../../../components/Table/StaffTable';
@@ -35,7 +36,11 @@ export default function Bills() {
           <Button type="primary" className="h-[40px]" onClick={() => setOpenModal(true)}>
             Thêm nhân viên
           </Button>
-          <StaffModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
+          {openModal ? (
+            <Modal>
+              <StaffModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
+            </Modal>
+          ) : null}
         </div>
       </div>
       <StaffTable searchValue={searchValue} />

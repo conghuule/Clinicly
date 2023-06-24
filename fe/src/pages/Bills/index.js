@@ -1,5 +1,6 @@
 import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
+import Modal from '../../components/Modal/Modal';
 import HeaderBar from '../../components/HeaderBar';
 import { Input } from 'antd';
 import BillTable from '../../components/Table/BillTable';
@@ -61,7 +62,15 @@ export default function Bills() {
           <Button type="primary" onClick={() => setOpenModal(true)} size="large">
             Xuất hoá đơn
           </Button>
-          <PublishBillModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
+          {openModal ? (
+            <Modal>
+              <PublishBillModal
+                open={openModal}
+                onOk={() => setOpenModal(false)}
+                onCancel={() => setOpenModal(false)}
+              />
+            </Modal>
+          ) : null}
         </div>
       </div>
       <BillTable searchValue={searchValue} />
