@@ -6,25 +6,18 @@ import PatientForm from '../../components/Form/PatientForm';
 import HeaderBar from '../../components/HeaderBar';
 import { Button } from 'antd';
 import config from '../../config';
+import { useDispatch, useSelector } from 'react-redux';
+import { updatePatient } from '../../redux/patient/slice';
 
 export default function PatientDetail() {
   const { id } = useParams();
-  console.log('patient id: ', id);
-  // TODO: get patient detail here
+  const patient = useSelector((state) => state.patient.list.find((patient) => patient.id === +id));
 
-  const patient = {
-    id: 1,
-    name: 'Patient 1',
-    gender: 'male',
-    date_of_birth: dayjs(new Date()),
-    personal_id: '11111',
-    address: 'LA',
-    phone_number: '1234',
-  };
+  const dispatch = useDispatch();
 
   const onSubmit = (values) => {
-    console.log('patient:', values);
-    // TODO: call api to update patient here
+    console.log(values);
+    // dispatch(updatePatient({ id, body: values }));
   };
 
   return (
@@ -40,7 +33,13 @@ export default function PatientDetail() {
         </div>
       </div>
       <h3 className="text-[32px] font-semibold mt-[20px]">{patient.name}</h3>
-      <PatientForm patient={patient} onSubmit={onSubmit} submitText="Lưu" />
+      {patient.id && (
+        <PatientForm
+          defaultValue={{ ...patient, birth_date: dayjs(patient.birth_date) }}
+          onSubmit={onSubmit}
+          submitText="Lưu"
+        />
+      )}
     </div>
   );
 }

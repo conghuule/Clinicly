@@ -1,6 +1,9 @@
 import { Table } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { selectPatients } from '../../redux/patient/selectors';
+import { getAllPatients } from '../../redux/patient/slice';
 import { PATIENT_COLUMNS } from '../../utils/constants';
 import ConfirmDeleteModal from '../Modal/ConfirmDeleteModal';
 
@@ -9,32 +12,33 @@ export default function PatientTable({ searchValue }) {
   const [openModal, setOpenModal] = useState(false);
   const [title, setTitle] = useState('');
 
-  // TODO: replace with api response
-  const patients = Array(100)
-    .fill(0)
-    .map((_, index) => ({
-      key: index,
-      id: index,
-      name: 'Patient ' + index,
-      date_of_birth: 12,
-      address: 'Address ' + index,
-      phone_number: '123',
+  const dispatch = useDispatch();
+  const patients = useSelector(selectPatients);
+
+  const filteredPatients = patients
+    .map((patient) => ({
+      key: patient.id,
+      ...patient,
       actions: [
         {
           value: 'Xoá',
           onClick: () => {
             setOpenModal(true);
-            setTitle(' bệnh nhân ở vị trí ' + index);
+            setTitle(patient.full_name);
           },
         },
       ],
     }))
-    .filter((item) => item.name.toLowerCase().includes(searchValue.toLowerCase()));
+    .filter((item) => item.full_name.toLowerCase().includes(searchValue.toLowerCase()));
+
+  useEffect(() => {
+    dispatch(getAllPatients());
+  }, [dispatch]);
 
   return (
     <>
       <Table
-        dataSource={patients}
+        dataSource={filteredPatients}
         columns={PATIENT_COLUMNS}
         onRow={(record) => ({
           onClick: () => navigate(record.id.toString()),
