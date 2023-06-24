@@ -18,21 +18,21 @@ export default function Bills() {
     setSearchValue(e.key);
   };
   const menuDelivery = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="Đã giao" className="h-[40px]">
+    <Menu>
+      <Menu.Item onClick={handleMenuClick} key="Đã giao" className="h-[40px]">
         Đã giao
       </Menu.Item>
-      <Menu.Item key="Chưa giao" className="h-[40px]">
+      <Menu.Item onClick={handleMenuClick} key="Chưa giao" className="h-[40px]">
         Chưa giao
       </Menu.Item>
     </Menu>
   );
   const menuPayment = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="Đã thanh toán" className="h-[40px]">
+    <Menu>
+      <Menu.Item onClick={handleMenuClick} key="Đã thanh toán" className="h-[40px]">
         Đã thanh toán
       </Menu.Item>
-      <Menu.Item key="Chưa thanh toán" className="h-[40px]">
+      <Menu.Item onClick={handleMenuClick} key="Chưa thanh toán" className="h-[40px]">
         Chưa thanh toán
       </Menu.Item>
     </Menu>

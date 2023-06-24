@@ -97,6 +97,11 @@ export const MEDICINE_COLUMNS = [
 ];
 export const BILL_COLUMNS = [
   {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+  },
+  {
     title: 'Mã hoá đơn',
     dataIndex: 'id',
     key: 'id',
