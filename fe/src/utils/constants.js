@@ -97,11 +97,6 @@ export const MEDICINE_COLUMNS = [
 ];
 export const INVOICE_COLUMNS = [
   {
-    title: '#',
-    dataIndex: 'index',
-    key: 'index',
-  },
-  {
     title: 'Mã hoá đơn',
     dataIndex: 'id',
     key: 'id',
@@ -110,16 +105,18 @@ export const INVOICE_COLUMNS = [
     title: 'Trạng thái giao thuốc',
     dataIndex: 'delivery_status',
     key: 'delivery_status',
+    render: (delivery_status) => (delivery_status ? 'Đã giao thuốc' : 'Chưa giao thuốc'),
   },
   {
     title: 'Trạng thái thanh toán',
     dataIndex: 'payment_status',
     key: 'payment_status',
+    render: (payment_status) => (payment_status ? 'Đã thanh toán' : 'Chưa thanh toán'),
   },
   {
     title: 'Tổng tiền',
-    dataIndex: 'Total',
-    key: 'Total',
+    dataIndex: 'total',
+    key: 'total',
   },
   {
     title: 'Thao tác',
