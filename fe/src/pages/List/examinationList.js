@@ -12,7 +12,7 @@ export default function ExaminationList() {
   return (
     <div>
       <HeaderBar title="Danh sách khám" icon={faRectangleList} image="" name="Nguyen Long Vu" role="Bac si" />
-      <div className="flex gap-[80px] mt-[20px] mb-[40px]">
+      <div className="flex gap-[80px] mt-[30px] mb-[30px]">
         <Search
           placeholder="Nhập bệnh nhân cần tìm"
           onSearch={onSearch}

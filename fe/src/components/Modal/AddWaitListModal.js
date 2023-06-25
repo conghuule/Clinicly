@@ -1,20 +1,17 @@
-import { faHospitalUser } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
-import HeaderBar from '../../components/HeaderBar';
-import PatientTable from '../../components/Table/PatientTable';
-import { Button, Input } from 'antd';
-import PatientModal from '../../components/Modal/PatientModal';
+import { Button, Input, Modal } from 'antd';
+import { React, useState } from 'react';
+import PatientModal from './PatientModal';
+import WaitListTable from '../Table/WaitListTable';
 const { Search } = Input;
 
-export default function Patients() {
+export default function AddWaitListModal(props) {
   const [searchValue, setSearchValue] = useState('');
+  const onSearch = (value) => setSearchValue(value);
   const [openModal, setOpenModal] = useState(false);
 
-  const onSearch = (value) => setSearchValue(value);
-
   return (
-    <div>
-      <HeaderBar title="Bệnh nhân" icon={faHospitalUser} image="" name="Nguyen Long Vu" role="Bac si" />
+    <Modal {...props} centered width={1000} footer={null}>
+      <h5 className="text-center text-[24px]">Thêm vào danh sách đợi khám</h5>
       <div className="flex gap-[80px] mt-[30px] mb-[30px]">
         <Search
           placeholder="Nhập bệnh nhân cần tìm"
@@ -30,7 +27,7 @@ export default function Patients() {
           <PatientModal open={openModal} onCancel={() => setOpenModal(false)} />
         </div>
       </div>
-      <PatientTable searchValue={searchValue} />
-    </div>
+      <WaitListTable searchValue={searchValue} />
+    </Modal>
   );
 }

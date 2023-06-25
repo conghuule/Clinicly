@@ -21,7 +21,7 @@ export default function Bills() {
           <Button className="h-[40px] bg-blue text-[#fff]">Quản lý quy định</Button>
         </Link>
       </div>
-      <div className="flex gap-[20px] mt-[20px] mb-[40px]">
+      <div className="flex gap-[20px] mt-[30px] mb-[30px]">
         <Search
           placeholder="Nhập quy định cần tìm"
           onSearch={onSearch}

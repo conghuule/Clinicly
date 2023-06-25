@@ -22,6 +22,7 @@ export default function PatientTable({ searchValue }) {
       actions: [
         {
           value: 'Xoá',
+          color: 'error',
           onClick: () => {
             setOpenModal(true);
             setTitle(' bệnh nhân ở vị trí ' + index);
