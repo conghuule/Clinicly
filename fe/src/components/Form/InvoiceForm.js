@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input } from 'antd';
 
-export default function BillForm({ bill }) {
+export default function InvoiceForm({ bill }) {
   return (
     <Form
       name="bill-form"

@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import Modal from '../../components/Modal/Modal';
 import HeaderBar from '../../components/HeaderBar';
 import { Input } from 'antd';
-import BillTable from '../../components/Table/BillTable';
-import PublishBillModal from '../../components/Modal/PublishBillModal';
+import InvoiceTable from '../../components/Table/InvoiceTable';
+import ConfirmPublishInvoiceModal from '../../components/Modal/ConfirmPublishInvoiceModal';
 import { Button, Dropdown, Menu } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
@@ -64,7 +64,7 @@ export default function Bills() {
           </Button>
           {openModal ? (
             <Modal>
-              <PublishBillModal
+              <ConfirmPublishInvoiceModal
                 open={openModal}
                 onOk={() => setOpenModal(false)}
                 onCancel={() => setOpenModal(false)}
@@ -73,7 +73,7 @@ export default function Bills() {
           ) : null}
         </div>
       </div>
-      <BillTable searchValue={searchValue} />
+      <InvoiceTable searchValue={searchValue} />
     </div>
   );
 }

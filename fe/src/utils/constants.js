@@ -95,7 +95,7 @@ export const MEDICINE_COLUMNS = [
     ),
   },
 ];
-export const BILL_COLUMNS = [
+export const INVOICE_COLUMNS = [
   {
     title: '#',
     dataIndex: 'index',

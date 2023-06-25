@@ -1,17 +1,17 @@
 import { Table } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BILL_COLUMNS } from '../../utils/constants';
+import { INVOICE_COLUMNS } from '../../utils/constants';
 import { useState } from 'react';
 import Modal from '../Modal/Modal';
-import ConfirmPublishBillModal from '../Modal/ConfirmPublishBillModal';
-export default function BillTable({ searchValue }) {
+import ConfirmPublishInvoiceModal from '../Modal/ConfirmPublishInvoiceModal';
+export default function InvoiceTable({ searchValue }) {
   const navigate = useNavigate();
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
   const [openDeliveryModal, setOpenDeliveryModal] = useState(false);
   const [openBillModal, setOpenBillModal] = useState(false);
   // TODO: replace with api response
-  const bills = Array(100)
+  const invoices = Array(100)
     .fill(0)
     .map((_, index) => ({
       key: index,
@@ -27,7 +27,7 @@ export default function BillTable({ searchValue }) {
       ],
     }));
 
-  const filteredData = bills.filter((item) => {
+  const filteredData = invoices.filter((item) => {
     const idCondition = item.id.toLowerCase().includes(searchValue.toLowerCase());
     const deliveryCondition = item.delivery_status.toLowerCase().includes(searchValue.toLowerCase());
     const paymentCondition = item.payment_status.toLowerCase().includes(searchValue.toLowerCase());
@@ -38,7 +38,7 @@ export default function BillTable({ searchValue }) {
     <div>
       <Table
         dataSource={filteredData}
-        columns={BILL_COLUMNS}
+        columns={INVOICE_COLUMNS}
         onRow={(record) => ({
           onClick: () => navigate(record.id.toString()),
         })}
@@ -48,7 +48,7 @@ export default function BillTable({ searchValue }) {
       {openDeliveryModal ? null : null}
       {openBillModal ? (
         <Modal>
-          <ConfirmPublishBillModal
+          <ConfirmPublishInvoiceModal
             open={openBillModal}
             onOk={() => setOpenBillModal(false)}
             onCancel={() => setOpenBillModal(false)}
