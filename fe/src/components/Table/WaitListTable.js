@@ -1,30 +1,31 @@
 import { Table } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MEDICINE_COLUMNS } from '../../utils/constants';
-import ConfirmDeleteModal from '../Modal/ConfirmDeleteModal';
+import { PATIENT_COLUMNS } from '../../utils/constants';
+import ConfirmAddModal from '../Modal/ConfirmAddModal';
 
-export default function MedicineTable({ searchValue }) {
+export default function WaitListTable({ searchValue }) {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [title, setTitle] = useState('');
 
   // TODO: replace with api response
-  const medicines = Array(100)
+  const patients = Array(100)
     .fill(0)
     .map((_, index) => ({
       key: index,
       id: index,
-      name: 'Medicine ' + index,
-      price: 12,
-      quantity: index * 2,
+      name: 'Patient ' + index,
+      date_of_birth: 12,
+      address: 'Address ' + index,
+      phone_number: '123',
       actions: [
         {
-          value: 'Xoá',
-          color: 'error',
+          value: 'Them',
+          color: '#47BB92',
           onClick: () => {
             setOpenModal(true);
-            setTitle(' thuốc ở vị trí ' + index);
+            setTitle(' bệnh nhân ở vị trí ' + index);
           },
         },
       ],
@@ -34,14 +35,14 @@ export default function MedicineTable({ searchValue }) {
   return (
     <>
       <Table
-        dataSource={medicines}
-        columns={MEDICINE_COLUMNS}
+        dataSource={patients}
+        columns={PATIENT_COLUMNS}
         onRow={(record) => ({
           onClick: () => navigate(record.id.toString()),
         })}
         rowClassName="cursor-pointer"
       />
-      <ConfirmDeleteModal
+      <ConfirmAddModal
         title={title}
         open={openModal}
         onCancel={() => setOpenModal(false)}

@@ -30,7 +30,7 @@ export const PATIENT_COLUMNS = [
         {actions.map((action) => {
           return (
             <Tag
-              color="error"
+              color={action.color}
               key={action.value}
               onClick={(e) => {
                 e.stopPropagation();

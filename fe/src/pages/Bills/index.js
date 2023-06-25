@@ -39,7 +39,7 @@ export default function Bills() {
   return (
     <div>
       <HeaderBar title="Hoá đơn" icon={faFileInvoiceDollar} image="" name="Nguyễn Long Vũ" role="Bác sĩ" />
-      <div className="flex gap-[20px] mt-[20px] mb-[40px]">
+      <div className="flex gap-[20px] mt-[30px] mb-[30px]">
         <Search
           placeholder="Nhập hoá đơn cần tìm"
           onSearch={onSearch}
