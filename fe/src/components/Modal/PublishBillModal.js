@@ -1,18 +1,10 @@
-import { Modal, Button } from 'antd';
+import { Modal } from 'antd';
 import React from 'react';
 
-export default function PublishBillModal(props) {
+export default function PublishBillModal({ open, onCancel, onOk, ...props }) {
   return (
-    <Modal {...props} centered width={700} footer={null}>
+    <Modal open={open} onCancel={onCancel} onOk={onOk} {...props} centered width={600} okText="Xuất" cancelText="Huỷ">
       <h5 className="text-center text-[2.4rem]">Bạn có muốn xuất hoá đơn không ?</h5>
-      <div className="flex place-content-center gap-[20px] mt-[2rem]">
-        <Button type="primary" htmlType="submit" className="w-[10rem]">
-          Có
-        </Button>
-        <Button type="primary" htmlType="submit" className="w-[10rem]">
-          Không
-        </Button>
-      </div>
     </Modal>
   );
 }

@@ -25,6 +25,7 @@ export default function RegulationTable({ searchValue }) {
       onRow={(record) => ({
         onClick: () => navigate(record.id.toString()),
       })}
+      rowClassName="cursor-pointer"
     />
   );
 }
