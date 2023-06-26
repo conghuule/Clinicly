@@ -1,41 +1,51 @@
 import { Table } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PATIENT_COLUMNS } from '../../utils/constants';
 import ConfirmDeleteModal from '../Modal/ConfirmDeleteModal';
+import patientApi from '../../services/patientApi';
+import dayjs from 'dayjs';
 
 export default function PatientTable({ searchValue }) {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [title, setTitle] = useState('');
+  const [patients, setPatients] = useState([]);
 
-  // TODO: replace with api response
-  const patients = Array(100)
-    .fill(0)
-    .map((_, index) => ({
-      key: index,
-      id: index,
-      name: 'Patient ' + index,
-      date_of_birth: 12,
-      address: 'Address ' + index,
-      phone_number: '123',
+  const filteredPatients = patients
+    .map((patient) => ({
+      key: patient.id,
+      ...patient,
       actions: [
         {
           value: 'Xoá',
           color: 'error',
           onClick: () => {
             setOpenModal(true);
-            setTitle(' bệnh nhân ở vị trí ' + index);
+            setTitle(patient.full_name);
           },
         },
       ],
     }))
-    .filter((item) => item.name.toLowerCase().includes(searchValue.toLowerCase()));
+    .filter((item) => item.full_name.toLowerCase().includes(searchValue.toLowerCase()));
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await patientApi.getAll();
+        setPatients(
+          response.data.map((patient) => ({ ...patient, birth_date: dayjs(patient.birth_date).format('DD-MM-YYYY') })),
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
 
   return (
     <>
       <Table
-        dataSource={patients}
+        dataSource={filteredPatients}
         columns={PATIENT_COLUMNS}
         onRow={(record) => ({
           onClick: () => navigate(record.id.toString()),
