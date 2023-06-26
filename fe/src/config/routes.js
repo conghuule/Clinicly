@@ -14,6 +14,7 @@ const routes = {
   regulation_detail: '/manage/regulations/:id',
   waiting_list: '/waiting_list',
   examination_list: '/examination_list',
+  not_found: '*',
 };
 
 export default routes;

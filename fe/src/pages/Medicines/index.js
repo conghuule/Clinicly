@@ -1,8 +1,7 @@
 import { faPills } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
 import { Button, Input } from 'antd';
-import Modal from '../../components/Modal/Modal';
 import MedicineTable from '../../components/Table/MedicineTable';
 import MedicineModal from '../../components/Modal/MedicineModal';
 const { Search } = Input;
@@ -10,6 +9,7 @@ const { Search } = Input;
 export default function Medicines() {
   const [searchValue, setSearchValue] = useState('');
   const [openModal, setOpenModal] = useState(false);
+  const medicineTableRef = useRef(null);
 
   const onSearch = (value) => setSearchValue(value);
 
@@ -28,14 +28,14 @@ export default function Medicines() {
           <Button type="primary" size="large" onClick={() => setOpenModal(true)}>
             Thêm thuốc
           </Button>
-          {openModal ? (
-            <Modal>
-              <MedicineModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
-            </Modal>
-          ) : null}
+          <MedicineModal
+            open={openModal}
+            onCancel={() => setOpenModal(false)}
+            getMedicines={medicineTableRef.current?.getMedicines}
+          />
         </div>
       </div>
-      <MedicineTable searchValue={searchValue} />
+      <MedicineTable searchValue={searchValue} ref={medicineTableRef} />
     </div>
   );
 }

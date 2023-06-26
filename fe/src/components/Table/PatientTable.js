@@ -1,5 +1,5 @@
 import { Table } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PATIENT_COLUMNS } from '../../utils/constants';
 import Modal from '../Modal/Modal';
@@ -8,7 +8,7 @@ import patientApi from '../../services/patientApi';
 import dayjs from 'dayjs';
 import { notify } from '../Notification/Notification';
 
-export default function PatientTable({ searchValue }) {
+const PatientTable = ({ searchValue }, ref) => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState({ name: '', id: null });
@@ -31,6 +31,12 @@ export default function PatientTable({ searchValue }) {
     setOpenModal(false);
   };
 
+  useImperativeHandle(ref, () => {
+    return {
+      getPatients,
+    };
+  });
+
   const getPatients = async (searchValue) => {
     try {
       const response = await patientApi.getAll({ ...patients.params, name: searchValue });
@@ -39,6 +45,7 @@ export default function PatientTable({ searchValue }) {
         loading: false,
         data: response.data.map((patient) => ({
           ...patient,
+          key: patient.id,
           birth_date: dayjs(patient.birth_date).format('DD-MM-YYYY'),
         })),
         params: {
@@ -82,6 +89,7 @@ export default function PatientTable({ searchValue }) {
 
   useEffect(() => {
     getPatients(searchValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patients.params.page_size, patients.params.page, searchValue]);
 
   return (
@@ -110,4 +118,6 @@ export default function PatientTable({ searchValue }) {
       />
     </>
   );
-}
+};
+
+export default forwardRef(PatientTable);

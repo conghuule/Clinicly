@@ -76,11 +76,10 @@ export const MEDICINE_COLUMNS = [
       <>
         {actions.map((action) => {
           return (
-            <div className="text-center">
+            <div className="text-center" key={action.value}>
               <FontAwesomeIcon
                 icon={faTrash}
                 color={action.color}
-                key={action.value}
                 onClick={(e) => {
                   e.stopPropagation();
                   action.onClick(e);
@@ -248,4 +247,9 @@ export const GENDERS = [
   { value: 1, label: 'Nam' },
   { value: 2, label: 'Nữ' },
   { value: 3, label: 'Khác' },
+];
+
+export const UNITS = [
+  { label: 'Viên', value: 1 },
+  { label: 'Chai', value: 2 },
 ];

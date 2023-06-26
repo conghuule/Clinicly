@@ -1,6 +1,6 @@
 import { Layout } from 'antd';
 import React from 'react';
-import { LoginComponent } from '../../components/Login/LoginComponent';
+import { LoginComponent } from '../../components/Login/loginComponent';
 import IMAGES from '../../components/assets/images/index';
 const { Content } = Layout;
 

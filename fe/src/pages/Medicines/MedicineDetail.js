@@ -4,8 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import MedicineForm from '../../components/Form/MedicineForm';
 import HeaderBar from '../../components/HeaderBar';
+import { notify } from '../../components/Notification/Notification';
 import config from '../../config';
 import medicineApi from '../../services/medicineApi';
+import { UNITS } from '../../utils/constants';
 
 export default function MedicineDetail() {
   const { id } = useParams();
@@ -18,9 +20,19 @@ export default function MedicineDetail() {
     })();
   }, [id]);
 
-  const onSubmit = (values) => {
-    console.log('medicine:', values);
-    // TODO: call api to update medicine here
+  const onSubmit = async (values) => {
+    try {
+      const newMedicine = {
+        ...values,
+        unit: UNITS.find((unit) => unit.label === values)?.value || 1,
+        quantity: Number(values.quantity),
+      };
+      await medicineApi.update(id, newMedicine);
+      notify({ type: 'success', mess: 'Cập nhật thuốc thành công' });
+    } catch (error) {
+      console.log(error);
+      notify({ type: 'error', mess: 'Cập nhật thuốc thất bại' });
+    }
   };
 
   return (

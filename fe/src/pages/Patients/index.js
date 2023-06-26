@@ -1,15 +1,15 @@
 import { faHospitalUser } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
 import PatientTable from '../../components/Table/PatientTable';
 import { Button, Input } from 'antd';
-import Modal from '../../components/Modal/Modal';
 import PatientModal from '../../components/Modal/PatientModal';
 const { Search } = Input;
 
 export default function Patients() {
   const [searchValue, setSearchValue] = useState('');
   const [openModal, setOpenModal] = useState(false);
+  const patientTableRef = useRef(null);
 
   const onSearch = (value) => setSearchValue(value);
 
@@ -28,14 +28,14 @@ export default function Patients() {
           <Button type="primary" onClick={() => setOpenModal(true)} size="large">
             Thêm bệnh nhân
           </Button>
-          {openModal ? (
-            <Modal>
-              <PatientModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
-            </Modal>
-          ) : null}
+          <PatientModal
+            open={openModal}
+            onCancel={() => setOpenModal(false)}
+            setPatients={patientTableRef.current?.getPatients}
+          />
         </div>
       </div>
-      <PatientTable searchValue={searchValue} />
+      <PatientTable searchValue={searchValue} ref={patientTableRef} />
     </div>
   );
 }

@@ -1,20 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Select } from 'antd';
 import { Option } from 'antd/es/mentions';
+import medicineApi from '../../services/medicineApi';
 
 export default function OldMedicineForm({ onSubmit, submitText, centered }) {
-  // TODO: replace with api response
-  const oldMedicines = Array(100)
-    .fill(0)
-    .map((_, index) => ({
-      key: index,
-      label: 'Medicine ' + index,
-      value: index,
-    }));
+  const [medicines, setMedicines] = useState({
+    data: [],
+    loading: true,
+    params: { page_size: 10, page: 1, total_page: 0 },
+  });
 
-  const onMedicineChange = (value) => {
-    console.log(value);
-  };
+  useEffect(() => {
+    (async () => {
+      const response = await medicineApi.getAll({ ...medicines.params });
+      setMedicines({
+        ...medicines,
+        loading: false,
+        data: response.data.map((medicine) => ({ label: medicine.name, value: medicine.id })),
+        params: {
+          ...medicines.params,
+          page_size: response.page_info.page_size,
+          page: response.page_info.page,
+          total_page: response.page_info.total_page,
+        },
+      });
+    })();
+  }, [medicines]);
 
   return (
     <Form
@@ -25,9 +36,9 @@ export default function OldMedicineForm({ onSubmit, submitText, centered }) {
       autoComplete="off"
       className="mt-[40px]"
     >
-      <Form.Item name="name" label="Chọn thuốc" rules={[{ required: true }]}>
-        <Select placeholder="Chọn thuốc" onChange={onMedicineChange} allowClear>
-          {oldMedicines.map((medicine) => (
+      <Form.Item name="medicine_id" label="Chọn thuốc" rules={[{ required: true }]}>
+        <Select placeholder="Chọn thuốc" allowClear>
+          {medicines.data.map((medicine) => (
             <Option key={medicine.key} value={medicine.value}>
               {medicine.label}
             </Option>

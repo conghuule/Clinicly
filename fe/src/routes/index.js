@@ -13,6 +13,7 @@ import WaitingList from '../pages/List/waitingList';
 import ExaminationList from '../pages/List/examinationList';
 import Logout from '../pages/Logout';
 import Login from '../pages/Login';
+import NotFound from '../pages/NotFound';
 
 const publicRoutes = [
   { path: config.routes.home, element: Home },
@@ -29,6 +30,7 @@ const publicRoutes = [
   { path: config.routes.examination_list, element: ExaminationList },
   { path: config.routes.login, element: Login, layout: null },
   { path: config.routes.logout, element: Logout, layout: null },
+  { path: config.routes.not_found, element: NotFound, layout: null },
 ];
 
 const privateRoutes = [];
