@@ -2,8 +2,16 @@ package models
 
 import (
 	"clinic-management/types"
+	"clinic-management/utils"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"strconv"
 	"time"
 
+	generator "github.com/angelodlfrtr/go-invoice-generator"
+	"github.com/go-pdf/fpdf"
 	"gorm.io/gorm"
 )
 
@@ -25,32 +33,26 @@ func (Invoice) TableName() string {
 	return TableNameInvoice
 }
 
-func (invoice *Invoice) Create(report MedicalReport) (*Invoice, error) {
+func (invoice *Invoice) Create() (*Invoice, error) {
 	total := 0
-	medicineIDList := []string{}
-	medicines := []Medicine{}
-	medicinePrice := map[string]uint{}
 
-	for _, value := range report.Prescription {
-		medicineIDList = append(medicineIDList, value.MedicineID)
-	}
-
-	DB.Where(medicineIDList).Find(&medicines)
-
-	for _, value := range medicines {
-		medicinePrice[value.ID] = value.Price
-	}
-
-	for _, value := range report.Prescription {
-		total += int(value.Quantity) * int(medicinePrice[value.MedicineID])
-	}
-
-	costReg, err := GetRegulationByID("GK")
+	prescriptions := []Prescription{}
+	err := DB.Preload("Medicine").Raw(`SELECT * FROM "DonThuoc"
+	WHERE "MaPK" = ?`, invoice.MedicalReportID).Scan(&prescriptions).Error
 	if err != nil {
 		return nil, err
 	}
 
-	invoice.Total = uint(total) + uint(costReg.Value)
+	for _, value := range prescriptions {
+		total += int(value.Quantity) * int(value.Medicine.Price)
+	}
+
+	fee, err := GetRegulationByID("GK")
+	if err != nil {
+		return nil, err
+	}
+
+	invoice.Total = uint(total) + uint(fee.Value)
 
 	err = DB.Create(invoice).Error
 	if err != nil {
@@ -75,7 +77,7 @@ func (invoice *Invoice) Delete() (*Invoice, error) {
 		return nil, err
 	}
 
-	DB.Delete(&invoice)
+	DB.Delete(invoice)
 
 	return invoice, nil
 }
@@ -89,6 +91,85 @@ func GetInvoice(query ...func(*gorm.DB) *gorm.DB) ([]Invoice, error) {
 	}
 
 	return invoices, nil
+}
+
+func (invoice *Invoice) GeneratePDF() (*fpdf.Fpdf, error) {
+	medicalReport, err := GetMedicalReportByID(strconv.Itoa(int(*invoice.MedicalReportID)))
+	if err != nil {
+		return nil, err
+	}
+
+	prescriptions := []Prescription{}
+	err = DB.Preload("Medicine").
+		Where(&Prescription{MedicalReportID: *invoice.MedicalReportID}).
+		Find(&prescriptions).Error
+	if err != nil {
+		return nil, err
+	}
+
+	fee, err := GetRegulationByID("GK")
+	if err != nil {
+		return nil, err
+	}
+
+	doc, _ := generator.New(generator.Invoice, &generator.Options{
+		CurrencySymbol:    "vnd ",
+		CurrencyPrecision: -1,
+	})
+
+	doc.SetRef(strconv.Itoa(int(invoice.ID)))
+	doc.SetDate(utils.GetCurrentDateString())
+
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exPath := filepath.Dir(ex)
+	fmt.Println(exPath)
+	logoBytes, err := ioutil.ReadFile(exPath + "/assets/logo.png")
+	if err != nil {
+		return nil, err
+	}
+
+	doc.SetCompany(&generator.Contact{
+		Name: "Clinicly",
+		Logo: logoBytes,
+		Address: &generator.Address{
+			Address:    "227 Nguyen Van Cu, Phuong 4, Quan 5",
+			PostalCode: "800000",
+			City:       "Ho Chi Minh",
+			Country:    "Vietnam",
+		},
+	})
+
+	doc.SetCustomer(&generator.Contact{
+		Name: medicalReport.Patient.FullName,
+		Address: &generator.Address{
+			Address: medicalReport.Patient.Address,
+		},
+	})
+
+	for _, v := range prescriptions {
+		doc.AppendItem(&generator.Item{
+			Name:        v.Medicine.Name,
+			Description: v.Instruction,
+			UnitCost:    strconv.Itoa(int(v.Medicine.Price)),
+			Quantity:    strconv.Itoa(int(v.Quantity)),
+		})
+	}
+
+	doc.AppendItem(&generator.Item{
+		Name:     "Giá khám",
+		UnitCost: strconv.Itoa(fee.Value),
+		Quantity: "1",
+	})
+
+	pdf, err := doc.Build()
+	if err != nil {
+		return nil, err
+	}
+
+	return pdf, nil
 }
 
 func GetInvoiceByID(id string) (*Invoice, error) {

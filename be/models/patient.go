@@ -50,6 +50,8 @@ func (patient *Patient) Delete() (*Patient, error) {
 		return nil, err
 	}
 
+	DB.Delete(patient)
+
 	return patient, nil
 }
 

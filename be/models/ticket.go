@@ -71,7 +71,7 @@ func (ticket *Ticket) Delete() (*Ticket, error) {
 		return nil, err
 	}
 
-	DB.Delete(&ticket)
+	DB.Delete(ticket)
 
 	return ticket, nil
 }

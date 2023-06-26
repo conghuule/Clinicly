@@ -12,14 +12,14 @@ import (
 )
 
 type PrescriptionRequest struct {
-	MedicineID  string `json:"medicine" binding:"required"`
+	MedicineID  string `json:"medicine_id" binding:"required"`
 	Quantity    uint   `json:"quantity" binding:"required"`
 	Instruction string `json:"instruction" binding:"required"`
 }
 
 type MedicalReportRequest struct {
-	PatientID    uint                  `json:"patient" binding:"required"`
-	DoctorID     uint                  `json:"doctor" binding:"required"`
+	PatientID    uint                  `json:"patient_id" binding:"required"`
+	DoctorID     uint                  `json:"doctor_id" binding:"required"`
 	Diagnose     string                `json:"diagnose"`
 	Prescription []PrescriptionRequest `json:"prescription"`
 }
@@ -164,7 +164,7 @@ func CreateMedicalReport(c *gin.Context) {
 		MedicalReportID: &res.ID,
 		UpdatedBy:       res.UpdatedBy,
 	}
-	_, err = invoice.Create(*res)
+	_, err = invoice.Create()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return

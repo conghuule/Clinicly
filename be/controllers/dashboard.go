@@ -110,25 +110,4 @@ func GetDashboardReport(c *gin.Context) {
 		Response: SuccessfulResponse,
 		Data:     dashboardReport,
 	})
-
-	// medicines, err := models.GetMedicine()
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
-	// 	return
-	// }
-
-	// invocies, err := models.GetInvoice()
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
-	// 	return
-	// }
-
-	// tickets, err := models.GetTicket()
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
-	// 	return
-	// }
-
-	// totalPatient := len(patients)
-
 }

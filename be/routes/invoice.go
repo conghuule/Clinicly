@@ -11,6 +11,7 @@ func addInvoiceRoute(r *gin.RouterGroup) {
 
 	group.GET("", controllers.GetInvoice)
 	group.GET(":id", controllers.GetInvoiceByID)
+	group.GET("/pdf/:id", controllers.GetInvoicePDF)
 	group.PUT(":id", controllers.UpdateInvoice)
 	group.DELETE(":id", controllers.DeleteInvoice)
 }

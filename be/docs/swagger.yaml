@@ -100,17 +100,17 @@ definitions:
     properties:
       diagnose:
         type: string
-      doctor:
+      doctor_id:
         type: integer
-      patient:
+      patient_id:
         type: integer
       prescription:
         items:
           $ref: '#/definitions/controllers.PrescriptionRequest'
         type: array
     required:
-    - doctor
-    - patient
+    - doctor_id
+    - patient_id
     type: object
   controllers.MedicalReportResponse:
     properties:
@@ -245,13 +245,13 @@ definitions:
     properties:
       instruction:
         type: string
-      medicine:
+      medicine_id:
         type: string
       quantity:
         type: integer
     required:
     - instruction
-    - medicine
+    - medicine_id
     - quantity
     type: object
   controllers.RegulationListResponse:
@@ -513,6 +513,8 @@ definitions:
         type: integer
       id:
         type: integer
+      patient:
+        $ref: '#/definitions/models.Patient'
       patient_id:
         type: integer
       prescription:
@@ -595,6 +597,8 @@ definitions:
         type: string
       medical_report_id:
         type: integer
+      medicine:
+        $ref: '#/definitions/models.Medicine'
       medicine_id:
         type: string
       quantity:
@@ -893,6 +897,19 @@ paths:
           schema:
             $ref: '#/definitions/controllers.InvoiceResponse'
       summary: Update invoice
+      tags:
+      - invoice
+  /invoice/pdf/{id}:
+    get:
+      description: Get invoice pdf
+      parameters:
+      - description: Invoice id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: Get invoice pdf
       tags:
       - invoice
   /medical-report:

@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"bytes"
 	"clinic-management/models"
 	"clinic-management/utils/query"
 	"clinic-management/utils/token"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -175,4 +177,40 @@ func DeleteInvoice(c *gin.Context) {
 		Response: SuccessfulResponse,
 		Data:     *invoice,
 	})
+}
+
+// @Summary Get invoice pdf
+// @Description Get invoice pdf
+// @Tags invoice
+// @Param id path int true "Invoice id"
+// @Router /invoice/pdf/{id} [get]
+func GetInvoicePDF(c *gin.Context) {
+	id := c.Param("id")
+
+	invoice, err := models.GetInvoiceByID(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	pdf, err := invoice.GeneratePDF()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	var buffer bytes.Buffer
+	err = pdf.Output(&buffer)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
+		return
+	}
+
+	contentLength := int64(buffer.Len())
+	contentType := "application/pdf"
+	extraHeaders := map[string]string{
+		"Content-Disposition": fmt.Sprintf(`attachment; filename="%s.pdf"`, id),
+	}
+
+	c.DataFromReader(http.StatusOK, contentLength, contentType, &buffer, extraHeaders)
 }
