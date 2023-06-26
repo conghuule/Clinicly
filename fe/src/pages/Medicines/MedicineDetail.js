@@ -22,12 +22,16 @@ export default function MedicineDetail() {
 
   const onSubmit = async (values) => {
     try {
-      const newMedicine = { ...values, unit: UNITS.find((unit) => unit.label === values)?.value || 1 };
+      const newMedicine = {
+        ...values,
+        unit: UNITS.find((unit) => unit.label === values)?.value || 1,
+        quantity: Number(values.quantity),
+      };
       await medicineApi.update(id, newMedicine);
-      notify({ type: 'success', mess: 'Cập nhật thành công' });
+      notify({ type: 'success', mess: 'Cập nhật thuốc thành công' });
     } catch (error) {
       console.log(error);
-      notify({ type: 'error', mess: 'Cập nhật thất bại' });
+      notify({ type: 'error', mess: 'Cập nhật thuốc thất bại' });
     }
   };
 
