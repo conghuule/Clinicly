@@ -2,7 +2,12 @@ package models
 
 import (
 	"clinic-management/types"
+	"clinic-management/utils"
+	"fmt"
 	"io/ioutil"
+	"os"
+	"path/filepath"
+	"strconv"
 	"time"
 
 	generator "github.com/angelodlfrtr/go-invoice-generator"
@@ -28,32 +33,26 @@ func (Invoice) TableName() string {
 	return TableNameInvoice
 }
 
-func (invoice *Invoice) Create(report MedicalReport) (*Invoice, error) {
+func (invoice *Invoice) Create() (*Invoice, error) {
 	total := 0
-	medicineIDList := []string{}
-	medicines := []Medicine{}
-	medicinePrice := map[string]uint{}
 
-	for _, value := range report.Prescription {
-		medicineIDList = append(medicineIDList, value.MedicineID)
-	}
-
-	DB.Where(medicineIDList).Find(&medicines)
-
-	for _, value := range medicines {
-		medicinePrice[value.ID] = value.Price
-	}
-
-	for _, value := range report.Prescription {
-		total += int(value.Quantity) * int(medicinePrice[value.MedicineID])
-	}
-
-	costReg, err := GetRegulationByID("GK")
+	prescriptions := []Prescription{}
+	err := DB.Preload("Medicine").Raw(`SELECT * FROM "DonThuoc"
+	WHERE "MaPK" = ?`, invoice.MedicalReportID).Scan(&prescriptions).Error
 	if err != nil {
 		return nil, err
 	}
 
-	invoice.Total = uint(total) + uint(costReg.Value)
+	for _, value := range prescriptions {
+		total += int(value.Quantity) * int(value.Medicine.Price)
+	}
+
+	fee, err := GetRegulationByID("GK")
+	if err != nil {
+		return nil, err
+	}
+
+	invoice.Total = uint(total) + uint(fee.Value)
 
 	err = DB.Create(invoice).Error
 	if err != nil {
@@ -78,7 +77,7 @@ func (invoice *Invoice) Delete() (*Invoice, error) {
 		return nil, err
 	}
 
-	DB.Delete(&invoice)
+	DB.Delete(invoice)
 
 	return invoice, nil
 }
@@ -95,37 +94,39 @@ func GetInvoice(query ...func(*gorm.DB) *gorm.DB) ([]Invoice, error) {
 }
 
 func (invoice *Invoice) GeneratePDF() (*fpdf.Fpdf, error) {
-	medicineIDList := []string{}
-	medicines := []Medicine{}
-	medicinePrice := map[string]uint{}
-
-	for _, value := range report.Prescription {
-		medicineIDList = append(medicineIDList, value.MedicineID)
+	medicalReport, err := GetMedicalReportByID(strconv.Itoa(int(*invoice.MedicalReportID)))
+	if err != nil {
+		return nil, err
 	}
 
-	DB.Where(medicineIDList).Find(&medicines)
-
-	for _, value := range medicines {
-		medicinePrice[value.ID] = value.Price
+	prescriptions := []Prescription{}
+	err = DB.Preload("Medicine").
+		Where(&Prescription{MedicalReportID: *invoice.MedicalReportID}).
+		Find(&prescriptions).Error
+	if err != nil {
+		return nil, err
 	}
 
-	for _, value := range report.Prescription {
-		total += int(value.Quantity) * int(medicinePrice[value.MedicineID])
-	}
-
-	costReg, err := GetRegulationByID("GK")
+	fee, err := GetRegulationByID("GK")
 	if err != nil {
 		return nil, err
 	}
 
 	doc, _ := generator.New(generator.Invoice, &generator.Options{
-		CurrencySymbol: "vnd ",
+		CurrencySymbol:    "vnd ",
+		CurrencyPrecision: -1,
 	})
 
-	doc.SetRef("1")
-	doc.SetDate("02/03/2021")
+	doc.SetRef(strconv.Itoa(int(invoice.ID)))
+	doc.SetDate(utils.GetCurrentDateString())
 
-	logoBytes, err := ioutil.ReadFile("./assets/logo.png")
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exPath := filepath.Dir(ex)
+	fmt.Println(exPath)
+	logoBytes, err := ioutil.ReadFile(exPath + "/assets/logo.png")
 	if err != nil {
 		return nil, err
 	}
@@ -142,37 +143,25 @@ func (invoice *Invoice) GeneratePDF() (*fpdf.Fpdf, error) {
 	})
 
 	doc.SetCustomer(&generator.Contact{
-		Name: "Test Customer",
+		Name: medicalReport.Patient.FullName,
 		Address: &generator.Address{
-			Address: "89 Rue de Paris",
+			Address: medicalReport.Patient.Address,
 		},
 	})
 
-	for i := 0; i < 3; i++ {
+	for _, v := range prescriptions {
 		doc.AppendItem(&generator.Item{
-			Name:        "Cupcake ipsum dolor sit amet bonbon, coucou bonbon lala jojo, mama titi toto",
-			Description: "Cupcake ipsum dolor sit amet bonbon, Cupcake ipsum dolor sit amet bonbon, Cupcake ipsum dolor sit amet bonbon",
-			UnitCost:    "99876.89",
-			Quantity:    "2",
+			Name:        v.Medicine.Name,
+			Description: v.Instruction,
+			UnitCost:    strconv.Itoa(int(v.Medicine.Price)),
+			Quantity:    strconv.Itoa(int(v.Quantity)),
 		})
 	}
 
 	doc.AppendItem(&generator.Item{
-		Name:     "Test",
-		UnitCost: "99876.89",
-		Quantity: "2",
-	})
-
-	doc.AppendItem(&generator.Item{
-		Name:     "Test",
-		UnitCost: "3576.89",
-		Quantity: "2",
-	})
-
-	doc.AppendItem(&generator.Item{
-		Name:     "Test",
-		UnitCost: "889.89",
-		Quantity: "2",
+		Name:     "Giá khám",
+		UnitCost: strconv.Itoa(fee.Value),
+		Quantity: "1",
 	})
 
 	pdf, err := doc.Build()

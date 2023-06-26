@@ -63,7 +63,7 @@ func (report *MedicineReport) Delete() (*MedicineReport, error) {
 		return nil, err
 	}
 
-	DB.Delete(&report)
+	DB.Delete(report)
 
 	return report, nil
 }

@@ -45,7 +45,7 @@ func (regulation *Regulation) DeleteRegulation() (*Regulation, error) {
 		return nil, err
 	}
 
-	DB.Delete(&regulation)
+	DB.Delete(regulation)
 
 	return regulation, nil
 }

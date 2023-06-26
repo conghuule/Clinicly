@@ -160,6 +160,25 @@ const docTemplate = `{
                 }
             }
         },
+        "/invoice/pdf/{id}": {
+            "get": {
+                "description": "Get invoice pdf",
+                "tags": [
+                    "invoice"
+                ],
+                "summary": "Get invoice pdf",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Invoice id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/invoice/{id}": {
             "get": {
                 "description": "Get invoice by id",
@@ -1727,17 +1746,17 @@ const docTemplate = `{
         "controllers.MedicalReportRequest": {
             "type": "object",
             "required": [
-                "doctor",
-                "patient"
+                "doctor_id",
+                "patient_id"
             ],
             "properties": {
                 "diagnose": {
                     "type": "string"
                 },
-                "doctor": {
+                "doctor_id": {
                     "type": "integer"
                 },
-                "patient": {
+                "patient_id": {
                     "type": "integer"
                 },
                 "prescription": {
@@ -1940,14 +1959,14 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "instruction",
-                "medicine",
+                "medicine_id",
                 "quantity"
             ],
             "properties": {
                 "instruction": {
                     "type": "string"
                 },
-                "medicine": {
+                "medicine_id": {
                     "type": "string"
                 },
                 "quantity": {
@@ -2341,6 +2360,9 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "patient": {
+                    "$ref": "#/definitions/models.Patient"
+                },
                 "patient_id": {
                     "type": "integer"
                 },
@@ -2465,6 +2487,9 @@ const docTemplate = `{
                 },
                 "medical_report_id": {
                     "type": "integer"
+                },
+                "medicine": {
+                    "$ref": "#/definitions/models.Medicine"
                 },
                 "medicine_id": {
                     "type": "string"

@@ -12,6 +12,7 @@ const TableNamePrescription = "DonThuoc"
 type Prescription struct {
 	MedicalReportID uint       `gorm:"column:MaPK" json:"medical_report_id"`
 	MedicineID      string     `gorm:"column:MaThuoc" json:"medicine_id"`
+	Medicine        *Medicine  `gorm:"foreignKey:MedicineID" json:"medicine,omitempty"`
 	Quantity        uint       `gorm:"column:SoLuong" json:"quantity,omitempty"`
 	Instruction     string     `gorm:"column:CachDung" json:"instruction,omitempty"`
 	CreatedAt       *time.Time `gorm:"column:NgayTao" json:"created_at,omitempty"`

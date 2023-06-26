@@ -11,6 +11,7 @@ const TableNameMedicalReport = "PhieuKham"
 type MedicalReport struct {
 	ID           uint           `gorm:"column:MaPK" json:"id"`
 	PatientID    uint           `gorm:"column:MaBN" json:"patient_id,omitempty"`
+	Patient      *Patient       `gorm:"foreignKey:PatientID" json:"patient,omitempty"`
 	DoctorID     uint           `gorm:"column:BacSi" json:"doctor_id,omitempty"`
 	Doctor       *Staff         `gorm:"foreignKey:DoctorID" json:"doctor,omitempty"`
 	Diagnose     string         `gorm:"column:ChanDoan" json:"diagnose,omitempty"`
@@ -49,7 +50,7 @@ func (report *MedicalReport) Delete() (*MedicalReport, error) {
 		return nil, err
 	}
 
-	DB.Delete(&report)
+	DB.Delete(report)
 
 	return report, nil
 }
@@ -72,6 +73,7 @@ func GetMedicalReportByID(id string) (*MedicalReport, error) {
 	report := &MedicalReport{}
 
 	err := DB.Where(`"MaPK" = ?`, id).
+		Preload("Patient").
 		Preload("Prescription").
 		Preload("Doctor").First(&report).Error
 	if err != nil {
