@@ -2,8 +2,11 @@ package models
 
 import (
 	"clinic-management/types"
+	"io/ioutil"
 	"time"
 
+	generator "github.com/angelodlfrtr/go-invoice-generator"
+	"github.com/go-pdf/fpdf"
 	"gorm.io/gorm"
 )
 
@@ -89,6 +92,95 @@ func GetInvoice(query ...func(*gorm.DB) *gorm.DB) ([]Invoice, error) {
 	}
 
 	return invoices, nil
+}
+
+func (invoice *Invoice) GeneratePDF() (*fpdf.Fpdf, error) {
+	medicineIDList := []string{}
+	medicines := []Medicine{}
+	medicinePrice := map[string]uint{}
+
+	for _, value := range report.Prescription {
+		medicineIDList = append(medicineIDList, value.MedicineID)
+	}
+
+	DB.Where(medicineIDList).Find(&medicines)
+
+	for _, value := range medicines {
+		medicinePrice[value.ID] = value.Price
+	}
+
+	for _, value := range report.Prescription {
+		total += int(value.Quantity) * int(medicinePrice[value.MedicineID])
+	}
+
+	costReg, err := GetRegulationByID("GK")
+	if err != nil {
+		return nil, err
+	}
+
+	doc, _ := generator.New(generator.Invoice, &generator.Options{
+		CurrencySymbol: "vnd ",
+	})
+
+	doc.SetRef("1")
+	doc.SetDate("02/03/2021")
+
+	logoBytes, err := ioutil.ReadFile("./assets/logo.png")
+	if err != nil {
+		return nil, err
+	}
+
+	doc.SetCompany(&generator.Contact{
+		Name: "Clinicly",
+		Logo: logoBytes,
+		Address: &generator.Address{
+			Address:    "227 Nguyen Van Cu, Phuong 4, Quan 5",
+			PostalCode: "800000",
+			City:       "Ho Chi Minh",
+			Country:    "Vietnam",
+		},
+	})
+
+	doc.SetCustomer(&generator.Contact{
+		Name: "Test Customer",
+		Address: &generator.Address{
+			Address: "89 Rue de Paris",
+		},
+	})
+
+	for i := 0; i < 3; i++ {
+		doc.AppendItem(&generator.Item{
+			Name:        "Cupcake ipsum dolor sit amet bonbon, coucou bonbon lala jojo, mama titi toto",
+			Description: "Cupcake ipsum dolor sit amet bonbon, Cupcake ipsum dolor sit amet bonbon, Cupcake ipsum dolor sit amet bonbon",
+			UnitCost:    "99876.89",
+			Quantity:    "2",
+		})
+	}
+
+	doc.AppendItem(&generator.Item{
+		Name:     "Test",
+		UnitCost: "99876.89",
+		Quantity: "2",
+	})
+
+	doc.AppendItem(&generator.Item{
+		Name:     "Test",
+		UnitCost: "3576.89",
+		Quantity: "2",
+	})
+
+	doc.AppendItem(&generator.Item{
+		Name:     "Test",
+		UnitCost: "889.89",
+		Quantity: "2",
+	})
+
+	pdf, err := doc.Build()
+	if err != nil {
+		return nil, err
+	}
+
+	return pdf, nil
 }
 
 func GetInvoiceByID(id string) (*Invoice, error) {
