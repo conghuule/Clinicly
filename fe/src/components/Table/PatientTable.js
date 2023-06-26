@@ -19,7 +19,7 @@ export default function PatientTable({ searchValue }) {
       actions: [
         {
           value: 'Xoá',
-          color: 'error',
+          color: '#dc2626',
           onClick: () => {
             setOpenModal(true);
             setTitle(patient.full_name);
