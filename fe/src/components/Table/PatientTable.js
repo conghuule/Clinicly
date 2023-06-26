@@ -2,7 +2,6 @@ import { Table } from 'antd';
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PATIENT_COLUMNS } from '../../utils/constants';
-import Modal from '../Modal/Modal';
 import ConfirmDeleteModal from '../Modal/ConfirmDeleteModal';
 import patientApi from '../../services/patientApi';
 import dayjs from 'dayjs';
@@ -24,7 +23,6 @@ const PatientTable = ({ searchValue }, ref) => {
       notify({ type: 'success', mess: `Xóa ${name} thành công` });
       getPatients(searchValue);
     } catch (error) {
-      console.log(error);
       notify({ type: 'error', mess: 'Xóa thất bại' });
     }
 
@@ -56,7 +54,6 @@ const PatientTable = ({ searchValue }, ref) => {
         },
       });
     } catch (error) {
-      console.log(error);
       notify({ type: 'error', mess: 'Lấy dữ liệu thất bại' });
     }
   };
@@ -110,7 +107,7 @@ const PatientTable = ({ searchValue }, ref) => {
         onChange={onChange}
         rowClassName="cursor-pointer"
       />
-        <ConfirmDeleteModal
+      <ConfirmDeleteModal
         title={selectedPatient.name}
         open={openModal}
         onCancel={() => setOpenModal(false)}

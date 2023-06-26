@@ -41,7 +41,6 @@ export default function MedicineModal(props) {
       quantity: Number(values.quantity),
       date: dayjs(Date.now()).format('YYYY-MM-DD'),
     };
-    console.log('newMedicine: ', newMedicine);
     try {
       await medicineReportApi.add(newMedicine);
       notify({ type: 'success', mess: `Thêm thuốc thành công` });

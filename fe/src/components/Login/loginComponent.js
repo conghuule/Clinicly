@@ -16,7 +16,6 @@ export const LoginComponent = () => {
       await authApi.login(email, password);
       navigate(config.routes.home);
     } catch (error) {
-      console.log('error: ', error);
       const {
         response: {
           data: { message },

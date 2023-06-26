@@ -31,7 +31,6 @@ export default function PatientDetail() {
 
       notify({ type: 'success', mess: 'Cập nhật thành công' });
     } catch (error) {
-      console.log(error);
       notify({ type: 'error', mess: 'Cập nhật thất bại' });
     }
   };

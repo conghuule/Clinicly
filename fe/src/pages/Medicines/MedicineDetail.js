@@ -30,7 +30,6 @@ export default function MedicineDetail() {
       await medicineApi.update(id, newMedicine);
       notify({ type: 'success', mess: 'Cập nhật thuốc thành công' });
     } catch (error) {
-      console.log(error);
       notify({ type: 'error', mess: 'Cập nhật thuốc thất bại' });
     }
   };

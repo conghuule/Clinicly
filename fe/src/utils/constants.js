@@ -27,19 +27,22 @@ export const PATIENT_COLUMNS = [
     title: 'Thao tác',
     dataIndex: 'actions',
     key: 'actions',
+    width: 120,
     render: (_, { actions }) => (
       <>
         {actions.map((action) => {
           return (
-            <FontAwesomeIcon
-              icon={faTrash}
-              color={action.color}
-              key={action.value}
-              onClick={(e) => {
-                e.stopPropagation();
-                action.onClick(e);
-              }}
-            />
+            <div className="text-center cursor-pointer" key={action.value}>
+              <FontAwesomeIcon
+                icon={faTrash}
+                color={action.color}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  action.onClick(e);
+                }}
+                className="p-[8px] rounded-[50%] hover:bg-[#fecaca]"
+              />
+            </div>
           );
         })}
       </>
@@ -72,11 +75,12 @@ export const MEDICINE_COLUMNS = [
     title: 'Thao tác',
     dataIndex: 'actions',
     key: 'actions',
+    width: 120,
     render: (_, { actions }) => (
       <>
         {actions.map((action) => {
           return (
-            <div className="text-center" key={action.value}>
+            <div className="text-center cursor-pointer" key={action.value}>
               <FontAwesomeIcon
                 icon={faTrash}
                 color={action.color}
@@ -84,6 +88,7 @@ export const MEDICINE_COLUMNS = [
                   e.stopPropagation();
                   action.onClick(e);
                 }}
+                className="p-[8px] rounded-[50%] hover:bg-[#fecaca]"
               />
             </div>
           );
