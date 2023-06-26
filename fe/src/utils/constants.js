@@ -31,17 +31,15 @@ export const PATIENT_COLUMNS = [
       <>
         {actions.map((action) => {
           return (
-            <div className="text-center">
-              <FontAwesomeIcon
-                icon={faTrash}
-                color={action.color}
-                key={action.value}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  action.onClick(e);
-                }}
-              />
-            </div>
+            <FontAwesomeIcon
+              icon={faTrash}
+              color={action.color}
+              key={action.value}
+              onClick={(e) => {
+                e.stopPropagation();
+                action.onClick(e);
+              }}
+            />
           );
         })}
       </>
