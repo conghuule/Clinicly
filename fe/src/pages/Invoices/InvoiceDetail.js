@@ -19,7 +19,6 @@ export default function InvoiceDetail() {
     const res = await invoiceAPI.getInvoiceDetail(id);
     const json = res.data;
     setInvoiceDetail(json.data);
-    console.log(invoiceDetail);
   }
 
   return (
