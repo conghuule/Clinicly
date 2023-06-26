@@ -10,8 +10,6 @@ export const LoginComponent = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-    console.log('values: ', values);
-    // TODO: handle remember account here
     const { email, password } = values;
 
     try {
@@ -26,18 +24,6 @@ export const LoginComponent = () => {
       } = error;
       setErrorMessage(message);
     }
-
-    // fetch('https://clinicly.fly.dev/api/v1/auth/login', {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     email,
-    //     password,
-    //   }),
-    //   credentials: 'include',
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => console.log(data))
-    //   .catch((err) => console.log(err));
   };
 
   return (
@@ -71,12 +57,12 @@ export const LoginComponent = () => {
       <p className="ml-[110px] text-danger">{errorMessage}</p>
 
       <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 6, span: 16 }}>
-        <Checkbox>Remember me</Checkbox>
+        <Checkbox>Ghi nhớ mật khẩu</Checkbox>
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
         <Button type="primary" htmlType="submit" size="large" shape="round" className="text-white lg:w-[35rem]">
-          Submit
+          Đăng nhập
         </Button>
       </Form.Item>
     </Form>
