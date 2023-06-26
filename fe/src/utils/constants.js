@@ -3,13 +3,13 @@ import { Tag } from 'antd';
 export const PATIENT_COLUMNS = [
   {
     title: 'Tên bệnh nhân',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'full_name',
+    key: 'full_name',
   },
   {
     title: 'Ngày sinh',
-    dataIndex: 'date_of_birth',
-    key: 'date_of_birth',
+    dataIndex: 'birth_date',
+    key: 'birth_date',
   },
   {
     title: 'Địa chỉ',
@@ -216,4 +216,10 @@ export const REGULATION_COLUMNS = [
       </>
     ),
   },
+];
+
+export const GENDERS = [
+  { value: 1, label: 'Nam' },
+  { value: 2, label: 'Nữ' },
+  { value: 3, label: 'Khác' },
 ];

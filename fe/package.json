@@ -1,8 +1,6 @@
 {
   "name": "fe",
   "version": "0.1.0",
-  "proxy": "https://clinicly.fly.dev/api/v1",
-  "homepage": "http://localhost:3000",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
