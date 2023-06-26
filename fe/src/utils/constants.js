@@ -1,4 +1,6 @@
 import { Tag } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export const PATIENT_COLUMNS = [
   {
@@ -29,16 +31,17 @@ export const PATIENT_COLUMNS = [
       <>
         {actions.map((action) => {
           return (
-            <Tag
-              color={action.color}
-              key={action.value}
-              onClick={(e) => {
-                e.stopPropagation();
-                action.onClick(e);
-              }}
-            >
-              {action.value.toUpperCase()}
-            </Tag>
+            <div className="text-center">
+              <FontAwesomeIcon
+                icon={faTrash}
+                color={action.color}
+                key={action.value}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  action.onClick(e);
+                }}
+              />
+            </div>
           );
         })}
       </>
@@ -75,16 +78,17 @@ export const MEDICINE_COLUMNS = [
       <>
         {actions.map((action) => {
           return (
-            <Tag
-              color="error"
-              key={action.value}
-              onClick={(e) => {
-                e.stopPropagation();
-                action.onClick(e);
-              }}
-            >
-              {action.value.toUpperCase()}
-            </Tag>
+            <div className="text-center">
+              <FontAwesomeIcon
+                icon={faTrash}
+                color={action.color}
+                key={action.value}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  action.onClick(e);
+                }}
+              />
+            </div>
           );
         })}
       </>

@@ -19,7 +19,7 @@ export default function MedicineTable({ searchValue }) {
       actions: [
         {
           value: 'Xoá',
-          color: 'error',
+          color: '#dc2626',
           onClick: () => {
             setOpenModal(true);
             setTitle(medicine.name);
