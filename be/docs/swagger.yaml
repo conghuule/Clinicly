@@ -52,6 +52,7 @@ definitions:
         type: array
       message:
         type: string
+      page_info: {}
       status:
         type: string
     type: object
@@ -91,6 +92,7 @@ definitions:
         type: array
       message:
         type: string
+      page_info: {}
       status:
         type: string
     type: object
@@ -127,6 +129,7 @@ definitions:
         type: array
       message:
         type: string
+      page_info: {}
       status:
         type: string
     type: object
@@ -138,6 +141,7 @@ definitions:
         type: array
       message:
         type: string
+      page_info: {}
       status:
         type: string
     type: object
@@ -201,6 +205,7 @@ definitions:
         type: array
       message:
         type: string
+      page_info: {}
       status:
         type: string
     type: object
@@ -257,6 +262,7 @@ definitions:
         type: array
       message:
         type: string
+      page_info: {}
       status:
         type: string
     type: object
@@ -290,6 +296,7 @@ definitions:
         type: array
       message:
         type: string
+      page_info: {}
       status:
         type: string
     type: object
@@ -346,6 +353,7 @@ definitions:
         type: array
       message:
         type: string
+      page_info: {}
       status:
         type: string
     type: object

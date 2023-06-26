@@ -26,7 +26,8 @@ type TicketResponse struct {
 
 type TicketListResponse struct {
 	Response
-	Data []models.Ticket `json:"data"`
+	Data     []models.Ticket `json:"data"`
+	PageInfo any             `json:"page_info"`
 }
 
 type TicketQuery struct {
@@ -56,7 +57,8 @@ func GetTicket(c *gin.Context) {
 		return
 	}
 
-	tickets, err := models.GetTicket(query.Paginate(c),
+	paginate, page, pageSize, totalPage := query.Paginate(c, []models.Ticket{})
+	tickets, err := models.GetTicket(paginate,
 		query.OrderBy(ticketQuery.OrderBy, ticketQuery.Desc),
 		query.QueryByDate("NgayKham", ticketQuery.Date),
 		query.QueryByField("TrangThai", ticketQuery.Status.Value()))
@@ -68,6 +70,11 @@ func GetTicket(c *gin.Context) {
 	c.JSON(http.StatusOK, TicketListResponse{
 		Response: SuccessfulResponse,
 		Data:     tickets,
+		PageInfo: gin.H{
+			"page_size":  pageSize,
+			"page":       page,
+			"total_page": totalPage,
+		},
 	})
 }
 

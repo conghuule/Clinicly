@@ -36,7 +36,8 @@ type PatientResponse struct {
 
 type PatientListResponse struct {
 	Response
-	Data []models.Patient `json:"data"`
+	Data     []models.Patient `json:"data"`
+	PageInfo any              `json:"page_info"`
 }
 
 type PatientQuery struct {
@@ -64,7 +65,8 @@ func GetPatient(c *gin.Context) {
 		return
 	}
 
-	patients, err := models.GetPatient(query.Paginate(c),
+	paginate, page, pageSize, totalPage := query.Paginate(c, []models.Patient{})
+	patients, err := models.GetPatient(paginate,
 		query.OrderBy(patientQuery.OrderBy, patientQuery.Desc),
 		query.StringSearch("HoTen", patientQuery.Name))
 	if err != nil {
@@ -75,6 +77,11 @@ func GetPatient(c *gin.Context) {
 	c.JSON(http.StatusOK, PatientListResponse{
 		Response: SuccessfulResponse,
 		Data:     patients,
+		PageInfo: gin.H{
+			"page_size":  pageSize,
+			"page":       page,
+			"total_page": totalPage,
+		},
 	})
 }
 
