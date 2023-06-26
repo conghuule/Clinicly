@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Sidebar = () => {
   return (
-    <div className="sidebar">
+    <div className="sidebar h-screen sticky top-0">
       <Link className="sidebar-logo" to={config.routes.home}>
         <div className="sidebar-logo-icon">{SidebarData[0].icon}</div>
         <div className="sidebar-logo-title">{SidebarData[0].title}</div>

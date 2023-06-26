@@ -3,6 +3,7 @@ import { useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
 import PatientTable from '../../components/Table/PatientTable';
 import { Button, Input } from 'antd';
+import Modal from '../../components/Modal/Modal';
 import PatientModal from '../../components/Modal/PatientModal';
 const { Search } = Input;
 
@@ -27,7 +28,11 @@ export default function Patients() {
           <Button type="primary" onClick={() => setOpenModal(true)} size="large">
             Thêm bệnh nhân
           </Button>
-          <PatientModal open={openModal} onCancel={() => setOpenModal(false)} />
+          {openModal ? (
+            <Modal>
+              <PatientModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
+            </Modal>
+          ) : null}
         </div>
       </div>
       <PatientTable searchValue={searchValue} />

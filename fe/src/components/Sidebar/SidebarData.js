@@ -57,7 +57,7 @@ export const SidebarData = [
   {
     id: 7,
     title: 'Hoá đơn',
-    path: config.routes.bills,
+    path: config.routes.invoices,
     icon: faFileInvoiceDollar,
     cName: 'nav-text',
   },

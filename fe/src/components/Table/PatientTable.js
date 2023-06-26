@@ -2,6 +2,7 @@ import { Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PATIENT_COLUMNS } from '../../utils/constants';
+import Modal from '../Modal/Modal';
 import ConfirmDeleteModal from '../Modal/ConfirmDeleteModal';
 import patientApi from '../../services/patientApi';
 import dayjs from 'dayjs';
@@ -101,7 +102,7 @@ export default function PatientTable({ searchValue }) {
         onChange={onChange}
         rowClassName="cursor-pointer"
       />
-      <ConfirmDeleteModal
+        <ConfirmDeleteModal
         title={selectedPatient.name}
         open={openModal}
         onCancel={() => setOpenModal(false)}
