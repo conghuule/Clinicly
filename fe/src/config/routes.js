@@ -6,14 +6,15 @@ const routes = {
   patient_detail: '/patients/:id',
   medicines: '/medicines',
   medicine_detail: '/medicines/:id',
-  bills: '/bills',
-  bill_detail: '/bills/:id',
+  invoices: '/invoices',
+  invoice_detail: '/invoices/:id',
   staffs: '/manage/staffs',
   staff_detail: '/manage/staffs/:id',
   regulations: '/manage/regulations',
   regulation_detail: '/manage/regulations/:id',
   waiting_list: '/waiting_list',
   examination_list: '/examination_list',
+  not_found: '*',
 };
 
 export default routes;

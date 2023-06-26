@@ -76,11 +76,10 @@ export const MEDICINE_COLUMNS = [
       <>
         {actions.map((action) => {
           return (
-            <div className="text-center">
+            <div className="text-center" key={action.value}>
               <FontAwesomeIcon
                 icon={faTrash}
                 color={action.color}
-                key={action.value}
                 onClick={(e) => {
                   e.stopPropagation();
                   action.onClick(e);
@@ -93,7 +92,7 @@ export const MEDICINE_COLUMNS = [
     ),
   },
 ];
-export const BILL_COLUMNS = [
+export const INVOICE_COLUMNS = [
   {
     title: 'Mã hoá đơn',
     dataIndex: 'id',
@@ -103,16 +102,18 @@ export const BILL_COLUMNS = [
     title: 'Trạng thái giao thuốc',
     dataIndex: 'delivery_status',
     key: 'delivery_status',
+    render: (delivery_status) => (delivery_status ? 'Đã giao thuốc' : 'Chưa giao thuốc'),
   },
   {
     title: 'Trạng thái thanh toán',
     dataIndex: 'payment_status',
     key: 'payment_status',
+    render: (payment_status) => (payment_status ? 'Đã thanh toán' : 'Chưa thanh toán'),
   },
   {
     title: 'Tổng tiền',
-    dataIndex: 'Total',
-    key: 'Total',
+    dataIndex: 'total',
+    key: 'total',
   },
   {
     title: 'Thao tác',
@@ -120,14 +121,17 @@ export const BILL_COLUMNS = [
     key: 'actions',
     render: (_, { actions }) => (
       <>
-        {actions.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
+        {actions.map((action) => {
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+            <Tag
+              color="error"
+              key={action.value}
+              onClick={(e) => {
+                e.stopPropagation();
+                action.onClick(e);
+              }}
+            >
+              {action.value.toUpperCase()}
             </Tag>
           );
         })}
@@ -138,13 +142,17 @@ export const BILL_COLUMNS = [
 export const STAFF_COLUMNS = [
   {
     title: 'Tên nhân viên',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'full_name',
+    key: 'full_name',
   },
   {
     title: 'Ngày sinh',
-    dataIndex: 'date_of_birth',
-    key: 'date_of_birth',
+    dataIndex: 'birth_date',
+    key: 'birth_date',
+    render: (birth_date) => {
+      const dateObject = new Date(birth_date);
+      return dateObject.toLocaleDateString();
+    },
   },
   {
     title: 'Địa chỉ',
@@ -158,8 +166,8 @@ export const STAFF_COLUMNS = [
   },
   {
     title: 'Loại nhân viên',
-    dataIndex: 'type',
-    key: 'type',
+    dataIndex: 'role',
+    key: 'role',
   },
   {
     title: 'Thao tác',
@@ -167,14 +175,21 @@ export const STAFF_COLUMNS = [
     key: 'actions',
     render: (_, { actions }) => (
       <>
-        {actions.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
+        {actions.map((action) => {
+          let color = action.length > 5 ? 'geekblue' : 'green';
+          if (action === 'loser') {
             color = 'volcano';
           }
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+            <Tag
+              color={color}
+              key={action}
+              onClick={(e) => {
+                e.stopPropagation();
+                action.onClick(e);
+              }}
+            >
+              {action.value}
             </Tag>
           );
         })}
@@ -204,14 +219,22 @@ export const REGULATION_COLUMNS = [
     key: 'actions',
     render: (_, { actions }) => (
       <>
-        {actions.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
+        {actions.map((action) => {
+          let color = action.length > 5 ? 'geekblue' : 'green';
+          if (action === 'loser') {
             color = 'volcano';
           }
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+            <Tag
+              className="cursor-pointer"
+              color={color}
+              key={action}
+              onClick={(e) => {
+                e.stopPropagation();
+                action.onClick(e);
+              }}
+            >
+              {action.value}
             </Tag>
           );
         })}
@@ -224,4 +247,9 @@ export const GENDERS = [
   { value: 1, label: 'Nam' },
   { value: 2, label: 'Nữ' },
   { value: 3, label: 'Khác' },
+];
+
+export const UNITS = [
+  { label: 'Viên', value: 1 },
+  { label: 'Chai', value: 2 },
 ];

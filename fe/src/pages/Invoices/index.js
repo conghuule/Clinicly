@@ -1,9 +1,10 @@
 import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
+import Modal from '../../components/Modal/Modal';
 import HeaderBar from '../../components/HeaderBar';
 import { Input } from 'antd';
-import BillTable from '../../components/Table/BillTable';
-import PublishBillModal from '../../components/Modal/PublishBillModal';
+import InvoiceTable from '../../components/Table/InvoiceTable';
+import ConfirmPublishInvoiceModal from '../../components/Modal/ConfirmPublishInvoiceModal';
 import { Button, Dropdown, Menu } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
@@ -17,21 +18,21 @@ export default function Bills() {
     setSearchValue(e.key);
   };
   const menuDelivery = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="Đã giao" className="h-[40px]">
+    <Menu>
+      <Menu.Item onClick={handleMenuClick} key="Đã giao" className="h-[40px]">
         Đã giao
       </Menu.Item>
-      <Menu.Item key="Chưa giao" className="h-[40px]">
+      <Menu.Item onClick={handleMenuClick} key="Chưa giao" className="h-[40px]">
         Chưa giao
       </Menu.Item>
     </Menu>
   );
   const menuPayment = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="Đã thanh toán" className="h-[40px]">
+    <Menu>
+      <Menu.Item onClick={handleMenuClick} key="Đã thanh toán" className="h-[40px]">
         Đã thanh toán
       </Menu.Item>
-      <Menu.Item key="Chưa thanh toán" className="h-[40px]">
+      <Menu.Item onClick={handleMenuClick} key="Chưa thanh toán" className="h-[40px]">
         Chưa thanh toán
       </Menu.Item>
     </Menu>
@@ -58,13 +59,18 @@ export default function Bills() {
           </Button>
         </Dropdown>
         <div>
-          <Button type="primary" onClick={() => setOpenModal(true)} size="large">
-            Xuất hoá đơn
-          </Button>
-          <PublishBillModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
+          {openModal ? (
+            <Modal>
+              <ConfirmPublishInvoiceModal
+                open={openModal}
+                onOk={() => setOpenModal(false)}
+                onCancel={() => setOpenModal(false)}
+              />
+            </Modal>
+          ) : null}
         </div>
       </div>
-      <BillTable searchValue={searchValue} />
+      <InvoiceTable searchValue={searchValue} />
     </div>
   );
 }
