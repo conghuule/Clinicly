@@ -10,8 +10,8 @@ import Staffs from '../pages/Manage/Staffs';
 import StaffDetail from '../pages/Manage/Staffs/StaffDetail';
 import Regulations from '../pages/Manage/Regulations';
 import RegulationDetail from '../pages/Manage/Regulations/RegulationDetail';
-import WaitingList from '../pages/List/waitingList';
-import ExaminationList from '../pages/List/examinationList';
+import WaitingList from '../pages/List/WaitingList';
+import ExaminationList from '../pages/List/ExaminationList';
 import Logout from '../pages/Logout';
 import Login from '../pages/Login';
 
