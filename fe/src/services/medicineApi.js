@@ -1,8 +1,11 @@
-import { get } from '../api/axiosClient';
+import { deleteAxios, get, post, put } from '../api/axiosClient';
 
 const medicineApi = {
-  getAll: () => get('/medicine'),
+  getAll: (params) => get('/medicine', { params }),
   getById: (id) => get(`/medicine/${id}`),
+  update: (id, body) => put(`/medicine/${id}`, body),
+  add: (body) => post(`/medicine`, body),
+  delete: (id) => deleteAxios(`/medicine/${id}`),
 };
 
 export default medicineApi;

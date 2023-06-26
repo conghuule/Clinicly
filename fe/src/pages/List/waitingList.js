@@ -27,7 +27,7 @@ export default function WaitingList() {
       actions: [
         {
           value: 'Xoá',
-          color: 'error',
+          color: '#dc2626',
           onClick: () => {
             setOpenModalDel(true);
             setTitle(' bệnh nhân ở vị trí ' + index);

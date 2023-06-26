@@ -22,7 +22,6 @@ export default function PatientDetail() {
   }, [id]);
 
   const onSubmit = async (values) => {
-    console.log({ ...values, birth_date: dayjs(values.birth_date).format('YYYY-MM-DD') });
     try {
       const newPatient = {
         ...values,

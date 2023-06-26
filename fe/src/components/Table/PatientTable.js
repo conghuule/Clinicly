@@ -45,6 +45,7 @@ const PatientTable = ({ searchValue }, ref) => {
         loading: false,
         data: response.data.map((patient) => ({
           ...patient,
+          key: patient.id,
           birth_date: dayjs(patient.birth_date).format('DD-MM-YYYY'),
         })),
         params: {

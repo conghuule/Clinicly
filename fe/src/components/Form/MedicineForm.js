@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Select } from 'antd';
+import { UNITS } from '../../utils/constants';
 
 export default function MedicineForm({ defaultValue = {}, onSubmit, submitText, centered }) {
   return (
@@ -20,20 +21,20 @@ export default function MedicineForm({ defaultValue = {}, onSubmit, submitText, 
         <Input placeholder="Nhập tên thuốc" />
       </Form.Item>
 
-      <Form.Item label="Số lượng" name="quantity" rules={[{ required: true, message: 'Nhập số lượng' }]}>
-        <Input placeholder="Nhập số lượng" />
-      </Form.Item>
-
-      <Form.Item label="Đơn giá" name="price" rules={[{ required: true, message: 'Nhập đơn giá' }]}>
-        <Input placeholder="Nhập đơn giá" />
-      </Form.Item>
-
       <Form.Item label="Thông tin" name="info" rules={[{ required: true, message: 'Nhập thông tin' }]}>
         <Input placeholder="Nhập thông tin" />
       </Form.Item>
 
-      <Form.Item label="Mã đơn vị" name="unit" rules={[{ required: true, message: 'Nhập mã đơn vị' }]}>
-        <Input placeholder="Nhập mã đơn vị" />
+      <Form.Item label="Số lượng" name="quantity" rules={[{ required: true, message: 'Nhập số lượng' }]}>
+        <Input placeholder="Nhập số lượng" />
+      </Form.Item>
+
+      <Form.Item name="unit" label="Đơn vị" rules={[{ required: true, message: 'Nhập mã đơn vị' }]}>
+        <Select style={{ width: 400 }} options={UNITS} placeholder="Chọn đơn vị" />
+      </Form.Item>
+
+      <Form.Item label="Đơn giá" name="price" rules={[{ required: true, message: 'Nhập đơn giá' }]}>
+        <Input placeholder="Nhập đơn giá" />
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: centered ? 11 : 20, span: 16 }}>

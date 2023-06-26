@@ -18,11 +18,11 @@ export default function PatientForm({ defaultValue = {}, onSubmit, submitText })
       </Form.Item>
 
       <Form.Item name="gender" label="Giới tính" rules={[{ required: true }]}>
-        <Select style={{ width: 120 }} options={GENDERS} />
+        <Select style={{ width: 400 }} options={GENDERS} placeholder="Chọn giới tính" />
       </Form.Item>
 
       <Form.Item label="Ngày sinh" name="birth_date" rules={[{ required: true, message: 'Nhập ngày sinh' }]}>
-        <DatePicker />
+        <DatePicker style={{ width: 400 }} placeholder="Chọn ngày sinh" />
       </Form.Item>
 
       <Form.Item label="CCCD" name="identity_card" rules={[{ required: true, message: 'Nhập số căn cước công dân' }]}>

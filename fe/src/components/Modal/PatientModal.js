@@ -13,9 +13,9 @@ export default function PatientModal(props) {
         birth_date: dayjs(values.birth_date).format('YYYY-MM-DD'),
       });
       notify({ type: 'success', mess: `Thêm ${values.full_name} thành công` });
-      props.getPatients([]);
+      props.getPatients('');
     } catch (error) {
-      console.log(error);
+      notify({ type: 'error', mess: `Thêm ${values.full_name} thất bại` });
     }
     props.onCancel();
   };
