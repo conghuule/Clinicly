@@ -5,7 +5,6 @@ import React from 'react';
 import config from '../../config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 const Sidebar = () => {
   return (
     <div className="sidebar">
@@ -19,9 +18,13 @@ const Sidebar = () => {
             <NavLink
               key={item.id}
               to={item.path}
-              className={({isActive}) => isActive ? 'sidebar-link selected text-primary-300' : 'sidebar-link text-primary-100 hover:text-primary-300'}
+              className={({ isActive }) =>
+                isActive
+                  ? 'sidebar-link selected text-primary-300'
+                  : 'sidebar-link text-primary-100 hover:text-primary-300'
+              }
             >
-              <FontAwesomeIcon icon={item.icon} className="w-[32px] h-[32px] pr-[16px]" />
+              <FontAwesomeIcon icon={item.icon} className="w-[24px] h-[24px] pr-[16px]" />
               <div className="sidebar-title">{item.title}</div>
             </NavLink>
           );
