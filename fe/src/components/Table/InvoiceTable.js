@@ -16,39 +16,28 @@ export default function InvoiceTable({ searchValue }) {
     getInvoices();
   });
   async function getInvoices() {
-    const res = await invoiceAPI.getInvoices();
-    const json = res.data;
-    json.data.forEach((element) => {
-      element.key = element.id;
-      element.actions = [
-        { value: 'Thanh toán', onClick: () => setOpenPaymentModal(true) },
-        { value: 'Giao thuốc', onClick: () => setOpenDeliveryModal(true) },
-        { value: 'Xuất hoá đơn', onClick: () => setOpenBillModal(true) },
-      ];
-    });
-    setInvoices(json.data);
+    try {
+      const res = await invoiceAPI.getInvoices();
+      const json = res.data;
+      await json.data.forEach((element) => {
+        element.key = element.id;
+        element.actions = [
+          { value: 'Thanh toán', onClick: () => setOpenPaymentModal(true) },
+          { value: 'Giao thuốc', onClick: () => setOpenDeliveryModal(true) },
+          { value: 'Xuất hoá đơn', onClick: () => setOpenBillModal(true) },
+        ];
+      });
+      setInvoices(json.data);
+    } catch (error) {
+      console.log('An error occurred:', error);
+    }
   }
-  // TODO: replace with api response
-  // const invoices = Array(100)
-  //   .fill(0)
-  //   .map((_, index) => ({
-  //     key: index,
-  //     index: index,
-  //     id: 'Hoá đơn ' + index,
-  //     delivery_status: 'Đã giao',
-  //     payment_status: 'Đã thanh toán',
-  //     total: index * 2 + 'VNĐ',
-  //     actions: [
-  //       { value: 'Thanh toán', onClick: () => setOpenPaymentModal(true) },
-  //       { value: 'Giao thuốc', onClick: () => setOpenDeliveryModal(true) },
-  //       { value: 'Xuất hoá đơn', onClick: () => setOpenBillModal(true) },
-  //     ],
-  //   }));
+  const filteredInvoices = invoices.filter((item) => item.id.toString().includes(searchValue.toLowerCase()));
 
   return (
     <div>
       <Table
-        dataSource={invoices}
+        dataSource={filteredInvoices}
         columns={INVOICE_COLUMNS}
         onRow={(record) => ({
           onClick: () => navigate(record.id.toString()),

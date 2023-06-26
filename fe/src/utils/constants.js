@@ -145,13 +145,17 @@ export const INVOICE_COLUMNS = [
 export const STAFF_COLUMNS = [
   {
     title: 'Tên nhân viên',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'full_name',
+    key: 'full_name',
   },
   {
     title: 'Ngày sinh',
-    dataIndex: 'date_of_birth',
-    key: 'date_of_birth',
+    dataIndex: 'birth_date',
+    key: 'birth_date',
+    render: (birth_date) => {
+      const dateObject = new Date(birth_date);
+      return dateObject.toLocaleDateString();
+    },
   },
   {
     title: 'Địa chỉ',
@@ -165,8 +169,8 @@ export const STAFF_COLUMNS = [
   },
   {
     title: 'Loại nhân viên',
-    dataIndex: 'type',
-    key: 'type',
+    dataIndex: 'role',
+    key: 'role',
   },
   {
     title: 'Thao tác',
@@ -174,14 +178,21 @@ export const STAFF_COLUMNS = [
     key: 'actions',
     render: (_, { actions }) => (
       <>
-        {actions.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
+        {actions.map((action) => {
+          let color = action.length > 5 ? 'geekblue' : 'green';
+          if (action === 'loser') {
             color = 'volcano';
           }
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+            <Tag
+              color={color}
+              key={action}
+              onClick={(e) => {
+                e.stopPropagation();
+                action.onClick(e);
+              }}
+            >
+              {action.value}
             </Tag>
           );
         })}
@@ -211,14 +222,14 @@ export const REGULATION_COLUMNS = [
     key: 'actions',
     render: (_, { actions }) => (
       <>
-        {actions.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
+        {actions.map((action) => {
+          let color = action.length > 5 ? 'geekblue' : 'green';
+          if (action === 'loser') {
             color = 'volcano';
           }
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+            <Tag className="cursor-pointer" color={color} key={action}>
+              {action.value}
             </Tag>
           );
         })}

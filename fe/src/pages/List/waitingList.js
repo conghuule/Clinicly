@@ -57,13 +57,13 @@ export default function WaitingList() {
           onClick: () => navigate(record.id.toString()),
         })}
       />
-      {openModal ? (
+      {openModalDel ? (
         <Modal>
           <ConfirmDeleteModal
             title={title}
-            open={openModal}
-            onOk={() => setOpenModal(false)}
-            onCancel={() => setOpenModal(false)}
+            open={openModalDel}
+            onOk={() => setOpenModalDel(false)}
+            onCancel={() => setOpenModalDel(false)}
           />
         </Modal>
       ) : null}

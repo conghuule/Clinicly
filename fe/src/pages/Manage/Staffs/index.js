@@ -13,6 +13,7 @@ export default function Bills() {
   const [searchValue, setSearchValue] = useState('');
   const onSearch = (value) => setSearchValue(value);
   const [openModal, setOpenModal] = useState(false);
+
   return (
     <div>
       <HeaderBar title="Quản lý" icon={faFileInvoiceDollar} image="" name="Nguyễn Long Vũ" role="Bác sĩ" />

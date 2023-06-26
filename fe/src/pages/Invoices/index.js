@@ -59,9 +59,6 @@ export default function Bills() {
           </Button>
         </Dropdown>
         <div>
-          <Button type="primary" onClick={() => setOpenModal(true)} size="large">
-            Xuất hoá đơn
-          </Button>
           {openModal ? (
             <Modal>
               <ConfirmPublishInvoiceModal

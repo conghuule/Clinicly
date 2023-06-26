@@ -26,7 +26,6 @@ const publicRoutes = [
   { path: config.routes.staffs, element: Staffs },
   { path: config.routes.staff_detail, element: StaffDetail },
   { path: config.routes.regulations, element: Regulations },
-  { path: config.routes.regulation_detail, element: RegulationDetail },
   { path: config.routes.waiting_list, element: WaitingList },
   { path: config.routes.examination_list, element: ExaminationList },
   { path: config.routes.login, element: Login, layout: null },
