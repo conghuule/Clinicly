@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { faHospitalUser } from '@fortawesome/free-solid-svg-icons';
 import { Link, useParams } from 'react-router-dom';
@@ -6,25 +6,35 @@ import PatientForm from '../../components/Form/PatientForm';
 import HeaderBar from '../../components/HeaderBar';
 import { Button } from 'antd';
 import config from '../../config';
+import patientApi from '../../services/patientApi';
+import { GENDERS } from '../../utils/constants';
+import { notify } from '../../components/Notification/Notification';
 
 export default function PatientDetail() {
   const { id } = useParams();
-  console.log('patient id: ', id);
-  // TODO: get patient detail here
+  const [patient, setPatient] = useState({});
 
-  const patient = {
-    id: 1,
-    name: 'Patient 1',
-    gender: 'male',
-    date_of_birth: dayjs(new Date()),
-    personal_id: '11111',
-    address: 'LA',
-    phone_number: '1234',
-  };
+  useEffect(() => {
+    (async () => {
+      const response = await patientApi.getById(id);
+      setPatient(response.data);
+    })();
+  }, [id]);
 
-  const onSubmit = (values) => {
-    console.log('patient:', values);
-    // TODO: call api to update patient here
+  const onSubmit = async (values) => {
+    console.log({ ...values, birth_date: dayjs(values.birth_date).format('YYYY-MM-DD') });
+    try {
+      const newPatient = {
+        ...values,
+        birth_date: dayjs(values.birth_date).format('YYYY-MM-DD'),
+      };
+      await patientApi.update(id, newPatient);
+
+      notify({ type: 'success', mess: 'Cập nhật thành công' });
+    } catch (error) {
+      console.log(error);
+      notify({ type: 'error', mess: 'Cập nhật thất bại' });
+    }
   };
 
   return (
@@ -40,7 +50,17 @@ export default function PatientDetail() {
         </div>
       </div>
       <h3 className="text-[32px] font-semibold mt-[20px]">{patient.name}</h3>
-      <PatientForm patient={patient} onSubmit={onSubmit} submitText="Lưu" />
+      {patient.id && (
+        <PatientForm
+          defaultValue={{
+            ...patient,
+            birth_date: dayjs(patient.birth_date),
+            gender: GENDERS.find((gender) => gender.label === patient.gender).value,
+          }}
+          onSubmit={onSubmit}
+          submitText="Lưu"
+        />
+      )}
     </div>
   );
 }

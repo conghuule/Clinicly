@@ -1676,6 +1676,7 @@
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -1736,6 +1737,7 @@
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -1791,6 +1793,7 @@
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -1808,6 +1811,7 @@
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -1902,6 +1906,7 @@
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -1984,6 +1989,7 @@
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -2034,6 +2040,7 @@
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -2115,6 +2122,7 @@
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }

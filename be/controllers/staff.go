@@ -46,7 +46,8 @@ type StaffResponse struct {
 
 type StaffListResponse struct {
 	Response
-	Data []models.Staff `json:"data"`
+	Data     []models.Staff `json:"data"`
+	PageInfo any            `json:"page_info"`
 }
 
 type StaffQuery struct {
@@ -78,7 +79,8 @@ func GetStaff(c *gin.Context) {
 		return
 	}
 
-	staffs, err := models.GetStaff(query.Paginate(c),
+	paginate, page, pageSize, totalPage := query.Paginate(c, []models.Staff{})
+	staffs, err := models.GetStaff(paginate,
 		query.OrderBy(staffQuery.OrderBy, staffQuery.Desc),
 		query.StringSearch("HoTen", staffQuery.Name),
 		query.QueryByField("TrangThai", staffQuery.Status.Value()),
@@ -91,6 +93,11 @@ func GetStaff(c *gin.Context) {
 	c.JSON(http.StatusOK, StaffListResponse{
 		Response: SuccessfulResponse,
 		Data:     staffs,
+		PageInfo: gin.H{
+			"page_size":  pageSize,
+			"page":       page,
+			"total_page": totalPage,
+		},
 	})
 }
 

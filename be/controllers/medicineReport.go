@@ -30,7 +30,8 @@ type MedicineReportResponse struct {
 
 type MedicineReportListResponse struct {
 	Response
-	Data []models.MedicineReport `json:"data"`
+	Data     []models.MedicineReport `json:"data"`
+	PageInfo any                     `json:"page_info"`
 }
 
 type MedicineReportQuery struct {
@@ -58,7 +59,8 @@ func GetMedicineReport(c *gin.Context) {
 		return
 	}
 
-	reports, err := models.GetMedicineReport(query.Paginate(c),
+	paginate, page, pageSize, totalPage := query.Paginate(c, []models.MedicineReport{})
+	reports, err := models.GetMedicineReport(paginate,
 		query.QueryByDate("NgayNhap", reportQuery.Date),
 		query.OrderBy(reportQuery.OrderBy, reportQuery.Desc))
 	if err != nil {
@@ -69,6 +71,11 @@ func GetMedicineReport(c *gin.Context) {
 	c.JSON(http.StatusOK, MedicineReportListResponse{
 		Response: SuccessfulResponse,
 		Data:     reports,
+		PageInfo: gin.H{
+			"page_size":  pageSize,
+			"page":       page,
+			"total_page": totalPage,
+		},
 	})
 }
 

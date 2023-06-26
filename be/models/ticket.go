@@ -3,7 +3,6 @@ package models
 import (
 	"clinic-management/types"
 	"clinic-management/utils"
-	"clinic-management/utils/query"
 	"errors"
 	"time"
 
@@ -31,8 +30,9 @@ func (Ticket) TableName() string {
 func (ticket *Ticket) BeforeCreate(tx *gorm.DB) error {
 	todayTicket := []Ticket{}
 
-	err := DB.Scopes(query.QueryByDate("NgayKham", utils.GetCurrentDateString())).
-		Order(`"NgayTao" desc`).Find(&todayTicket).Error
+	err := DB.Raw(`SELECT * FROM "PhieuDoiKham" 
+	WHERE DATE("NgayKham") = DATE(?)
+	ORDER BY "NgayTao" DESC`, utils.GetCurrentDateString()).Scan(&todayTicket).Error
 	if err != nil || len(todayTicket) == 0 {
 		ticket.Number = 1
 	} else {

@@ -1678,6 +1678,7 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -1738,6 +1739,7 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -1793,6 +1795,7 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -1810,6 +1813,7 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -1904,6 +1908,7 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -1986,6 +1991,7 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -2036,6 +2042,7 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }
@@ -2117,6 +2124,7 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
+                "page_info": {},
                 "status": {
                     "type": "string"
                 }

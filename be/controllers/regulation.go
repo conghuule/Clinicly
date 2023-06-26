@@ -28,7 +28,8 @@ type RegulationResponse struct {
 
 type RegulationListResponse struct {
 	Response
-	Data []models.Regulation `json:"data"`
+	Data     []models.Regulation `json:"data"`
+	PageInfo any                 `json:"page_info"`
 }
 
 type RegulationQuery struct {
@@ -58,7 +59,8 @@ func GetRegulation(c *gin.Context) {
 		return
 	}
 
-	regulations, err := models.GetRegulation(query.Paginate(c),
+	paginate, page, pageSize, totalPage := query.Paginate(c, []models.Regulation{})
+	regulations, err := models.GetRegulation(paginate,
 		query.StringSearch("MaQD", regulationQuery.ID),
 		query.StringSearch("TenQD", regulationQuery.Name),
 		query.OrderBy(regulationQuery.OrderBy, regulationQuery.Desc))
@@ -70,6 +72,11 @@ func GetRegulation(c *gin.Context) {
 	c.JSON(http.StatusOK, RegulationListResponse{
 		Response: SuccessfulResponse,
 		Data:     regulations,
+		PageInfo: gin.H{
+			"page_size":  pageSize,
+			"page":       page,
+			"total_page": totalPage,
+		},
 	})
 }
 

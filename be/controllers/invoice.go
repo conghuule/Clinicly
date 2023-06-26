@@ -23,7 +23,8 @@ type InvoiceResponse struct {
 
 type InvoiceListResponse struct {
 	Response
-	Data []models.Invoice `json:"data"`
+	Data     []models.Invoice `json:"data"`
+	PageInfo any              `json:"page_info"`
 }
 
 type InvoiceQuery struct {
@@ -57,7 +58,8 @@ func GetInvoice(c *gin.Context) {
 		return
 	}
 
-	invoices, err := models.GetInvoice(query.Paginate(c),
+	paginate, page, pageSize, totalPage := query.Paginate(c, []models.Invoice{})
+	invoices, err := models.GetInvoice(paginate,
 		query.OrderBy(invoiceQuery.OrderBy, invoiceQuery.Desc),
 		query.QueryByDate("NgayTao", invoiceQuery.Date),
 		query.QueryByField("MaBN", invoiceQuery.Patient),
@@ -71,6 +73,11 @@ func GetInvoice(c *gin.Context) {
 	c.JSON(http.StatusOK, InvoiceListResponse{
 		Response: SuccessfulResponse,
 		Data:     invoices,
+		PageInfo: gin.H{
+			"page_size":  pageSize,
+			"page":       page,
+			"total_page": totalPage,
+		},
 	})
 }
 

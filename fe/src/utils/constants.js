@@ -1,15 +1,17 @@
 import { Tag } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export const PATIENT_COLUMNS = [
   {
     title: 'Tên bệnh nhân',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'full_name',
+    key: 'full_name',
   },
   {
     title: 'Ngày sinh',
-    dataIndex: 'date_of_birth',
-    key: 'date_of_birth',
+    dataIndex: 'birth_date',
+    key: 'birth_date',
   },
   {
     title: 'Địa chỉ',
@@ -29,16 +31,15 @@ export const PATIENT_COLUMNS = [
       <>
         {actions.map((action) => {
           return (
-            <Tag
-              color="error"
+            <FontAwesomeIcon
+              icon={faTrash}
+              color={action.color}
               key={action.value}
               onClick={(e) => {
                 e.stopPropagation();
                 action.onClick(e);
               }}
-            >
-              {action.value.toUpperCase()}
-            </Tag>
+            />
           );
         })}
       </>
@@ -75,16 +76,17 @@ export const MEDICINE_COLUMNS = [
       <>
         {actions.map((action) => {
           return (
-            <Tag
-              color="error"
-              key={action.value}
-              onClick={(e) => {
-                e.stopPropagation();
-                action.onClick(e);
-              }}
-            >
-              {action.value.toUpperCase()}
-            </Tag>
+            <div className="text-center">
+              <FontAwesomeIcon
+                icon={faTrash}
+                color={action.color}
+                key={action.value}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  action.onClick(e);
+                }}
+              />
+            </div>
           );
         })}
       </>
@@ -216,4 +218,10 @@ export const REGULATION_COLUMNS = [
       </>
     ),
   },
+];
+
+export const GENDERS = [
+  { value: 1, label: 'Nam' },
+  { value: 2, label: 'Nữ' },
+  { value: 3, label: 'Khác' },
 ];

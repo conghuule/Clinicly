@@ -15,7 +15,7 @@ export default function Medicines() {
   return (
     <div>
       <HeaderBar title="Kho thuốc" icon={faPills} image="" name="Nguyen Long Vu" role="Bac si" />
-      <div className="flex gap-[80px] mt-[20px] mb-[40px]">
+      <div className="flex gap-[80px] mt-[30px] mb-[30px]">
         <Search
           placeholder="Nhập bệnh nhân cần tìm"
           onSearch={onSearch}

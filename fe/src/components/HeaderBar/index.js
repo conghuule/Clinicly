@@ -7,8 +7,8 @@ const HeaderBar = ({ title, icon, image, name, role }) => {
   return (
     <div className="flex justify-center items-center item h-[80px] w-full px-5 py-2 shadow-md shadow-neutral-500/50">
       <div className="flex items-center gap-4 flex-1">
-        <FontAwesomeIcon icon={icon} className="w-[32px] h-[32px] text-primary-300" />
-        <h2 className="font-bold text-[28px] text-primary-300 pl-[8px]">{title}</h2>
+        <FontAwesomeIcon icon={icon} className="w-[24px] h-[24px] text-primary-300" />
+        <h2 className="font-bold text-[24px] text-primary-300 pl-[8px]">{title}</h2>
       </div>
       <div className="flex items-center gap-4">
         <div className="flex gap-3">
