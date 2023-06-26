@@ -8,6 +8,7 @@ import { Button } from 'antd';
 import config from '../../config';
 import patientApi from '../../services/patientApi';
 import { GENDERS } from '../../utils/constants';
+import { notify } from '../../components/Notification/Notification';
 
 export default function PatientDetail() {
   const { id } = useParams();
@@ -28,8 +29,11 @@ export default function PatientDetail() {
         birth_date: dayjs(values.birth_date).format('YYYY-MM-DD'),
       };
       await patientApi.update(id, newPatient);
+
+      notify({ type: 'success', mess: 'Cập nhật thành công' });
     } catch (error) {
       console.log(error);
+      notify({ type: 'error', mess: 'Cập nhật thất bại' });
     }
   };
 

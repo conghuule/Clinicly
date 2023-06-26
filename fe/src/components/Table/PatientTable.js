@@ -6,63 +6,108 @@ import Modal from '../Modal/Modal';
 import ConfirmDeleteModal from '../Modal/ConfirmDeleteModal';
 import patientApi from '../../services/patientApi';
 import dayjs from 'dayjs';
+import { notify } from '../Notification/Notification';
 
 export default function PatientTable({ searchValue }) {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
-  const [title, setTitle] = useState('');
-  const [patients, setPatients] = useState([]);
+  const [selectedPatient, setSelectedPatient] = useState({ name: '', id: null });
+  const [patients, setPatients] = useState({
+    data: [],
+    loading: true,
+    params: { page_size: 10, page: 1, total_page: 0 },
+  });
 
-  const filteredPatients = patients
-    .map((patient) => ({
-      key: patient.id,
-      ...patient,
-      actions: [
-        {
-          value: 'Xoá',
-          color: '#dc2626',
-          onClick: () => {
-            setOpenModal(true);
-            setTitle(patient.full_name);
-          },
+  const deletePatient = async ({ id, name }) => {
+    try {
+      await patientApi.delete(id);
+      notify({ type: 'success', mess: `Xóa ${name} thành công` });
+      getPatients(searchValue);
+    } catch (error) {
+      console.log(error);
+      notify({ type: 'error', mess: 'Xóa thất bại' });
+    }
+
+    setOpenModal(false);
+  };
+
+  const getPatients = async (searchValue) => {
+    try {
+      const response = await patientApi.getAll({ ...patients.params, name: searchValue });
+      setPatients({
+        ...patients,
+        loading: false,
+        data: response.data.map((patient) => ({
+          ...patient,
+          birth_date: dayjs(patient.birth_date).format('DD-MM-YYYY'),
+        })),
+        params: {
+          ...patients.params,
+          page_size: response.page_info.page_size,
+          page: response.page_info.page,
+          total_page: response.page_info.total_page,
         },
-      ],
-    }))
-    .filter((item) => item.full_name.toLowerCase().includes(searchValue.toLowerCase()));
+      });
+    } catch (error) {
+      console.log(error);
+      notify({ type: 'error', mess: 'Lấy dữ liệu thất bại' });
+    }
+  };
+
+  const onChange = (action) => {
+    setPatients({
+      ...patients,
+      params: {
+        ...patients.params,
+        page_size: action.pageSize,
+        page: action.current,
+      },
+    });
+  };
+
+  const filteredPatients = patients.data.map((patient) => ({
+    key: patient.id,
+    ...patient,
+    actions: [
+      {
+        value: 'Xoá',
+        color: '#dc2626',
+        onClick: () => {
+          setOpenModal(true);
+          setSelectedPatient({ name: patient.full_name, id: patient.id });
+        },
+      },
+    ],
+  }));
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await patientApi.getAll();
-        setPatients(
-          response.data.map((patient) => ({ ...patient, birth_date: dayjs(patient.birth_date).format('DD-MM-YYYY') })),
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+    getPatients(searchValue);
+  }, [patients.params.page_size, patients.params.page, searchValue]);
 
   return (
     <>
       <Table
+        loading={patients.loading}
         dataSource={filteredPatients}
         columns={PATIENT_COLUMNS}
         onRow={(record) => ({
           onClick: () => navigate(record.id.toString()),
         })}
+        pagination={{
+          current: patients.params.page,
+          pageSize: patients.params.page_size,
+          total: patients.params.total_page * patients.params.page_size,
+          showSizeChanger: true,
+        }}
+        onChange={onChange}
         rowClassName="cursor-pointer"
       />
-      {openModal ? (
-        <Modal>
-          <ConfirmDeleteModal
-            title={title}
-            open={openModal}
-            onCancel={() => setOpenModal(false)}
-            onOk={() => setOpenModal(false)}
-          />
-        </Modal>
-      ) : null}
+        <ConfirmDeleteModal
+        title={selectedPatient.name}
+        open={openModal}
+        onCancel={() => setOpenModal(false)}
+        onOk={() => deletePatient(selectedPatient)}
+      />
     </>
   );
 }
