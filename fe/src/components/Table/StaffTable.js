@@ -20,7 +20,7 @@ export default function StaffTable({ searchValue }) {
     try {
       const res = await staffAPI.getStaffs();
       const json = res.data;
-      await json.data.forEach((element) => {
+      await json.forEach((element) => {
         element.key = element.id;
         element.actions = [
           {
@@ -36,7 +36,7 @@ export default function StaffTable({ searchValue }) {
           },
         ];
       });
-      setStaffs(json.data);
+      setStaffs(json);
     } catch (error) {
       console.log('An error occurred:', error);
     }

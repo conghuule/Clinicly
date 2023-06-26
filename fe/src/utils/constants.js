@@ -228,7 +228,15 @@ export const REGULATION_COLUMNS = [
             color = 'volcano';
           }
           return (
-            <Tag className="cursor-pointer" color={color} key={action}>
+            <Tag
+              className="cursor-pointer"
+              color={color}
+              key={action}
+              onClick={(e) => {
+                e.stopPropagation();
+                action.onClick(e);
+              }}
+            >
               {action.value}
             </Tag>
           );

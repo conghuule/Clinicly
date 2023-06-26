@@ -19,7 +19,7 @@ export default function InvoiceTable({ searchValue }) {
     try {
       const res = await invoiceAPI.getInvoices();
       const json = res.data;
-      await json.data.forEach((element) => {
+      json.forEach((element) => {
         element.key = element.id;
         element.actions = [
           { value: 'Thanh toán', onClick: () => setOpenPaymentModal(true) },
@@ -27,7 +27,7 @@ export default function InvoiceTable({ searchValue }) {
           { value: 'Xuất hoá đơn', onClick: () => setOpenBillModal(true) },
         ];
       });
-      setInvoices(json.data);
+      setInvoices(json);
     } catch (error) {
       console.log('An error occurred:', error);
     }
