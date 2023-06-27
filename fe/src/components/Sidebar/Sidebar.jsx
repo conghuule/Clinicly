@@ -7,13 +7,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Sidebar = () => {
   return (
-    <div className="sidebar">
+    <div className="sidebar h-screen sticky top-0">
       <Link className="sidebar-logo" to={config.routes.home}>
         <div className="sidebar-logo-icon">{SidebarData[0].icon}</div>
         <div className="sidebar-logo-title">{SidebarData[0].title}</div>
       </Link>
       <div className="sidebar-items">
-        {SidebarData.slice(1).map((item) => {
+        {SidebarData.slice(1, -1).map((item) => {
           return (
             <NavLink
               key={item.id}

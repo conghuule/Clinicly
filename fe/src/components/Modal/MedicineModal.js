@@ -2,6 +2,10 @@ import { Modal, Radio } from 'antd';
 import React, { useState } from 'react';
 import MedicineForm from '../Form/MedicineForm';
 import OldMedicineForm from '../Form/OldMedicineForm';
+import { notify } from '../Notification/Notification';
+import medicineApi from '../../services/medicineApi';
+import medicineReportApi from '../../services/medicineReportApi';
+import dayjs from 'dayjs';
 
 export default function MedicineModal(props) {
   const [medicineValue, setMedicineValue] = useState('old_medicine');
@@ -12,18 +16,39 @@ export default function MedicineModal(props) {
   ];
 
   const onChange = ({ target: { value } }) => {
-    console.log('radio2 checked', value);
     setMedicineValue(value);
   };
 
-  const onSubmitNewMedicine = (values) => {
-    console.log('values: ', values);
-    // TODO: add medicine here
+  const onSubmitNewMedicine = async (values) => {
+    const newMedicine = {
+      ...values,
+      price: Number(values.price),
+      quantity: Number(values.quantity),
+    };
+    try {
+      await medicineApi.add(newMedicine);
+      notify({ type: 'success', mess: `Thêm thuốc ${values.full_name} thành công` });
+      props.getMedicines('');
+    } catch (error) {
+      notify({ type: 'error', mess: `Thêm thuốc ${values.full_name} thất bại` });
+    }
+    props.onCancel();
   };
 
-  const onSubmitOldMedicine = (values) => {
-    console.log('values: ', values);
-    // TODO: add medicine here
+  const onSubmitOldMedicine = async (values) => {
+    const newMedicine = {
+      ...values,
+      quantity: Number(values.quantity),
+      date: dayjs(Date.now()).format('YYYY-MM-DD'),
+    };
+    try {
+      await medicineReportApi.add(newMedicine);
+      notify({ type: 'success', mess: `Thêm thuốc thành công` });
+      props.getMedicines('');
+    } catch (error) {
+      notify({ type: 'error', mess: `Thêm thuốc thất bại` });
+    }
+    props.onCancel();
   };
 
   return (

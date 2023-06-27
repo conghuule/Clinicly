@@ -1,10 +1,23 @@
 import { Modal } from 'antd';
+import dayjs from 'dayjs';
 import React from 'react';
+import patientApi from '../../services/patientApi';
 import PatientForm from '../Form/PatientForm';
+import { notify } from '../Notification/Notification';
 
 export default function PatientModal(props) {
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    try {
+      await patientApi.add({
+        ...values,
+        birth_date: dayjs(values.birth_date).format('YYYY-MM-DD'),
+      });
+      notify({ type: 'success', mess: `Thêm ${values.full_name} thành công` });
+      props.getPatients('');
+    } catch (error) {
+      notify({ type: 'error', mess: `Thêm ${values.full_name} thất bại` });
+    }
+    props.onCancel();
   };
 
   return (

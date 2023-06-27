@@ -2,7 +2,7 @@ import { faRectangleList } from '@fortawesome/free-solid-svg-icons';
 import { Input } from 'antd';
 import React, { useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
-import PatientTable from '../../components/Table/PatientTable';
+import ExaminationListTable from '../../components/Table/ExaminationListTable';
 const { Search } = Input;
 
 export default function ExaminationList() {
@@ -21,7 +21,7 @@ export default function ExaminationList() {
           size="large"
         />
       </div>
-      <PatientTable searchValue={searchValue} />
+      <ExaminationListTable searchValue={searchValue} />
     </div>
   );
 }

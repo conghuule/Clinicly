@@ -1,13 +1,11 @@
 import { Button, Input, Modal } from 'antd';
 import { React, useState } from 'react';
-import PatientModal from './PatientModal';
-import WaitListTable from '../Table/WaitListTable';
+import PatientTable from '../Table/PatientTable';
 const { Search } = Input;
 
 export default function AddWaitListModal(props) {
   const [searchValue, setSearchValue] = useState('');
   const onSearch = (value) => setSearchValue(value);
-  const [openModal, setOpenModal] = useState(false);
 
   return (
     <Modal {...props} centered width={1000} footer={null}>
@@ -21,13 +19,12 @@ export default function AddWaitListModal(props) {
           size="large"
         />
         <div>
-          <Button type="primary" onClick={() => setOpenModal(true)} size="large">
+          <Button type="primary" size="large">
             Thêm bệnh nhân
           </Button>
-          <PatientModal open={openModal} onCancel={() => setOpenModal(false)} />
         </div>
       </div>
-      <WaitListTable searchValue={searchValue} />
+      <PatientTable searchValue={searchValue} />
     </Modal>
   );
 }
