@@ -11,11 +11,15 @@ import StaffDetail from '../pages/Manage/Staffs/StaffDetail';
 import Regulations from '../pages/Manage/Regulations';
 import WaitingList from '../pages/List/waitingList';
 import ExaminationList from '../pages/List/examinationList';
-import Logout from '../pages/Logout';
 import Login from '../pages/Login';
 import NotFound from '../pages/NotFound';
 
 const publicRoutes = [
+  { path: config.routes.login, element: Login, layout: null },
+  { path: config.routes.not_found, element: NotFound, layout: null },
+];
+
+const privateRoutes = [
   { path: config.routes.home, element: Home },
   { path: config.routes.patients, element: Patients },
   { path: config.routes.patient_detail, element: PatientDetail },
@@ -28,11 +32,6 @@ const publicRoutes = [
   { path: config.routes.regulations, element: Regulations },
   { path: config.routes.waiting_list, element: WaitingList },
   { path: config.routes.examination_list, element: ExaminationList },
-  { path: config.routes.login, element: Login, layout: null },
-  { path: config.routes.logout, element: Logout, layout: null },
-  { path: config.routes.not_found, element: NotFound, layout: null },
 ];
-
-const privateRoutes = [];
 
 export { publicRoutes, privateRoutes };
