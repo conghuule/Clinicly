@@ -70,7 +70,7 @@ export default function Home() {
             <Card bordered={false} className="h-[100%]">
               <Card bordered={false} className="mb-5">
                 <p className="mb-5 text-[20px] flex items-center justify-center font-medium">Chọn ngày</p>
-                <Space direction="vertical" size={12}>
+                <Space direction="vertical" size={12} className="flex items-center justify-center">
                   <RangePicker format="YYYY-MM-DD" onChange={onChange} />
                 </Space>
               </Card>
