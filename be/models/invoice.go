@@ -4,7 +4,6 @@ import (
 	"clinic-management/types"
 	"clinic-management/utils"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -126,7 +125,7 @@ func (invoice *Invoice) GeneratePDF() (*fpdf.Fpdf, error) {
 	}
 	exPath := filepath.Dir(ex)
 	fmt.Println(exPath)
-	logoBytes, err := ioutil.ReadFile(exPath + "/assets/logo.png")
+	logoBytes, err := os.ReadFile(exPath + "/assets/logo.png")
 	if err != nil {
 		return nil, err
 	}

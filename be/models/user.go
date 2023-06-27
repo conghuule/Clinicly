@@ -7,6 +7,7 @@ const TableNameUser = "NhanVien"
 type User struct {
 	ID       uint   `gorm:"column:MaNV" json:"id"`
 	Email    string `gorm:"column:Email" json:"email"`
+	FullName string `gorm:"column:HoTen" json:"full_name"`
 	Role     string `gorm:"column:LoaiNV" json:"role"`
 	Password string `gorm:"column:Password" json:"-"`
 }
@@ -28,7 +29,6 @@ func GetUserByEmail(email string) (*User, error) {
 }
 
 func initAdminAccount() {
-	updatedBy := uint(1)
 	var adminAccount = Staff{
 		Email:        "admin",
 		Role:         types.Admin.Value(),
@@ -39,7 +39,6 @@ func initAdminAccount() {
 		Status:       types.Working.Value(),
 		Gender:       types.Male.Value(),
 		Address:      "TP HCM",
-		UpdatedBy:    &updatedBy,
 	}
 
 	if _, err := GetUserByEmail(adminAccount.Email); err != nil {

@@ -2621,6 +2621,9 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
+                "full_name": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
