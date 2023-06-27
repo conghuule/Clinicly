@@ -71,7 +71,6 @@ export const SidebarData = [
   {
     id: 9,
     title: 'Đăng xuất',
-    path: config.routes.logout,
     icon: faRightFromBracket,
     cName: 'nav-text',
   },
