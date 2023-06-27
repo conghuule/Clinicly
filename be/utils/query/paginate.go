@@ -23,7 +23,7 @@ func Paginate(c *gin.Context, model any) (function func(db *gorm.DB) *gorm.DB, p
 
 	totalPage = int(math.Ceil(float64(count) / float64(pageSize)))
 	page, _ = strconv.Atoi(c.Query("page"))
-	if page <= 0 {
+	if page <= 1 {
 		page = 1
 	} else if page >= int(totalPage) {
 		page = int(totalPage)

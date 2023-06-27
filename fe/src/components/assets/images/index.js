@@ -8,5 +8,8 @@ const IMAGES = {
   logoBill: require('./bill.svg').default,
   logoManage: require('./manage.svg').default,
   logoLogout: require('./logout.svg').default,
+  logoPatientMetric: require('./patient_metric.svg').default,
+  logoRevenueMetric: require('./revenue_metric.svg').default,
+  logoVisitMetric: require('./visit_metric.svg').default,
 };
 export default IMAGES;

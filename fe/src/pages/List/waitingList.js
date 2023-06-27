@@ -12,11 +12,9 @@ export default function WaitingList() {
     <div>
       <HeaderBar title="Danh sách đợi khám" icon={faUserClock} image="" name="Nguyen Long Vu" role="Bac si"></HeaderBar>
       <div className="flex justify-end gap-[35px] mb-[30px] mt-[30px]">
-        <Button type="primary" className="bg-[#004DB6] h-[4.5rem] w-[20rem]">
-          Người tiếp theo
-        </Button>
+        <Button className="bg-[#004DB6] text-white h-[40px] w-[20rem]">Người tiếp theo</Button>
         <div>
-          <Button type="primary" className="bg-primary-200 h-[4.5rem] w-[20rem]" onClick={() => setOpenModalAdd(true)}>
+          <Button type="primary" className="bg-primary-200 h-[40px] w-[20rem]" onClick={() => setOpenModalAdd(true)}>
             Thêm vào DSDK
           </Button>
           <AddWaitListModal open={openModalAdd} onCancel={() => setOpenModalAdd(false)} />

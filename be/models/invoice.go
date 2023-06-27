@@ -3,8 +3,10 @@ package models
 import (
 	"clinic-management/types"
 	"clinic-management/utils"
-	"io"
+	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -122,8 +124,9 @@ func (invoice *Invoice) GeneratePDF() (*fpdf.Fpdf, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	logoBytes, err := io.ReadAll(logoResponse.Body)
+	exPath := filepath.Dir(ex)
+	fmt.Println(exPath)
+	logoBytes, err := os.ReadFile(exPath + "/assets/logo.png")
 	if err != nil {
 		return nil, err
 	}

@@ -1,44 +1,70 @@
 import React, { Fragment } from 'react';
 import { useEffect } from 'react';
+import { useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import config from './config';
+import { AuthContext } from './context/authContext';
 import DefaultLayout from './layouts/DefaultLayout';
-import { publicRoutes } from './routes';
+import { privateRoutes, publicRoutes } from './routes';
 
 function App() {
-  const userId = sessionStorage.getItem('user_id');
+  const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth_data') || 'null') || null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userId) {
+    if (!auth) {
       navigate(config.routes.login);
     }
-  }, [userId, navigate]);
+  }, [auth, navigate]);
 
   return (
-    <Routes>
-      {publicRoutes.map((route) => {
-        const Comp = route.element;
-        let Layout = DefaultLayout;
+    <AuthContext.Provider value={{ auth, setAuth }}>
+      <Routes>
+        {publicRoutes.map((route) => {
+          const Comp = route.element;
+          let Layout = DefaultLayout;
 
-        if (route.layout === null) {
-          Layout = Fragment;
-        } else if (route.layout) {
-          Layout = route.layout;
-        }
-        return (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={
-              <Layout>
-                <Comp />
-              </Layout>
+          if (route.layout === null) {
+            Layout = Fragment;
+          } else if (route.layout) {
+            Layout = route.layout;
+          }
+          return (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={
+                <Layout>
+                  <Comp />
+                </Layout>
+              }
+            />
+          );
+        })}
+        {auth &&
+          privateRoutes.map((route) => {
+            const Comp = route.element;
+            let Layout = DefaultLayout;
+
+            if (route.layout === null) {
+              Layout = Fragment;
+            } else if (route.layout) {
+              Layout = route.layout;
             }
-          />
-        );
-      })}
-    </Routes>
+            return (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={
+                  <Layout>
+                    <Comp />
+                  </Layout>
+                }
+              />
+            );
+          })}
+      </Routes>
+    </AuthContext.Provider>
   );
 }
 
