@@ -1,6 +1,6 @@
 import { Tag } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export const PATIENT_COLUMNS = [
   {
@@ -41,6 +41,54 @@ export const PATIENT_COLUMNS = [
                   action.onClick(e);
                 }}
                 className="p-[8px] rounded-[50%] hover:bg-[#fecaca]"
+              />
+            </div>
+          );
+        })}
+      </>
+    ),
+  },
+];
+
+export const PATIENT_COLUMNS_IN_WAITING_LIST = [
+  {
+    title: 'Tên bệnh nhân',
+    dataIndex: 'full_name',
+    key: 'full_name',
+  },
+  {
+    title: 'Ngày sinh',
+    dataIndex: 'birth_date',
+    key: 'birth_date',
+  },
+  {
+    title: 'Địa chỉ',
+    dataIndex: 'address',
+    key: 'address',
+  },
+  {
+    title: 'Số điện thoại',
+    dataIndex: 'phone_number',
+    key: 'phone_number',
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'actions',
+    key: 'actions',
+    width: 120,
+    render: (_, { actions }) => (
+      <>
+        {actions.map((action) => {
+          return (
+            <div className="text-center cursor-pointer" key={action.value}>
+              <FontAwesomeIcon
+                icon={faPlus}
+                color={action.color}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  action.onClick(e);
+                }}
+                className="p-[8px] rounded-[50%] hover:bg-[#bbf7d0]"
               />
             </div>
           );
