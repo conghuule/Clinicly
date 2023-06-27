@@ -3,9 +3,8 @@ package models
 import (
 	"clinic-management/types"
 	"clinic-management/utils"
-	"fmt"
-	"os"
-	"path/filepath"
+	"io"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -119,13 +118,12 @@ func (invoice *Invoice) GeneratePDF() (*fpdf.Fpdf, error) {
 	doc.SetRef(strconv.Itoa(int(invoice.ID)))
 	doc.SetDate(utils.GetCurrentDateString())
 
-	ex, err := os.Executable()
+	logoResponse, err := http.Get("https://raw.githubusercontent.com/longvu2907/Clinicly/main/be/assets/logo.png")
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	exPath := filepath.Dir(ex)
-	fmt.Println(exPath)
-	logoBytes, err := os.ReadFile(exPath + "/assets/logo.png")
+
+	logoBytes, err := io.ReadAll(logoResponse.Body)
 	if err != nil {
 		return nil, err
 	}
