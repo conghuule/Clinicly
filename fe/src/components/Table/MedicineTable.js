@@ -23,7 +23,6 @@ const MedicineTable = ({ searchValue }, ref) => {
       notify({ type: 'success', mess: `Xóa ${name} thành công` });
       getMedicines(searchValue);
     } catch (error) {
-      console.log(error);
       notify({ type: 'error', mess: 'Xóa thất bại' });
     }
 
@@ -45,7 +44,6 @@ const MedicineTable = ({ searchValue }, ref) => {
         },
       });
     } catch (error) {
-      console.log(error);
       notify({ type: 'error', mess: 'Lấy dữ liệu thất bại' });
     }
   };
