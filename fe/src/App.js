@@ -1,35 +1,44 @@
 import React, { Fragment } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import config from './config';
 import DefaultLayout from './layouts/DefaultLayout';
 import { publicRoutes } from './routes';
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        {publicRoutes.map((route) => {
-          const Comp = route.element;
-          let Layout = DefaultLayout;
+  const userId = sessionStorage.getItem('user_id');
+  const navigate = useNavigate();
 
-          if (route.layout === null) {
-            Layout = Fragment;
-          } else if (route.layout) {
-            Layout = route.layout;
-          }
-          return (
-            <Route
-              key={route.path}
-              path={route.path}
-              element={
-                <Layout>
-                  <Comp />
-                </Layout>
-              }
-            />
-          );
-        })}
-      </Routes>
-    </Router>
+  useEffect(() => {
+    if (!userId) {
+      navigate(config.routes.login);
+    }
+  }, [userId, navigate]);
+
+  return (
+    <Routes>
+      {publicRoutes.map((route) => {
+        const Comp = route.element;
+        let Layout = DefaultLayout;
+
+        if (route.layout === null) {
+          Layout = Fragment;
+        } else if (route.layout) {
+          Layout = route.layout;
+        }
+        return (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={
+              <Layout>
+                <Comp />
+              </Layout>
+            }
+          />
+        );
+      })}
+    </Routes>
   );
 }
 

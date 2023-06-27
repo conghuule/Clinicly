@@ -13,7 +13,7 @@ const Sidebar = () => {
         <div className="sidebar-logo-title">{SidebarData[0].title}</div>
       </Link>
       <div className="sidebar-items">
-        {SidebarData.slice(1).map((item) => {
+        {SidebarData.slice(1, -1).map((item) => {
           return (
             <NavLink
               key={item.id}

@@ -13,7 +13,8 @@ export const LoginComponent = () => {
     const { email, password } = values;
 
     try {
-      await authApi.login(email, password);
+      const { data } = await authApi.login(email, password);
+      sessionStorage.setItem('user_id', data.id);
       navigate(config.routes.home);
     } catch (error) {
       const {
