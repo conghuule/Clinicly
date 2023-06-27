@@ -1,11 +1,22 @@
 import './Sidebar.css';
 import { SidebarData } from './SidebarData';
 import { Link, NavLink } from 'react-router-dom';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import config from '../../config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ConfirmLogoutModal from '../Modal/ConfirmLogoutModal';
+import { AuthContext } from '../../context/authContext';
 
 const Sidebar = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const authContext = useContext(AuthContext);
+
+  const handleLogout = () => {
+    authContext.setAuth(null);
+    localStorage.setItem('auth_data', JSON.stringify(null));
+    setOpenModal(false);
+  };
+
   return (
     <div className="sidebar h-screen sticky top-0">
       <Link className="sidebar-logo" to={config.routes.home}>
@@ -29,6 +40,14 @@ const Sidebar = () => {
             </NavLink>
           );
         })}
+        <span
+          className="sidebar-link text-primary-100 hover:text-primary-300 hover:cursor-pointer"
+          onClick={() => setOpenModal(true)}
+        >
+          <FontAwesomeIcon icon={SidebarData.at(-1).icon} className="w-[24px] h-[24px] pr-[16px]" />
+          <div className="sidebar-title">{SidebarData.at(-1).title}</div>
+        </span>
+        <ConfirmLogoutModal open={openModal} onCancel={() => setOpenModal(false)} onOk={handleLogout} />
       </div>
     </div>
   );

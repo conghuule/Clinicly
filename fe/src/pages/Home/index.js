@@ -1,20 +1,11 @@
-import {
-  faChartSimple,
-  faEye,
-  faHospitalUser,
-  faMoneyCheckDollar,
-  faPills,
-  faUser,
-} from '@fortawesome/free-solid-svg-icons';
+import { faChartSimple, faHospitalUser, faMoneyCheckDollar, faPills, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Card, Col, DatePicker, Row, Space, Statistic } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
 import dashboardApi from '../../services/dashboardApi';
-
-import IMAGES from '../../components/assets/images';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { notify } from '../../components/Notification/Notification';
 import dayjs from 'dayjs';
+import { notify } from '../../components/Notification/Notification';
 import LineChart from './LineChart';
 
 const { RangePicker } = DatePicker;

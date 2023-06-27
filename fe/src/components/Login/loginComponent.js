@@ -1,11 +1,13 @@
-import { Button, Checkbox, Form, Input } from 'antd';
-import React, { useState } from 'react';
+import { Button, Form, Input } from 'antd';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from '../../config';
+import { AuthContext } from '../../context/authContext';
 import authApi from '../../services/authApi';
 
 export const LoginComponent = () => {
   const [errorMessage, setErrorMessage] = useState('');
+  const authContext = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -14,7 +16,8 @@ export const LoginComponent = () => {
 
     try {
       const { data } = await authApi.login(email, password);
-      sessionStorage.setItem('user_id', data.id);
+      localStorage.setItem('auth_data', JSON.stringify(data));
+      authContext.setAuth(data);
       navigate(config.routes.home);
     } catch (error) {
       const {
@@ -56,12 +59,14 @@ export const LoginComponent = () => {
 
       <p className="ml-[110px] text-danger">{errorMessage}</p>
 
-      <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 6, span: 16 }}>
-        <Checkbox>Ghi nhớ mật khẩu</Checkbox>
-      </Form.Item>
-
       <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-        <Button type="primary" htmlType="submit" size="large" shape="round" className="text-white lg:w-[35rem]">
+        <Button
+          type="primary"
+          htmlType="submit"
+          size="large"
+          shape="round"
+          className="text-white lg:w-[35rem] mt-[12px]"
+        >
           Đăng nhập
         </Button>
       </Form.Item>

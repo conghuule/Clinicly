@@ -16,7 +16,7 @@ export default function ExaminationListTable({ searchValue = '' }) {
 
   const getPatients = async () => {
     try {
-      const response = await examinationListApi.getAll();
+      const response = await examinationListApi.getAll({ status: 2 });
       setPatients({
         loading: false,
         data: response.data,

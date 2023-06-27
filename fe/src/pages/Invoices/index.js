@@ -17,22 +17,53 @@ export default function Bills() {
   const handleMenuClick = (e) => {
     setSearchValue(e.key);
   };
+  const [deliveryStatus, setDeliveryStatus] = useState('Trạng thái giao hàng');
+  const [payStatus, setPayStatus] = useState('Trạng thái thanh toán');
+
   const menuDelivery = (
     <Menu>
-      <Menu.Item onClick={handleMenuClick} key="Đã giao" className="h-[40px]">
+      <Menu.Item
+        onClick={(e) => {
+          handleMenuClick(e);
+          setDeliveryStatus('Đã giao');
+        }}
+        key="Đã giao"
+        className="h-[40px]"
+      >
         Đã giao
       </Menu.Item>
-      <Menu.Item onClick={handleMenuClick} key="Chưa giao" className="h-[40px]">
+      <Menu.Item
+        onClick={(e) => {
+          handleMenuClick(e);
+          setDeliveryStatus('Chưa giao');
+        }}
+        key="Chưa giao"
+        className="h-[40px]"
+      >
         Chưa giao
       </Menu.Item>
     </Menu>
   );
   const menuPayment = (
     <Menu>
-      <Menu.Item onClick={handleMenuClick} key="Đã thanh toán" className="h-[40px]">
+      <Menu.Item
+        onClick={(e) => {
+          handleMenuClick(e);
+          setPayStatus('Đã thanh toán');
+        }}
+        key="Đã thanh toán"
+        className="h-[40px]"
+      >
         Đã thanh toán
       </Menu.Item>
-      <Menu.Item onClick={handleMenuClick} key="Chưa thanh toán" className="h-[40px]">
+      <Menu.Item
+        onClick={(e) => {
+          handleMenuClick(e);
+          setPayStatus('Chưa thanh toán');
+        }}
+        key="Chưa thanh toán"
+        className="h-[40px]"
+      >
         Chưa thanh toán
       </Menu.Item>
     </Menu>
@@ -49,13 +80,13 @@ export default function Bills() {
           size="large"
         />
         <Dropdown overlay={menuDelivery} className="h-[40px]">
-          <Button>
-            Trạng thái giao hàng <DownOutlined />
+          <Button style={{ display: 'inline-block', width: 400 }}>
+            {deliveryStatus} <DownOutlined />
           </Button>
         </Dropdown>
         <Dropdown overlay={menuPayment} className="h-[40px]">
-          <Button>
-            Trạng thái thanh toán <DownOutlined />
+          <Button style={{ display: 'inline-block', width: 400 }}>
+            {payStatus} <DownOutlined />
           </Button>
         </Dropdown>
         <div>
