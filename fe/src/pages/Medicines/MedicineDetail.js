@@ -1,6 +1,6 @@
 import { faPills } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import MedicineForm from '../../components/Form/MedicineForm';
 import HeaderBar from '../../components/HeaderBar';
@@ -8,8 +8,10 @@ import { notify } from '../../components/Notification/Notification';
 import config from '../../config';
 import medicineApi from '../../services/medicineApi';
 import { UNITS } from '../../utils/constants';
+import { AuthContext } from '../../context/authContext';
 
 export default function MedicineDetail() {
+  const { auth } = useContext(AuthContext);
   const { id } = useParams();
   const [medicine, setMedicine] = useState({});
 
@@ -36,7 +38,7 @@ export default function MedicineDetail() {
 
   return (
     <div>
-      <HeaderBar title="Kho thuốc" icon={faPills} image="" name="Nguyen Long Vu" role="Bac si" />
+      <HeaderBar title="Kho thuốc" icon={faPills} image="" name={auth.full_name} role={auth.role} />
       <div className="mt-[20px] flex justify-between">
         <Link to={config.routes.medicines}>
           <Button type="primary">Trở về</Button>

@@ -28,7 +28,7 @@ export default function AddWaitListModal(props) {
           <PatientModal
             open={openModal}
             onCancel={() => setOpenModal(false)}
-            setPatients={patientTableRef.current?.getPatients}
+            getPatients={patientTableRef.current?.getPatients}
           />
         </div>
       </div>

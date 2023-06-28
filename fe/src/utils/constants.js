@@ -1,6 +1,7 @@
 import { Tag } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { DateFormat } from './utils';
 
 export const PATIENT_COLUMNS = [
   {
@@ -60,6 +61,7 @@ export const PATIENT_COLUMNS_IN_WAITING_LIST = [
     title: 'Ngày sinh',
     dataIndex: 'birth_date',
     key: 'birth_date',
+    render: ({ birth_date }) => DateFormat(birth_date),
   },
   {
     title: 'Địa chỉ',

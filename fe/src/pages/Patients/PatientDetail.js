@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { faHospitalUser } from '@fortawesome/free-solid-svg-icons';
 import { Link, useParams } from 'react-router-dom';
@@ -9,8 +9,10 @@ import config from '../../config';
 import patientApi from '../../services/patientApi';
 import { GENDERS } from '../../utils/constants';
 import { notify } from '../../components/Notification/Notification';
+import { AuthContext } from '../../context/authContext';
 
 export default function PatientDetail() {
+  const { auth } = useContext(AuthContext);
   const { id } = useParams();
   const [patient, setPatient] = useState({});
 
@@ -37,7 +39,7 @@ export default function PatientDetail() {
 
   return (
     <div>
-      <HeaderBar title="Bệnh nhân" icon={faHospitalUser} image="" name="Nguyen Long Vu" role="Bac si" />
+      <HeaderBar title="Bệnh nhân" icon={faHospitalUser} image="" name={auth.full_name} role={auth.role} />
       <div className="mt-[20px] flex justify-between">
         <Link to={config.routes.patients}>
           <Button type="primary">Trở về</Button>

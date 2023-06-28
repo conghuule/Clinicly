@@ -1,16 +1,19 @@
 import { faChartSimple, faHospitalUser, faMoneyCheckDollar, faPills, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Card, Col, DatePicker, Row, Space, Statistic } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
 import dashboardApi from '../../services/dashboardApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
 import { notify } from '../../components/Notification/Notification';
 import LineChart from './LineChart';
+import { AuthContext } from '../../context/authContext';
+import CountUp from 'react-countup';
 
 const { RangePicker } = DatePicker;
 
 export default function Home() {
+  const { auth } = useContext(AuthContext);
   const [dashboard, setDashboard] = useState({});
   const [dateRange, setDateRange] = useState([dayjs(new Date()).subtract(7, 'day'), dayjs(new Date())]);
 
@@ -91,9 +94,11 @@ export default function Home() {
     [dashboard],
   );
 
+  const formatter = (value) => <CountUp end={value} separator=" " />;
+
   return (
     <div>
-      <HeaderBar title="Tổng quan" icon={faChartSimple} image="" name="Nguyen Long Vu" role="Bac si" />
+      <HeaderBar title="Tổng quan" icon={faChartSimple} image="" name={auth.full_name} role={auth.role} />
       <div className="my-5">
         <Row className="p-5 py-7">
           <Space direction="horizontal" size={12}>
@@ -107,6 +112,7 @@ export default function Home() {
               <Card key={i} bordered={false} className="flex items-center justify-center w-1/4">
                 <span className="text-[20px] font-medium">{metric.label}</span>
                 <Statistic
+                  formatter={formatter}
                   className="flex items-center justify-center pt-5 pb-5"
                   value={metric.value}
                   valueStyle={{ color: metric.color }}
@@ -121,7 +127,12 @@ export default function Home() {
               {newValueMetric.map((metric, i) => (
                 <Col key={i} span={12} className="mb-5">
                   <Card bordered={false}>
-                    <Statistic title={metric.label} value={metric.value} valueStyle={{ color: metric.color }} />
+                    <Statistic
+                      formatter={formatter}
+                      title={metric.label}
+                      value={metric.value}
+                      valueStyle={{ color: metric.color }}
+                    />
                   </Card>
                 </Col>
               ))}

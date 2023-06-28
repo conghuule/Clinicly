@@ -40,11 +40,7 @@ const WaitingListTable = ({ searchValue }, ref) => {
       setPatients({
         ...patients,
         loading: false,
-        data: response.data.map((patient) => ({
-          ...patient,
-          key: patient.id,
-          birth_date: dayjs(patient.birth_date).format('DD-MM-YYYY'),
-        })),
+        data: response.data,
         params: {
           ...patients.params,
           page_size: response.page_info.page_size,

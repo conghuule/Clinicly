@@ -1,18 +1,20 @@
 import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import HeaderBar from '../../../components/HeaderBar';
 import { Input } from 'antd';
 import { Button } from 'antd';
 import RegulationTable from '../../../components/Table/RegulationTable';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../context/authContext';
 const { Search } = Input;
 
 export default function Bills() {
+  const { auth } = useContext(AuthContext);
   const [searchValue, setSearchValue] = useState('');
   const onSearch = (value) => setSearchValue(value);
   return (
     <div>
-      <HeaderBar title="Quản lý" icon={faFileInvoiceDollar} image="" name="Nguyễn Long Vũ" role="Bác sĩ" />
+      <HeaderBar title="Quản lý" icon={faFileInvoiceDollar} image="" name={auth.full_name} role={auth.role} />
       <div className="flex gap-[2rem] mt-[2rem]">
         <Link to="/manage/staffs">
           <Button className="h-[40px] ">Quản lý nhân viên</Button>

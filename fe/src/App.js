@@ -1,6 +1,4 @@
-import React, { Fragment } from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import config from './config';
 import { AuthContext } from './context/authContext';

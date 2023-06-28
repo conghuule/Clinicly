@@ -1,12 +1,14 @@
 import { faHospitalUser } from '@fortawesome/free-solid-svg-icons';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
 import PatientTable from '../../components/Table/PatientTable';
 import { Button, Input } from 'antd';
 import PatientModal from '../../components/Modal/PatientModal';
+import { AuthContext } from '../../context/authContext';
 const { Search } = Input;
 
 export default function Patients() {
+  const { auth } = useContext(AuthContext);
   const [searchValue, setSearchValue] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const patientTableRef = useRef(null);
@@ -15,7 +17,7 @@ export default function Patients() {
 
   return (
     <div>
-      <HeaderBar title="Bệnh nhân" icon={faHospitalUser} image="" name="Nguyen Long Vu" role="Bac si" />
+      <HeaderBar title="Bệnh nhân" icon={faHospitalUser} image="" name={auth.full_name} role={auth.role} />
       <div className="flex gap-[80px] mt-[30px] mb-[30px]">
         <Search
           placeholder="Nhập bệnh nhân cần tìm"
@@ -31,7 +33,7 @@ export default function Patients() {
           <PatientModal
             open={openModal}
             onCancel={() => setOpenModal(false)}
-            setPatients={patientTableRef.current?.getPatients}
+            getPatients={patientTableRef.current?.getPatients}
           />
         </div>
       </div>

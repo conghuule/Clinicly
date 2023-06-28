@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
 import { Link, useParams } from 'react-router-dom';
 import StaffForm from '../../../components/Form/StaffForm';
 import HeaderBar from '../../../components/HeaderBar';
 import { Button } from 'antd';
 import config from '../../../config';
+import { AuthContext } from '../../../context/authContext';
 
 export default function StaffDetail() {
+  const { auth } = useContext(AuthContext);
   const { id } = useParams();
   console.log('staff id: ', id);
   // TODO: get bill detail here
@@ -20,7 +22,7 @@ export default function StaffDetail() {
 
   return (
     <div>
-      <HeaderBar title="Quản lý" icon={faFileInvoiceDollar} image="" name="Nguyen Long Vu" role="Bac si" />
+      <HeaderBar title="Quản lý" icon={faFileInvoiceDollar} image="" name={auth.full_name} role={auth.role} />
       <div className="mt-[20px] flex justify-between">
         <Link to={config.routes.staffs}>
           <Button type="primary">Trở về</Button>

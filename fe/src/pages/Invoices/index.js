@@ -1,5 +1,5 @@
 import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Modal from '../../components/Modal/Modal';
 import HeaderBar from '../../components/HeaderBar';
 import { Input } from 'antd';
@@ -7,10 +7,12 @@ import InvoiceTable from '../../components/Table/InvoiceTable';
 import ConfirmPublishInvoiceModal from '../../components/Modal/ConfirmPublishInvoiceModal';
 import { Button, Dropdown, Menu } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+import { AuthContext } from '../../context/authContext';
 
 const { Search } = Input;
 
 export default function Bills() {
+  const { auth } = useContext(AuthContext);
   const [searchValue, setSearchValue] = useState('');
   const onSearch = (value) => setSearchValue(value);
   const [openModal, setOpenModal] = useState(false);
@@ -70,7 +72,7 @@ export default function Bills() {
   );
   return (
     <div>
-      <HeaderBar title="Hoá đơn" icon={faFileInvoiceDollar} image="" name="Nguyễn Long Vũ" role="Bác sĩ" />
+      <HeaderBar title="Hoá đơn" icon={faFileInvoiceDollar} image="" name={auth.full_name} role={auth.role} />
       <div className="flex gap-[20px] mt-[30px] mb-[30px]">
         <Search
           placeholder="Nhập hoá đơn cần tìm"
