@@ -40,5 +40,9 @@ var TicketEnums = map[string]any{
 			"id":           Processing,
 			"display_name": Processing.Value(),
 		},
+		{
+			"id":           Done,
+			"display_name": Done.Value(),
+		},
 	},
 }

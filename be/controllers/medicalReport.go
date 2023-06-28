@@ -132,9 +132,9 @@ func CreateMedicalReport(c *gin.Context) {
 		return
 	}
 
-	var prescription []models.Prescription
+	var prescriptions []models.Prescription
 	for _, value := range input.Prescription {
-		prescription = append(prescription, models.Prescription{
+		prescriptions = append(prescriptions, models.Prescription{
 			MedicineID:  value.MedicineID,
 			Quantity:    value.Quantity,
 			Instruction: value.Instruction,
@@ -147,7 +147,7 @@ func CreateMedicalReport(c *gin.Context) {
 		PatientID:    input.PatientID,
 		DoctorID:     input.DoctorID,
 		Diagnose:     input.Diagnose,
-		Prescription: prescription,
+		Prescription: prescriptions,
 		Date:         &now,
 		UpdatedBy:    &uid,
 	}

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"time"
 
 	"gorm.io/gorm"
@@ -36,6 +37,10 @@ func (prescription *Prescription) AfterCreate(db *gorm.DB) (err error) {
 	medicine, err := GetMedicineByID(prescription.MedicineID)
 	if err != nil {
 		return err
+	}
+
+	if int(medicine.Quantity-prescription.Quantity) < 0 {
+		return errors.New(medicine.ID + " is not enough quantity")
 	}
 
 	updatedMedicine := Medicine{

@@ -35,8 +35,9 @@ func (invoice *Invoice) Create() (*Invoice, error) {
 	total := 0
 
 	prescriptions := []Prescription{}
-	err := DB.Preload("Medicine").Raw(`SELECT * FROM "DonThuoc"
-	WHERE "MaPK" = ?`, invoice.MedicalReportID).Scan(&prescriptions).Error
+	err := DB.Preload("Medicine").
+		Where(&Prescription{MedicalReportID: *invoice.MedicalReportID}).
+		Find(&prescriptions).Error
 	if err != nil {
 		return nil, err
 	}
@@ -206,7 +207,7 @@ func GetRevenueMetric(startDate, endDate time.Time) (revenueData []int, newReven
 	}
 
 	i := 0
-	for date := startDate; date.Before(endDate.Add(time.Hour * 24 * time.Duration(1))); date = date.Add(time.Hour * 24 * time.Duration(1)) {
+	for date := startDate; date.Before(endDate); date = date.Add(time.Hour * 24 * time.Duration(1)) {
 		if i < len(result) && date.Format(types.DateFormat) == result[i].Date.Format(types.DateFormat) {
 			revenueData = append(revenueData, result[i].Revenue)
 			i++

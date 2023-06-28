@@ -66,6 +66,7 @@ func GetDashboardReport(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err.Error()))
 		return
 	}
+	*endDate = endDate.Add(time.Hour * 24 * time.Duration(1))
 
 	patientData, newPatient, totalPatient, err := models.GetPatientMetric(*startDate, *endDate)
 	if err != nil {

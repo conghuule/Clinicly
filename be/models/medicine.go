@@ -104,7 +104,7 @@ func GetMedicineMetric(startDate, endDate time.Time) (medicineData []int, newMed
 	}
 
 	i := 0
-	for date := startDate; date.Before(endDate.Add(time.Hour * 24 * time.Duration(1))); date = date.Add(time.Hour * 24 * time.Duration(1)) {
+	for date := startDate; date.Before(endDate); date = date.Add(time.Hour * 24 * time.Duration(1)) {
 		if i < len(result) && date.Format(types.DateFormat) == result[i].Date.Format(types.DateFormat) {
 			medicineData = append(medicineData, result[i].Count)
 			i++
