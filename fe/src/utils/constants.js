@@ -149,10 +149,6 @@ export const STAFF_COLUMNS = [
     title: 'Ngày sinh',
     dataIndex: 'birth_date',
     key: 'birth_date',
-    render: (birth_date) => {
-      const dateObject = new Date(birth_date);
-      return dateObject.toLocaleDateString();
-    },
   },
   {
     title: 'Địa chỉ',
@@ -248,7 +244,16 @@ export const GENDERS = [
   { value: 2, label: 'Nữ' },
   { value: 3, label: 'Khác' },
 ];
-
+export const ROLES = [
+  { value: 1, label: 'Tiếp tân' },
+  { value: 2, label: 'Bác sĩ' },
+  { value: 3, label: 'Dược sĩ' },
+  { value: 3, label: 'Quản lý' },
+];
+export const STATUS = [
+  { value: 1, label: 'Đang làm' },
+  { value: 2, label: 'Đã nghỉ' },
+];
 export const UNITS = [
   { label: 'Viên', value: 1 },
   { label: 'Chai', value: 2 },

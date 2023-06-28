@@ -1,5 +1,5 @@
 import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import HeaderBar from '../../../components/HeaderBar';
 import { Input } from 'antd';
 import Modal from '../../../components/Modal/Modal';
@@ -13,7 +13,7 @@ export default function Bills() {
   const [searchValue, setSearchValue] = useState('');
   const onSearch = (value) => setSearchValue(value);
   const [openModal, setOpenModal] = useState(false);
-
+  const staffTableRef = useRef(null);
   return (
     <div>
       <HeaderBar title="Quản lý" icon={faFileInvoiceDollar} image="" name="Nguyễn Long Vũ" role="Bác sĩ" />
@@ -39,12 +39,16 @@ export default function Bills() {
           </Button>
           {openModal ? (
             <Modal>
-              <StaffModal open={openModal} onOk={() => setOpenModal(false)} onCancel={() => setOpenModal(false)} />
+              <StaffModal
+                open={openModal}
+                onCancel={() => setOpenModal(false)}
+                getStaffs={staffTableRef.current?.getStaffs}
+              />
             </Modal>
           ) : null}
         </div>
       </div>
-      <StaffTable searchValue={searchValue} />
+      <StaffTable searchValue={searchValue} ref={staffTableRef} />
     </div>
   );
 }

@@ -11,14 +11,13 @@ import invoiceAPI from '../../services/invoiceAPI';
 export default function InvoiceDetail() {
   const { id } = useParams();
   const [invoiceDetail, setInvoiceDetail] = useState({});
-  // TODO: get bill detail here
   useEffect(() => {
     getInvoiceDetail(id);
-  });
+  }, []);
   async function getInvoiceDetail(id) {
     const res = await invoiceAPI.getInvoiceDetail(id);
     const json = res.data;
-    setInvoiceDetail(json.data);
+    setInvoiceDetail(json);
   }
 
   return (
