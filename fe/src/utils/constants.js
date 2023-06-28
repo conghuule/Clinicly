@@ -228,24 +228,22 @@ export const STAFF_COLUMNS = [
     title: 'Thao tác',
     dataIndex: 'actions',
     key: 'actions',
+    width: 120,
     render: (_, { actions }) => (
       <>
         {actions.map((action) => {
-          let color = action.length > 5 ? 'geekblue' : 'green';
-          if (action === 'loser') {
-            color = 'volcano';
-          }
           return (
-            <Tag
-              color={color}
-              key={action}
-              onClick={(e) => {
-                e.stopPropagation();
-                action.onClick(e);
-              }}
-            >
-              {action.value}
-            </Tag>
+            <div className="text-center cursor-pointer" key={action.value}>
+              <FontAwesomeIcon
+                icon={faTrash}
+                color={action.color}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  action.onClick(e);
+                }}
+                className="p-[8px] rounded-[50%] hover:bg-[#fecaca]"
+              />
+            </div>
           );
         })}
       </>
@@ -272,25 +270,22 @@ export const REGULATION_COLUMNS = [
     title: 'Thao tác',
     dataIndex: 'actions',
     key: 'actions',
+    width: 120,
     render: (_, { actions }) => (
       <>
         {actions.map((action) => {
-          let color = action.length > 5 ? 'geekblue' : 'green';
-          if (action === 'loser') {
-            color = 'volcano';
-          }
           return (
-            <Tag
-              className="cursor-pointer"
-              color={color}
-              key={action}
-              onClick={(e) => {
-                e.stopPropagation();
-                action.onClick(e);
-              }}
-            >
-              {action.value}
-            </Tag>
+            <div className="text-center cursor-pointer" key={action.value}>
+              <FontAwesomeIcon
+                icon={faTrash}
+                color={action.color}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  action.onClick(e);
+                }}
+                className="p-[8px] rounded-[50%] hover:bg-[#fecaca]"
+              />
+            </div>
           );
         })}
       </>
@@ -307,4 +302,34 @@ export const GENDERS = [
 export const UNITS = [
   { label: 'Viên', value: 1 },
   { label: 'Chai', value: 2 },
+];
+
+export const ROLES = [
+  {
+    label: 'Tiếp tân',
+    value: 1,
+  },
+  {
+    label: 'Bác sĩ',
+    value: 2,
+  },
+  {
+    label: 'Dược sĩ',
+    value: 3,
+  },
+  {
+    label: 'Quản lý',
+    value: 4,
+  },
+];
+
+export const STATUS = [
+  {
+    label: 'Đang làm',
+    value: 1,
+  },
+  {
+    label: 'Đã nghỉ',
+    value: 2,
+  },
 ];

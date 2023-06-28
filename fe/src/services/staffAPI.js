@@ -1,8 +1,10 @@
-import { get } from '../api/axiosClient';
+import { deleteAxios, get, put } from '../api/axiosClient';
 
-const invoiceAPI = {
+const staffApi = {
   getStaffs: () => get('/staff'),
-  getStaffDetail: (id) => get(`/staff/${id}`),
+  getById: (id) => get(`/staff/${id}`),
+  update: (id, body) => put(`/staff/${id}`, body),
+  delete: (id) => deleteAxios(`/staff/${id}`),
 };
 
-export default invoiceAPI;
+export default staffApi;

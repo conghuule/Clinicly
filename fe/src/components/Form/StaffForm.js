@@ -1,55 +1,55 @@
 import React from 'react';
 import { Button, DatePicker, Form, Input, Select } from 'antd';
-import { Option } from 'antd/es/mentions';
+import { GENDERS, ROLES, STATUS } from '../../utils/constants';
 
 export default function StaffForm({ defaultValue = {}, onSubmit, submitText }) {
   return (
     <Form
       name="newStaff-form"
-      labelCol={{ span: 2 }}
+      labelCol={{ span: 4 }}
       wrapperCol={{ span: 16 }}
       initialValues={{ ...defaultValue }}
       onFinish={onSubmit}
       autoComplete="off"
       className="mt-[40px]"
     >
-      <Form.Item label="Họ và tên" name="name" rules={[{ required: true, message: 'Nhập họ và tên' }]}>
-        <Input defaultValue={defaultValue.name} placeholder="Nhập họ và tên" />
+      <Form.Item label="Họ và tên" name="full_name" rules={[{ required: true, message: 'Nhập họ và tên' }]}>
+        <Input placeholder="Nhập họ và tên" />
       </Form.Item>
 
       <Form.Item name="gender" label="Giới tính" rules={[{ required: true }]}>
-        <Select placeholder="Chọn giới tính" allowClear>
-          <Option value="male">Male</Option>
-          <Option value="female">Female</Option>
-          <Option value="other">Other</Option>
-        </Select>
+        <Select style={{ width: 400 }} options={GENDERS} placeholder="Chọn giới tính" />
       </Form.Item>
 
-      <Form.Item label="Ngày sinh" name="date_of_birth" rules={[{ required: true, message: 'Nhập ngày sinh' }]}>
+      <Form.Item label="Ngày sinh" name="birth_date" rules={[{ required: true, message: 'Nhập ngày sinh' }]}>
         <DatePicker />
       </Form.Item>
 
-      <Form.Item label="CCCD" name="personal_id" rules={[{ required: true, message: 'Nhập số căn cước công dân' }]}>
-        <Input defaultValue={defaultValue.personal_id} placeholder="Nhập số căn cước công dân" />
+      <Form.Item label="CCCD" name="identity_card" rules={[{ required: true, message: 'Nhập số căn cước công dân' }]}>
+        <Input placeholder="Nhập số căn cước công dân" />
       </Form.Item>
 
       <Form.Item label="Địa chỉ" name="address" rules={[{ required: true, message: 'Nhập địa chỉ' }]}>
-        <Input defaultValue={defaultValue.address} placeholder="Nhập địa chỉ" />
+        <Input placeholder="Nhập địa chỉ" />
       </Form.Item>
 
       <Form.Item label="SĐT" name="phone_number" rules={[{ required: true, message: 'Nhập số điện thoại' }]}>
-        <Input defaultValue={defaultValue.phone_number} placeholder="Nhập số điện thoại" />
+        <Input placeholder="Nhập số điện thoại" />
       </Form.Item>
+
       <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Nhập email' }]}>
-        <Input defaultValue={defaultValue.email} placeholder="Nhập email" />
+        <Input placeholder="Nhập email" />
       </Form.Item>
-      <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Nhập password' }]}>
-        <Input defaultValue={defaultValue.password} placeholder="Nhập password" />
+
+      <Form.Item label="Loại nhân viên" name="role" rules={[{ required: true, message: 'Chọn loại nhân viên' }]}>
+        <Select style={{ width: 400 }} options={ROLES} placeholder="Chọn loại nhân viên" />
       </Form.Item>
-      <Form.Item label="Loại nhân viên" name="type_staff" rules={[{ required: true, message: 'Nhập loại nhân viên' }]}>
-        <Input defaultValue={defaultValue.type_staff} placeholder="Nhập loại nhân viên" />
+
+      <Form.Item label="Trạng thái" name="status" rules={[{ required: true, message: 'Chọn trạnh thái nhân viên' }]}>
+        <Select style={{ width: 400 }} options={STATUS} placeholder="Chọn trạng thái nhân viên" />
       </Form.Item>
-      <Form.Item wrapperCol={{ offset: 2, span: 16 }}>
+
+      <Form.Item wrapperCol={{ offset: 16, span: 16 }}>
         <Button type="primary" htmlType="submit">
           {submitText}
         </Button>
