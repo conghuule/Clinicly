@@ -2,6 +2,7 @@ import { Button, Input, Modal } from 'antd';
 import { React, useState, useRef } from 'react';
 import PatientTable from '../Table/PatientTable';
 import PatientModal from '../../components/Modal/PatientModal';
+import WaitingPatientTable from '../Table/WaitingPatientTable';
 const { Search } = Input;
 
 export default function AddWaitListModal(props) {
@@ -32,7 +33,7 @@ export default function AddWaitListModal(props) {
           />
         </div>
       </div>
-      <PatientTable searchValue={searchValue} ref={patientTableRef} />
+      <WaitingPatientTable searchValue={searchValue} ref={patientTableRef} />
     </Modal>
   );
 }
