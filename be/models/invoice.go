@@ -191,9 +191,9 @@ func GetRevenueMetric(startDate, endDate time.Time) (revenueData []int, newReven
 		Date    time.Time
 	}
 
-	err = DB.Raw(`SELECT coalesce(SUM("TongTien"), 0), Date("NgayTao") FROM "HoaDon" 
-	WHERE "NgayTao" BETWEEN ? AND ?
-	AND "TTThanhToan" = true
+	err = DB.Raw(`SELECT coalesce(SUM("TongTien"), 0) Revenue, Date("NgayTao") FROM "HoaDon" 
+	WHERE "TTThanhToan" = true
+	AND "NgayTao" BETWEEN ? AND ?
 	GROUP BY Date("NgayTao")
 	ORDER BY DATE("NgayTao")`, startDate, endDate).Scan(&result).Error
 	if err != nil {

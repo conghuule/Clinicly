@@ -1,4 +1,4 @@
-import { Tag } from 'antd';
+import { Space, Tag, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DateFormat } from './utils';
@@ -261,6 +261,109 @@ export const REGULATION_COLUMNS = [
     title: 'Giá trị',
     dataIndex: 'value',
     key: 'value',
+  },
+];
+
+export const MEDICAL_REPORT_COLUMN = [
+  {
+    title: 'Mã bệnh nhân',
+    dataIndex: 'patient_id',
+    key: 'patient_id',
+  },
+  {
+    title: 'Họ tên',
+    dataIndex: 'patient_name',
+    key: 'patient_name',
+  },
+  {
+    title: 'Ngày khám',
+    dataIndex: 'date',
+    key: 'date',
+    render: (date) => DateFormat(date),
+  },
+  {
+    title: 'Bác sĩ',
+    dataIndex: 'doctor_name',
+    key: 'doctor_name',
+  },
+];
+
+export const PRESCRIPTION_COLUMN = [
+  {
+    title: 'STT',
+    render: (_, record, rowIndex) => <div>{rowIndex + 1}</div>,
+  },
+  {
+    title: 'Mã thuốc',
+    dataIndex: 'id',
+    key: 'id',
+  },
+  {
+    title: 'Tên thuốc',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: 'Số lượng',
+    dataIndex: 'quantity',
+    key: 'quantity',
+  },
+  {
+    title: 'Đơn vị',
+    dataIndex: 'unit',
+    key: 'unit',
+  },
+  {
+    title: 'Cách dùng',
+    dataIndex: 'instruction',
+    key: 'instruction',
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'action',
+    key: 'action',
+    render: ({ modify, remove }) => (
+      <Space size="middle">
+        <span className="text-primary-200 cursor-pointer" onClick={modify}>
+          Sửa
+        </span>
+        <span className="text-danger cursor-pointer" onClick={remove}>
+          Xóa
+        </span>
+      </Space>
+    ),
+  },
+];
+
+export const PRESCRIPTION_VIEW_COLUMN = [
+  {
+    title: 'STT',
+    render: (_, record, rowIndex) => <div>{rowIndex + 1}</div>,
+  },
+  {
+    title: 'Mã thuốc',
+    dataIndex: 'id',
+    key: 'id',
+  },
+  {
+    title: 'Tên thuốc',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: 'Số lượng',
+    dataIndex: 'quantity',
+    key: 'quantity',
+  },
+  {
+    title: 'Đơn vị',
+    dataIndex: 'unit',
+    key: 'unit',
+  },
+  {
+    title: 'Cách dùng',
+    dataIndex: 'instruction',
+    key: 'instruction',
   },
 ];
 

@@ -25,6 +25,17 @@ func (Prescription) TableName() string {
 	return TableNamePrescription
 }
 
+func (prescription *Prescription) AfterFind(db *gorm.DB) (err error) {
+	medicine, err := GetMedicineByID(prescription.MedicineID)
+	if err != nil {
+		return err
+	}
+
+	prescription.Medicine = medicine
+
+	return nil
+}
+
 func (prescription *Prescription) BeforeCreate(db *gorm.DB) (err error) {
 	db.Statement.AddClause(clause.OnConflict{
 		DoNothing: true,
