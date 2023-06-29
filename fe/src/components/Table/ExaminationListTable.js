@@ -44,9 +44,5 @@ export default function ExaminationListTable({ searchValue = '' }) {
     }))
     .filter((patient) => patient.full_name.toLowerCase().includes(searchValue.toLowerCase()));
 
-  return (
-    <>
-      <Table dataSource={filteredPatients} columns={PATIENT_COLUMNS_BEING_EXAMINED} loading={patients.loading} />
-    </>
-  );
+  return <Table dataSource={filteredPatients} columns={PATIENT_COLUMNS_BEING_EXAMINED} loading={patients.loading} />;
 }

@@ -58,7 +58,7 @@ const WaitingListTable = forwardRef((props, ref) => {
     <>
       <Table dataSource={filteredPatients} columns={PATIENT_COLUMNS} loading={patients.loading} ref={ref} />
       <ConfirmDeleteModal
-        title={selectedPatient.name}
+        title={` bệnh nhân ${selectedPatient.name}`}
         open={openModal}
         onCancel={() => setOpenModal(false)}
         onOk={() => deletePatient(selectedPatient)}

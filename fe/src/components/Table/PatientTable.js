@@ -108,7 +108,7 @@ const PatientTable = ({ searchValue }, ref) => {
         rowClassName="cursor-pointer"
       />
       <ConfirmDeleteModal
-        title={selectedPatient.name}
+        title={` bệnh nhân ${selectedPatient.name}`}
         open={openModal}
         onCancel={() => setOpenModal(false)}
         onOk={() => deletePatient(selectedPatient)}
