@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
 import Modal from '../../components/Modal/Modal';
 import HeaderBar from '../../components/HeaderBar';
-import { Input } from 'antd';
+import { Input, Select } from 'antd';
 import InvoiceTable from '../../components/Table/InvoiceTable';
 import ConfirmPublishInvoiceModal from '../../components/Modal/ConfirmPublishInvoiceModal';
-import { Button, Dropdown, Menu } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 import { AuthContext } from '../../context/authContext';
+import { DELIVERY_STATUS, PAYMENT_STATUS } from '../../utils/constants';
 
 const { Search } = Input;
 export default function Invoices() {
@@ -16,36 +16,13 @@ export default function Invoices() {
   const [searchValue, setSearchValue] = useState('');
   const [deliveryStatus, setDeliveryStatus] = useState('');
   const [paymentStatus, setPaymentStatus] = useState('');
-  const handleDeliveryStatusChange = (event) => {
-    setDeliveryStatus(event.key);
-  };
-  const handlePaymentStatusChange = (event) => {
-    setPaymentStatus(event.key);
-  };
+
   const onSearch = (value) => {
     setSearchValue(value);
   };
+
   const [openModal, setOpenModal] = useState(false);
-  const menuDelivery = (
-    <Menu onClick={handleDeliveryStatusChange}>
-      <Menu.Item key={true} className="h-[40px]">
-        Đã giao
-      </Menu.Item>
-      <Menu.Item key={false} className="h-[40px]">
-        Chưa giao
-      </Menu.Item>
-    </Menu>
-  );
-  const menuPayment = (
-    <Menu onClick={handlePaymentStatusChange}>
-      <Menu.Item key={true} className="h-[40px]">
-        Đã thanh toán
-      </Menu.Item>
-      <Menu.Item key={false} className="h-[40px]">
-        Chưa thanh toán
-      </Menu.Item>
-    </Menu>
-  );
+
   return (
     <div>
       <HeaderBar title="Hoá đơn" icon={faFileInvoiceDollar} image="" name={auth.full_name} role={auth.role} />
@@ -57,18 +34,24 @@ export default function Invoices() {
           className="rounded-[4px]"
           size="large"
         />
-        <Dropdown overlay={menuDelivery} className="h-[40px]">
-          <Button style={{ display: 'inline-block', width: 400 }}>
-            {deliveryStatus === '' ? 'Tình trạng thanh toán' : deliveryStatus ? 'Đã giao' : 'Chưa giao'}{' '}
-            <DownOutlined />
-          </Button>
-        </Dropdown>
-        <Dropdown overlay={menuPayment} className="h-[40px]">
-          <Button style={{ display: 'inline-block', width: 400 }}>
-            {paymentStatus === '' ? 'Tình trạng giao hàng' : paymentStatus ? 'Đã thanh toán' : 'Chưa thanh toán'}{' '}
-            <DownOutlined />
-          </Button>
-        </Dropdown>
+
+        <Select
+          options={DELIVERY_STATUS}
+          value={deliveryStatus || null}
+          onChange={(value) => setDeliveryStatus(value)}
+          placeholder="Thông tin vận chuyển"
+          style={{ width: 500 }}
+          size="large"
+        />
+        <Select
+          options={PAYMENT_STATUS}
+          value={paymentStatus || null}
+          onChange={(value) => setPaymentStatus(value)}
+          placeholder="Thông tin thanh toán"
+          style={{ width: 500 }}
+          size="large"
+        />
+
         <Button
           className="h-[40px]"
           onClick={() => {
@@ -79,6 +62,7 @@ export default function Invoices() {
         >
           <FontAwesomeIcon icon={faRotate} />
         </Button>
+
         <div>
           {openModal ? (
             <Modal>

@@ -20,10 +20,10 @@ const PatientTable = ({ searchValue }, ref) => {
   const deletePatient = async ({ id, name }) => {
     try {
       await patientApi.delete(id);
-      notify({ type: 'success', mess: `Xóa ${name} thành công` });
+      notify({ type: 'success', mess: `Xóa bệnh nhân ${name} thành công` });
       getPatients(searchValue);
     } catch (error) {
-      notify({ type: 'error', mess: 'Xóa thất bại' });
+      notify({ type: 'error', mess: `Xóa bệnh nhân ${name} thất bại` });
     }
 
     setOpenModal(false);

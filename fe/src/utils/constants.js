@@ -223,6 +223,7 @@ export const INVOICE_COLUMNS = [
     title: 'Thao tác',
     dataIndex: 'actions',
     key: 'actions',
+    width: '400px',
     render: (_, { actions }) => (
       <>
         {actions.map((action) => {
@@ -234,6 +235,7 @@ export const INVOICE_COLUMNS = [
                 e.stopPropagation();
                 action.onClick(e);
               }}
+              className={`${action.disabled ? 'cursor-no-drop opacity-60' : ''}`}
             >
               {action.value.toUpperCase()}
             </Tag>
@@ -318,16 +320,19 @@ export const GENDERS = [
   { value: 2, label: 'Nữ' },
   { value: 3, label: 'Khác' },
 ];
+
 export const ROLES = [
   { value: 1, label: 'Tiếp tân' },
   { value: 2, label: 'Bác sĩ' },
   { value: 3, label: 'Dược sĩ' },
   { value: 4, label: 'Quản lý' },
 ];
+
 export const STATUS = [
   { value: 1, label: 'Đang làm' },
   { value: 2, label: 'Đã nghỉ' },
 ];
+
 export const UNITS = [
   { label: 'Viên', value: 1 },
   { label: 'Chai', value: 2 },

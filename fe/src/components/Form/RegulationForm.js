@@ -11,8 +11,8 @@ export default function StaffForm({ defaultValue = {}, onSubmit, submitText }) {
       autoComplete="off"
       className="mt-[40px]"
     >
-      <Form.Item label="ID" name="id">
-        <Input placeholder="Nhập ID" disabled />
+      <Form.Item label="Mã quy định" name="id">
+        <Input placeholder="Nhập mã quy định" disabled />
       </Form.Item>
       <Form.Item label="Tên quy định" name="name">
         <Input placeholder="Nhập tên quy định" disabled />

@@ -24,11 +24,11 @@ const StaffTable = ({ searchValue }, ref) => {
   const deleteStaff = async ({ id, name }) => {
     try {
       await staffAPI.delete(id);
-      notify({ type: 'success', mess: `Xóa ${name} thành công` });
+      notify({ type: 'success', mess: `Xóa nhân viên ${name} thành công` });
       getStaffs(searchValue);
     } catch (error) {
       console.log(error);
-      notify({ type: 'error', mess: 'Xóa thất bại' });
+      notify({ type: 'error', mess: `Xóa nhân viên ${name} thất bại` });
     }
 
     setOpenDeleteModal(false);
