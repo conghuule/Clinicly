@@ -49,7 +49,9 @@ export default function PatientDetail() {
           <Button type="primary" onClick={() => navigate(`create_medical_report`)}>
             Tạo phiếu khám
           </Button>
-          <Button type="primary">Lịch sử khám</Button>
+          <Button type="primary">
+            <Link to={`/patients/${id}/history`}>Lịch sử khám</Link>
+          </Button>
         </div>
       </div>
       <h3 className="text-[32px] font-semibold mt-[20px]">{patient.name}</h3>

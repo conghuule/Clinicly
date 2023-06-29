@@ -6,6 +6,7 @@ const routes = {
   patient_detail: '/patients/:id',
   medical_report: '/patients/:id/medical_report/:medical_report_id',
   create_medical_report: '/patients/:id/create_medical_report',
+  patient_history: '/patients/:id/history',
   medicines: '/medicines',
   medicine_detail: '/medicines/:id',
   invoices: '/invoices',
