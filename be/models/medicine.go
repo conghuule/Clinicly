@@ -57,7 +57,7 @@ func (medicine *Medicine) Delete() (*Medicine, error) {
 func GetMedicine(query ...func(*gorm.DB) *gorm.DB) ([]Medicine, error) {
 	medicines := []Medicine{}
 
-	err := DB.Select("ID", "Name", "Quantity", "Price").Scopes(query...).Find(&medicines).Error
+	err := DB.Select("ID", "Name", "Quantity", "Price", "Unit").Scopes(query...).Find(&medicines).Error
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +86,7 @@ func GetMedicineMetric(startDate, endDate time.Time) (medicineData []int, newMed
 		Date  time.Time
 	}
 
-	err = DB.Raw(`SELECT coalesce(SUM("SoLuong"), 0), Date(hd."NgayTao") FROM "HoaDon" hd
+	err = DB.Raw(`SELECT coalesce(SUM("SoLuong"), 0) Count, Date(hd."NgayTao") FROM "HoaDon" hd
 	JOIN "DonThuoc" dt ON hd."MaPK" = dt."MaPK"
 	WHERE hd."NgayTao" BETWEEN ? AND ?
 	AND "TTGiaoThuoc" = true

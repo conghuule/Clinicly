@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { faHospitalUser } from '@fortawesome/free-solid-svg-icons';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import PatientForm from '../../components/Form/PatientForm';
 import HeaderBar from '../../components/HeaderBar';
 import { Button } from 'antd';
@@ -15,6 +15,7 @@ export default function PatientDetail() {
   const { auth } = useContext(AuthContext);
   const { id } = useParams();
   const [patient, setPatient] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -45,7 +46,9 @@ export default function PatientDetail() {
           <Button type="primary">Trở về</Button>
         </Link>
         <div className="flex gap-[20px]">
-          <Button type="primary">Tạo phiếu khám</Button>
+          <Button type="primary" onClick={() => navigate(`create_medical_report`)}>
+            Tạo phiếu khám
+          </Button>
           <Button type="primary">Lịch sử khám</Button>
         </div>
       </div>

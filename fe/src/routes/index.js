@@ -14,6 +14,8 @@ import WaitingList from '../pages/List/waitingList';
 import ExaminationList from '../pages/List/examinationList';
 import Login from '../pages/Login';
 import NotFound from '../pages/NotFound';
+import MedicalReport from '../pages/Patients/MedicalReport';
+import CreateMedicalReport from '../pages/Patients/CreateMedicalReport';
 
 const publicRoutes = [
   { path: config.routes.login, element: Login, layout: null },
@@ -24,6 +26,8 @@ const privateRoutes = [
   { path: config.routes.home, element: Home },
   { path: config.routes.patients, element: Patients },
   { path: config.routes.patient_detail, element: PatientDetail },
+  { path: config.routes.medical_report, element: MedicalReport },
+  { path: config.routes.create_medical_report, element: CreateMedicalReport },
   { path: config.routes.medicines, element: Medicines },
   { path: config.routes.medicine_detail, element: MedicineDetail },
   { path: config.routes.invoices, element: Invoices },
