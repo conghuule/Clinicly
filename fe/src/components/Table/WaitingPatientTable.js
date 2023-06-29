@@ -4,6 +4,10 @@ import patientApi from '../../services/patientApi';
 import waitingListApi from '../../services/waitingListApi';
 import { PATIENT_COLUMNS_IN_WAITING_LIST } from '../../utils/constants';
 import ConfirmAddModal from '../Modal/ConfirmAddModal';
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6abce31 (doing)
 import { notify } from '../Notification/Notification';
 
 const WaitingPatientTable = ({ searchValue }, ref) => {
@@ -16,6 +20,12 @@ const WaitingPatientTable = ({ searchValue }, ref) => {
   });
   useEffect(() => {
     getPatients();
+  });
+
+  useImperativeHandle(ref, () => {
+    return {
+      getPatients,
+    };
   });
 
   const addPatient = async ({ id, name }) => {
