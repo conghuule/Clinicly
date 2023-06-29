@@ -59,12 +59,14 @@ export default function Invoices() {
         />
         <Dropdown overlay={menuDelivery} className="h-[40px]">
           <Button style={{ display: 'inline-block', width: 400 }}>
-            {deliveryStatus} <DownOutlined />
+            {deliveryStatus === '' ? 'Tình trạng thanh toán' : deliveryStatus ? 'Đã giao' : 'Chưa giao'}{' '}
+            <DownOutlined />
           </Button>
         </Dropdown>
         <Dropdown overlay={menuPayment} className="h-[40px]">
           <Button style={{ display: 'inline-block', width: 400 }}>
-            {paymentStatus} <DownOutlined />
+            {paymentStatus === '' ? 'Tình trạng giao hàng' : paymentStatus ? 'Đã thanh toán' : 'Chưa thanh toán'}{' '}
+            <DownOutlined />
           </Button>
         </Dropdown>
         <Button

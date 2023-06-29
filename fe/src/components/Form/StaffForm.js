@@ -3,6 +3,12 @@ import { Button, DatePicker, Form, Input, Select } from 'antd';
 import { GENDERS, ROLES, STATUS } from '../../utils/constants';
 
 export default function StaffForm({ defaultValue = {}, onSubmit, submitText, isAdd = false }) {
+  const validateInput = (_, value) => {
+    if (value && value.length !== 12) {
+      return Promise.reject('Căn cước công dân phải bao gồm 12 số');
+    }
+    return Promise.resolve();
+  };
   return (
     <Form
       name="newStaff-form"
@@ -25,10 +31,13 @@ export default function StaffForm({ defaultValue = {}, onSubmit, submitText, isA
         <DatePicker style={{ width: 400 }} placeholder="Chọn ngày sinh" />
       </Form.Item>
 
-      <Form.Item label="CCCD" name="identity_card" rules={[{ required: true, message: 'Nhập số căn cước công dân' }]}>
+      <Form.Item
+        label="CCCD"
+        name="identity_card"
+        rules={[{ required: true, message: 'Nhập số căn cước công dân' }, { validator: validateInput }]}
+      >
         <Input placeholder="Nhập số căn cước công dân" />
       </Form.Item>
-
       <Form.Item label="Địa chỉ" name="address" rules={[{ required: true, message: 'Nhập địa chỉ' }]}>
         <Input placeholder="Nhập địa chỉ" />
       </Form.Item>
@@ -49,12 +58,12 @@ export default function StaffForm({ defaultValue = {}, onSubmit, submitText, isA
         <Select style={{ width: 400 }} options={ROLES} placeholder="Chọn vai trò" />
       </Form.Item>
 
-      <Form.Item label="Lương" name="salary">
+      <Form.Item label="Lương" name="salary" rules={[{ required: true }]}>
         <Input placeholder="Nhập số lương" />
       </Form.Item>
 
       <Form.Item name="status" label="Trạng thái">
-        <Select style={{ width: 400 }} options={STATUS} placeholder="Chọn trạng thái" />
+        <Select style={{ width: 400 }} defaultValue={STATUS[0]} options={STATUS} placeholder="Chọn trạng thái" />
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 20, span: 4 }}>
