@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import React, { useContext, useEffect, useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
 import AddWaitListModal from '../../components/Modal/AddWaitListModal';
+import ConfirmAddExamination from '../../components/Modal/ConfirmAddExamination';
 import WaitingListTable from '../../components/Table/WaitingListTable';
 import { AuthContext } from '../../context/authContext';
 import waitingListApi from '../../services/waitingListApi';

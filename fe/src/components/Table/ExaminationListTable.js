@@ -1,14 +1,13 @@
 import { Table } from 'antd';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import examinationListApi from '../../services/examinationListApi';
-import { PATIENT_COLUMNS } from '../../utils/constants';
-import ConfirmDeleteModal from '../Modal/ConfirmDeleteModal';
+import { PATIENT_COLUMNS_BEING_EXAMINED } from '../../utils/constants';
 import { notify } from '../Notification/Notification';
 
 export default function ExaminationListTable({ searchValue = '' }) {
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState({ name: '', id: null });
+  const navigate = useNavigate();
   const [patients, setPatients] = useState({
     data: [],
     loading: true,
@@ -30,17 +29,6 @@ export default function ExaminationListTable({ searchValue = '' }) {
     getPatients(searchValue);
   }, [searchValue]);
 
-  const deletePatient = async ({ id, name }) => {
-    try {
-      await examinationListApi.delete(id);
-      notify({ type: 'success', mess: `Xóa bệnh nhân ${name} thành công` });
-      getPatients();
-    } catch (error) {
-      notify({ type: 'error', mess: 'Xóa thất bại' });
-    }
-    setOpenModal(false);
-  };
-
   const filteredPatients = patients.data
     .map((patient) => ({
       ...patient.patient,
@@ -48,12 +36,9 @@ export default function ExaminationListTable({ searchValue = '' }) {
       birth_date: dayjs(patient.patient.birth_date).format('DD-MM-YYYY'),
       actions: [
         {
-          value: 'Xoá',
-          color: '#dc2626',
-          onClick: () => {
-            setOpenModal(true);
-            setSelectedPatient({ name: patient.patient.full_name, id: patient.id });
-          },
+          value: 'Khám',
+          color: '##2ecc71',
+          onClick: () => navigate(`/patients/${patient.patient.id}`),
         },
       ],
     }))
@@ -61,13 +46,7 @@ export default function ExaminationListTable({ searchValue = '' }) {
 
   return (
     <>
-      <Table dataSource={filteredPatients} columns={PATIENT_COLUMNS} loading={patients.loading} />
-      <ConfirmDeleteModal
-        title={selectedPatient.name}
-        open={openModal}
-        onCancel={() => setOpenModal(false)}
-        onOk={() => deletePatient(selectedPatient)}
-      />
+      <Table dataSource={filteredPatients} columns={PATIENT_COLUMNS_BEING_EXAMINED} loading={patients.loading} />
     </>
   );
 }
