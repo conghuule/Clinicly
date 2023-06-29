@@ -114,7 +114,7 @@ const StaffTable = ({ searchValue }, ref) => {
       {openDeleteModal ? (
         <Modal>
           <ConfirmDeleteModal
-            title={deleteTitle}
+            title={` nhân viên ${deleteTitle}`}
             open={openDeleteModal}
             onCancel={() => setOpenDeleteModal(false)}
             onOk={() => deleteStaff(selectedStaff)}

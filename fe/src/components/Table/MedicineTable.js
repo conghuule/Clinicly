@@ -106,7 +106,7 @@ const MedicineTable = ({ searchValue }, ref) => {
         rowClassName="cursor-pointer"
       />
       <ConfirmDeleteModal
-        title={selectedMedicine.name}
+        title={` thuốc ${selectedMedicine.name}`}
         open={openModal}
         onCancel={() => setOpenModal(false)}
         onOk={() => deleteMedicine(selectedMedicine)}
