@@ -21,7 +21,6 @@ export default function MedicineDetail() {
       setMedicine(response.data);
     })();
   }, [id]);
-
   const onSubmit = async (values) => {
     try {
       const newMedicine = {

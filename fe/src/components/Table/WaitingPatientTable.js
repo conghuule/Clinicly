@@ -4,6 +4,9 @@ import patientApi from '../../services/patientApi';
 import waitingListApi from '../../services/waitingListApi';
 import { PATIENT_COLUMNS_IN_WAITING_LIST } from '../../utils/constants';
 import ConfirmAddModal from '../Modal/ConfirmAddModal';
+
+import patientApi from '../../services/patientApi';
+
 import { notify } from '../Notification/Notification';
 
 const WaitingListTable = ({ searchValue }, ref) => {
