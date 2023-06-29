@@ -12,10 +12,10 @@ export default function PatientModal(props) {
         ...values,
         birth_date: dayjs(values.birth_date).format('YYYY-MM-DD'),
       });
-      notify({ type: 'success', mess: `Thêm ${values.full_name} thành công` });
+      notify({ type: 'success', mess: `Thêm bệnh nhân ${values.full_name} thành công` });
       props.getPatients('');
     } catch (error) {
-      notify({ type: 'error', mess: `Thêm ${values.full_name} thất bại` });
+      notify({ type: 'error', mess: `Thêm bệnh nhân ${values.full_name} thất bại` });
     }
     props.onCancel();
   };

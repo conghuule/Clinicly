@@ -21,10 +21,10 @@ const WaitingPatientTable = ({ searchValue }, ref) => {
   const addPatient = async ({ id, name }) => {
     try {
       await waitingListApi.post({ patient_id: Number(id) });
-      notify({ type: 'success', mess: `Thêm ${name} vào danh sách đợi khám thành công` });
+      notify({ type: 'success', mess: `Thêm bệnh nhân ${name} vào danh sách đợi khám thành công` });
       getPatients(searchValue);
     } catch (error) {
-      notify({ type: 'error', mess: 'Thêm vào danh sách đợi khám thất bại' });
+      notify({ type: 'error', mess: `Thêm bệnh nhân ${name} vào danh sách đợi khám thất bại` });
     }
 
     setOpenModal(false);

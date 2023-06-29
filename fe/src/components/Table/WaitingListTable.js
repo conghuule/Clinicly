@@ -33,7 +33,7 @@ const WaitingListTable = forwardRef((props, ref) => {
       notify({ type: 'success', mess: `Xóa bệnh nhân ${name} thành công` });
       getPatients();
     } catch (error) {
-      notify({ type: 'error', mess: 'Xóa thất bại' });
+      notify({ type: 'error', mess: `Xóa bệnh nhân ${name} thất bại` });
     }
     setOpenModal(false);
   };

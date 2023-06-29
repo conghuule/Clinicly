@@ -14,7 +14,7 @@ export default function StaffForm({ defaultValue = {}, onSubmit, submitText, isA
       name="newStaff-form"
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 18 }}
-      initialValues={{ ...defaultValue }}
+      initialValues={{ ...defaultValue, status: defaultValue.status || 1 }}
       onFinish={onSubmit}
       autoComplete="off"
       className="mt-[40px]"
@@ -54,16 +54,16 @@ export default function StaffForm({ defaultValue = {}, onSubmit, submitText, isA
         </Form.Item>
       )}
 
-      <Form.Item name="role" label="Vai trò" rules={[{ required: true }]}>
+      <Form.Item name="role" label="Vai trò" rules={[{ required: true, message: 'Chọn vai trò' }]}>
         <Select style={{ width: 400 }} options={ROLES} placeholder="Chọn vai trò" />
       </Form.Item>
 
-      <Form.Item label="Lương" name="salary" rules={[{ required: true }]}>
+      <Form.Item label="Lương" name="salary" rules={[{ required: true, message: 'Nhập số lương' }]}>
         <Input placeholder="Nhập số lương" />
       </Form.Item>
 
-      <Form.Item name="status" label="Trạng thái">
-        <Select style={{ width: 400 }} defaultValue={STATUS[0]} options={STATUS} placeholder="Chọn trạng thái" />
+      <Form.Item name="status" label="Trạng thái" rules={[{ required: true, message: 'Chọn trạng thái' }]}>
+        <Select style={{ width: 400 }} options={STATUS} placeholder="Chọn trạng thái" />
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 20, span: 4 }}>

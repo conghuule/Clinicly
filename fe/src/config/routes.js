@@ -10,7 +10,7 @@ const routes = {
   medicine_detail: '/medicines/:id',
   invoices: '/invoices',
   invoice_detail: '/invoices/:id',
-  staffs: '/manage/staffs',
+  staffs: '/manage',
   staff_detail: '/manage/staffs/:id',
   regulations: '/manage/regulations',
   regulation_detail: '/manage/regulations/:id',

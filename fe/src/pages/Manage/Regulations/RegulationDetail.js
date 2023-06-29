@@ -40,7 +40,7 @@ export default function RegulationDetail() {
           <Button type="primary">Trở về</Button>
         </Link>
       </div>
-      <h3 className="text-[32px] font-semibold mt-[20px]">Chi tiết quy định {regulation.id}</h3>
+      <h3 className="text-[32px] font-semibold mt-[20px]">Chi tiết quy định {regulation.name}</h3>
       {regulation.id && <RegulationForm defaultValue={regulation} onSubmit={onSubmit} submitText="Cập nhật" />}
     </div>
   );

@@ -11,11 +11,14 @@ export default function InvoiceTable({ searchValue, deliveryStatus, paymentStatu
   const navigate = useNavigate();
   const [openBillModal, setOpenBillModal] = useState(false);
   const [invoices, setInvoices] = useState([]);
-  const payment_status = paymentStatus === '' ? paymentStatus : JSON.parse(paymentStatus);
-  const delivery_status = deliveryStatus === '' ? paymentStatus : JSON.parse(deliveryStatus);
+  const payment_status = paymentStatus === '' ? paymentStatus : paymentStatus === 1;
+  const delivery_status = deliveryStatus === '' ? paymentStatus : deliveryStatus === 1;
+
   useEffect(() => {
     getInvoices();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   async function getInvoices() {
     try {
       const res = await invoiceAPI.getInvoices();
@@ -23,8 +26,16 @@ export default function InvoiceTable({ searchValue, deliveryStatus, paymentStatu
       json.forEach((element) => {
         element.key = element.id;
         element.actions = [
-          { value: 'Thanh toán', onClick: () => updatePaymentStatus(element.id, element.payment_status) },
-          { value: 'Giao thuốc', onClick: () => updateDeliveryStatus(element.id, element.delivery_status) },
+          {
+            value: 'Thanh toán',
+            disabled: payment_status === true,
+            onClick: () => updatePaymentStatus(element.id, element.payment_status),
+          },
+          {
+            value: 'Giao thuốc',
+            disabled: delivery_status === true,
+            onClick: () => updateDeliveryStatus(element.id, element.delivery_status),
+          },
           { value: 'Xuất hoá đơn', onClick: () => setOpenBillModal(true) },
         ];
       });
