@@ -1,11 +1,10 @@
 import { Table } from 'antd';
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import patientApi from '../../services/patientApi';
+import waitingListApi from '../../services/waitingListApi';
 import { PATIENT_COLUMNS_IN_WAITING_LIST } from '../../utils/constants';
 import ConfirmAddModal from '../Modal/ConfirmAddModal';
-import patientApi from '../../services/patientApi';
-import dayjs from 'dayjs';
 import { notify } from '../Notification/Notification';
-import waitingListApi from '../../services/waitingListApi';
 
 const WaitingListTable = ({ searchValue }, ref) => {
   const [openModal, setOpenModal] = useState(false);
@@ -14,6 +13,9 @@ const WaitingListTable = ({ searchValue }, ref) => {
     data: [],
     loading: true,
     params: { page_size: 10, page: 1, total_page: 0 },
+  });
+  useEffect(() => {
+    getPatients();
   });
 
   const addPatient = async ({ id, name }) => {
@@ -27,12 +29,6 @@ const WaitingListTable = ({ searchValue }, ref) => {
 
     setOpenModal(false);
   };
-
-  useImperativeHandle(ref, () => {
-    return {
-      getPatients,
-    };
-  });
 
   const getPatients = async (searchValue) => {
     try {
