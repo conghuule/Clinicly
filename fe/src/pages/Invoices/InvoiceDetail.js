@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
 import { Link, useParams } from 'react-router-dom';
@@ -11,14 +12,13 @@ import invoiceAPI from '../../services/invoiceAPI';
 export default function InvoiceDetail() {
   const { id } = useParams();
   const [invoiceDetail, setInvoiceDetail] = useState({});
-
   useEffect(() => {
     getInvoiceDetail(id);
-  });
-
+  }, []);
   async function getInvoiceDetail(id) {
     const res = await invoiceAPI.getInvoiceDetail(id);
-    setInvoiceDetail(res.data);
+    const json = res.data;
+    setInvoiceDetail(json);
   }
 
   return (

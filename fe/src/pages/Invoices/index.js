@@ -1,4 +1,5 @@
-import { faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
+import { faFileInvoiceDollar, faRotate } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
 import Modal from '../../components/Modal/Modal';
 import HeaderBar from '../../components/HeaderBar';
@@ -10,62 +11,37 @@ import { DownOutlined } from '@ant-design/icons';
 import { AuthContext } from '../../context/authContext';
 
 const { Search } = Input;
-
-export default function Bills() {
+export default function Invoices() {
   const { auth } = useContext(AuthContext);
   const [searchValue, setSearchValue] = useState('');
-  const onSearch = (value) => setSearchValue(value);
-  const [openModal, setOpenModal] = useState(false);
-  const handleMenuClick = (e) => {
-    setSearchValue(e.key);
+  const [deliveryStatus, setDeliveryStatus] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState('');
+  const handleDeliveryStatusChange = (event) => {
+    setDeliveryStatus(event.key);
   };
-  const [deliveryStatus, setDeliveryStatus] = useState('Trạng thái giao hàng');
-  const [payStatus, setPayStatus] = useState('Trạng thái thanh toán');
-
+  const handlePaymentStatusChange = (event) => {
+    setPaymentStatus(event.key);
+  };
+  const onSearch = (value) => {
+    setSearchValue(value);
+  };
+  const [openModal, setOpenModal] = useState(false);
   const menuDelivery = (
-    <Menu>
-      <Menu.Item
-        onClick={(e) => {
-          handleMenuClick(e);
-          setDeliveryStatus('Đã giao');
-        }}
-        key="Đã giao"
-        className="h-[40px]"
-      >
+    <Menu onClick={handleDeliveryStatusChange}>
+      <Menu.Item key={true} className="h-[40px]">
         Đã giao
       </Menu.Item>
-      <Menu.Item
-        onClick={(e) => {
-          handleMenuClick(e);
-          setDeliveryStatus('Chưa giao');
-        }}
-        key="Chưa giao"
-        className="h-[40px]"
-      >
+      <Menu.Item key={false} className="h-[40px]">
         Chưa giao
       </Menu.Item>
     </Menu>
   );
   const menuPayment = (
-    <Menu>
-      <Menu.Item
-        onClick={(e) => {
-          handleMenuClick(e);
-          setPayStatus('Đã thanh toán');
-        }}
-        key="Đã thanh toán"
-        className="h-[40px]"
-      >
+    <Menu onClick={handlePaymentStatusChange}>
+      <Menu.Item key={true} className="h-[40px]">
         Đã thanh toán
       </Menu.Item>
-      <Menu.Item
-        onClick={(e) => {
-          handleMenuClick(e);
-          setPayStatus('Chưa thanh toán');
-        }}
-        key="Chưa thanh toán"
-        className="h-[40px]"
-      >
+      <Menu.Item key={false} className="h-[40px]">
         Chưa thanh toán
       </Menu.Item>
     </Menu>
@@ -88,9 +64,19 @@ export default function Bills() {
         </Dropdown>
         <Dropdown overlay={menuPayment} className="h-[40px]">
           <Button style={{ display: 'inline-block', width: 400 }}>
-            {payStatus} <DownOutlined />
+            {paymentStatus} <DownOutlined />
           </Button>
         </Dropdown>
+        <Button
+          className="h-[40px]"
+          onClick={() => {
+            setDeliveryStatus('');
+            setPaymentStatus('');
+            setSearchValue('');
+          }}
+        >
+          <FontAwesomeIcon icon={faRotate} />
+        </Button>
         <div>
           {openModal ? (
             <Modal>
@@ -103,7 +89,7 @@ export default function Bills() {
           ) : null}
         </div>
       </div>
-      <InvoiceTable searchValue={searchValue} />
+      <InvoiceTable searchValue={searchValue} deliveryStatus={deliveryStatus} paymentStatus={paymentStatus} />
     </div>
   );
 }
