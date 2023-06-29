@@ -4,6 +4,7 @@ const routes = {
   logout: '/logout',
   patients: '/patients',
   patient_detail: '/patients/:id',
+  patient_history: '/patients/:id/history',
   medicines: '/medicines',
   medicine_detail: '/medicines/:id',
   invoices: '/invoices',

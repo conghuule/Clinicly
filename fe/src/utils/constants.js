@@ -51,6 +51,55 @@ export const PATIENT_COLUMNS = [
   },
 ];
 
+export const PATIENT_HISTORY_COLUMNS = [
+  {
+    title: 'Mã phiếu khám',
+    dataIndex: 'id',
+    key: 'id',
+    width: 200,
+  },
+  {
+    title: 'Bác sĩ',
+    dataIndex: 'full_name',
+    key: 'full_name',
+  },
+  {
+    title: 'Ngày khám',
+    dataIndex: 'date',
+    key: 'date',
+  },
+  {
+    title: 'Chẩn đoán',
+    dataIndex: 'diagnose',
+    key: 'diagnose',
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'actions',
+    key: 'actions',
+    width: 120,
+    render: (_, { actions }) => (
+      <>
+        {actions.map((action) => {
+          return (
+            <div className="text-center cursor-pointer" key={action.value}>
+              <FontAwesomeIcon
+                icon={faTrash}
+                color={action.color}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  action.onClick(e);
+                }}
+                className="p-[8px] rounded-[50%] hover:bg-[#fecaca]"
+              />
+            </div>
+          );
+        })}
+      </>
+    ),
+  },
+];
+
 export const PATIENT_COLUMNS_IN_WAITING_LIST = [
   {
     title: 'Tên bệnh nhân',

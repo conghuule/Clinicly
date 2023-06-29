@@ -46,7 +46,9 @@ export default function PatientDetail() {
         </Link>
         <div className="flex gap-[20px]">
           <Button type="primary">Tạo phiếu khám</Button>
-          <Button type="primary">Lịch sử khám</Button>
+          <Button type="primary">
+            <Link to={`/patients/${id}/history`}>Lịch sử khám</Link>
+          </Button>
         </div>
       </div>
       <h3 className="text-[32px] font-semibold mt-[20px]">{patient.name}</h3>
