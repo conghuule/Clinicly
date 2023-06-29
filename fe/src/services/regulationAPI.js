@@ -1,8 +1,9 @@
-import { get } from '../api/axiosClient';
+import { get, put } from '../api/axiosClient';
 
 const regulationAPI = {
-  getRegulations: () => get('/regulation'),
-  getRegulationDetail: (id) => get(`/regulation/${id}`),
+  getALL: () => get('/regulation'),
+  getByID: (id) => get(`/regulation?id=${id}`),
+  update: (id, body) => put(`/regulation/${id}`, body),
 };
 
 export default regulationAPI;

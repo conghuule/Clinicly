@@ -5,7 +5,7 @@ export default function InvoiceForm({ invoice }) {
   return (
     <Form
       name="invoice-form"
-      labelCol={{ span: 4 }}
+      labelCol={{ span: 5 }}
       wrapperCol={{ span: 16 }}
       initialValues={{ ...invoice }}
       autoComplete="off"

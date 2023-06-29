@@ -204,10 +204,6 @@ export const STAFF_COLUMNS = [
     title: 'Ngày sinh',
     dataIndex: 'birth_date',
     key: 'birth_date',
-    render: (birth_date) => {
-      const dateObject = new Date(birth_date);
-      return dateObject.toLocaleDateString();
-    },
   },
   {
     title: 'Địa chỉ',
@@ -228,24 +224,22 @@ export const STAFF_COLUMNS = [
     title: 'Thao tác',
     dataIndex: 'actions',
     key: 'actions',
+    width: 120,
     render: (_, { actions }) => (
       <>
         {actions.map((action) => {
-          let color = action.length > 5 ? 'geekblue' : 'green';
-          if (action === 'loser') {
-            color = 'volcano';
-          }
           return (
-            <Tag
-              color={color}
-              key={action}
-              onClick={(e) => {
-                e.stopPropagation();
-                action.onClick(e);
-              }}
-            >
-              {action.value}
-            </Tag>
+            <div className="text-center cursor-pointer" key={action.value}>
+              <FontAwesomeIcon
+                icon={faTrash}
+                color={action.color}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  action.onClick(e);
+                }}
+                className="p-[8px] rounded-[50%] hover:bg-[#fecaca]"
+              />
+            </div>
           );
         })}
       </>
@@ -268,34 +262,6 @@ export const REGULATION_COLUMNS = [
     dataIndex: 'value',
     key: 'value',
   },
-  {
-    title: 'Thao tác',
-    dataIndex: 'actions',
-    key: 'actions',
-    render: (_, { actions }) => (
-      <>
-        {actions.map((action) => {
-          let color = action.length > 5 ? 'geekblue' : 'green';
-          if (action === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag
-              className="cursor-pointer"
-              color={color}
-              key={action}
-              onClick={(e) => {
-                e.stopPropagation();
-                action.onClick(e);
-              }}
-            >
-              {action.value}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
 ];
 
 export const GENDERS = [
@@ -303,8 +269,27 @@ export const GENDERS = [
   { value: 2, label: 'Nữ' },
   { value: 3, label: 'Khác' },
 ];
-
+export const ROLES = [
+  { value: 1, label: 'Tiếp tân' },
+  { value: 2, label: 'Bác sĩ' },
+  { value: 3, label: 'Dược sĩ' },
+  { value: 3, label: 'Quản lý' },
+];
+export const STATUS = [
+  { value: 1, label: 'Đang làm' },
+  { value: 2, label: 'Đã nghỉ' },
+];
 export const UNITS = [
   { label: 'Viên', value: 1 },
   { label: 'Chai', value: 2 },
+];
+
+export const DELIVERY_STATUS = [
+  { label: 'Đã giao', value: 1 },
+  { label: 'Chưa giao', value: 2 },
+];
+
+export const PAYMENT_STATUS = [
+  { label: 'Đã thanh toán', value: 1 },
+  { label: 'Chưa thanh toán', value: 2 },
 ];

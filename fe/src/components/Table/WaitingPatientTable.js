@@ -3,7 +3,6 @@ import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'rea
 import { PATIENT_COLUMNS_IN_WAITING_LIST } from '../../utils/constants';
 import ConfirmAddModal from '../Modal/ConfirmAddModal';
 import patientApi from '../../services/patientApi';
-import dayjs from 'dayjs';
 import { notify } from '../Notification/Notification';
 import waitingListApi from '../../services/waitingListApi';
 
