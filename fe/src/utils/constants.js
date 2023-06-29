@@ -100,6 +100,55 @@ export const PATIENT_COLUMNS_IN_WAITING_LIST = [
   },
 ];
 
+export const PATIENT_COLUMNS_BEING_EXAMINED = [
+  {
+    title: 'Tên bệnh nhân',
+    dataIndex: 'full_name',
+    key: 'full_name',
+  },
+  {
+    title: 'Ngày sinh',
+    dataIndex: 'birth_date',
+    key: 'birth_date',
+    render: ({ birth_date }) => DateFormat(birth_date),
+  },
+  {
+    title: 'Địa chỉ',
+    dataIndex: 'address',
+    key: 'address',
+  },
+  {
+    title: 'Số điện thoại',
+    dataIndex: 'phone_number',
+    key: 'phone_number',
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'actions',
+    key: 'actions',
+    width: 120,
+    render: (_, { actions }) => (
+      <>
+        {actions.map((action) => {
+          return (
+            <Tag
+              className="text-center cursor-pointer"
+              color="#2ecc71"
+              key={action.value}
+              onClick={(e) => {
+                e.stopPropagation();
+                action.onClick(e);
+              }}
+            >
+              {action.value.toUpperCase()}
+            </Tag>
+          );
+        })}
+      </>
+    ),
+  },
+];
+
 export const MEDICINE_COLUMNS = [
   {
     title: 'Mã thuốc',
@@ -273,7 +322,7 @@ export const ROLES = [
   { value: 1, label: 'Tiếp tân' },
   { value: 2, label: 'Bác sĩ' },
   { value: 3, label: 'Dược sĩ' },
-  { value: 3, label: 'Quản lý' },
+  { value: 4, label: 'Quản lý' },
 ];
 export const STATUS = [
   { value: 1, label: 'Đang làm' },

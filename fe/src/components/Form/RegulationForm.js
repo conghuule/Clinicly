@@ -11,11 +11,11 @@ export default function StaffForm({ defaultValue = {}, onSubmit, submitText }) {
       autoComplete="off"
       className="mt-[40px]"
     >
-      <Form.Item label="ID" name="id" rules={[{ required: true, message: 'Nhập ID' }]}>
-        <Input placeholder="Nhập ID" />
+      <Form.Item label="ID" name="id">
+        <Input placeholder="Nhập ID" disabled />
       </Form.Item>
-      <Form.Item label="Tên quy định" name="name" rules={[{ required: true, message: 'Nhập tên quy định' }]}>
-        <Input placeholder="Nhập tên quy định" />
+      <Form.Item label="Tên quy định" name="name">
+        <Input placeholder="Nhập tên quy định" disabled />
       </Form.Item>
       <Form.Item label="Giá trị" name="value" rules={[{ required: true, message: 'Nhập giá trị' }]}>
         <Input placeholder="Nhập giá trị" />

@@ -3,6 +3,12 @@ import { Button, DatePicker, Form, Input, Select } from 'antd';
 import { GENDERS } from '../../utils/constants';
 
 export default function PatientForm({ defaultValue = {}, onSubmit, submitText }) {
+  const validateInput = (_, value) => {
+    if (value && value.length !== 12) {
+      return Promise.reject('Căn cước công dân phải bao gồm 12 số');
+    }
+    return Promise.resolve();
+  };
   return (
     <Form
       name="patient-form"
@@ -25,7 +31,11 @@ export default function PatientForm({ defaultValue = {}, onSubmit, submitText })
         <DatePicker style={{ width: 400 }} placeholder="Chọn ngày sinh" />
       </Form.Item>
 
-      <Form.Item label="CCCD" name="identity_card" rules={[{ required: true, message: 'Nhập số căn cước công dân' }]}>
+      <Form.Item
+        label="CCCD"
+        name="identity_card"
+        rules={[{ required: true, message: 'Nhập số căn cước công dân' }, { validator: validateInput }]}
+      >
         <Input placeholder="Nhập số căn cước công dân" />
       </Form.Item>
 
