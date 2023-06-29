@@ -6,7 +6,7 @@ import patientApi from '../../services/patientApi';
 import { notify } from '../Notification/Notification';
 import waitingListApi from '../../services/waitingListApi';
 
-const WaitingListTable = ({ searchValue }, ref) => {
+const WaitingPatientTable = ({ searchValue }, ref) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState({ name: '', id: null });
   const [patients, setPatients] = useState({
@@ -108,4 +108,4 @@ const WaitingListTable = ({ searchValue }, ref) => {
   );
 };
 
-export default forwardRef(WaitingListTable);
+export default forwardRef(WaitingPatientTable);

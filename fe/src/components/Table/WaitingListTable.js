@@ -1,22 +1,23 @@
+import React, { forwardRef, useEffect, useState, useImperativeHandle } from 'react';
 import { Table } from 'antd';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
 import waitingListApi from '../../services/waitingListApi';
 import { PATIENT_COLUMNS } from '../../utils/constants';
 import ConfirmDeleteModal from '../Modal/ConfirmDeleteModal';
 import { notify } from '../Notification/Notification';
 
-export default function WaitingListTable() {
+const WaitingListTable = forwardRef((props, ref) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState({ name: '', id: null });
-  const [patients, setPatients] = useState({
-    data: [],
-    loading: true,
-  });
+  const { patients, setPatients } = props;
+
+  useEffect(() => {
+    getPatients();
+  }, []);
 
   const getPatients = async () => {
     try {
-      const response = await waitingListApi.getAll();
+      const response = await waitingListApi.getAll({ status: 1 });
       setPatients({
         loading: false,
         data: response.data,
@@ -25,10 +26,6 @@ export default function WaitingListTable() {
       notify({ type: 'error', mess: 'Lấy dữ liệu thất bại' });
     }
   };
-
-  useEffect(() => {
-    getPatients();
-  }, []);
 
   const deletePatient = async ({ id, name }) => {
     try {
@@ -59,7 +56,7 @@ export default function WaitingListTable() {
 
   return (
     <>
-      <Table dataSource={filteredPatients} columns={PATIENT_COLUMNS} loading={patients.loading} />
+      <Table dataSource={filteredPatients} columns={PATIENT_COLUMNS} loading={patients.loading} ref={ref} />
       <ConfirmDeleteModal
         title={selectedPatient.name}
         open={openModal}
@@ -68,4 +65,6 @@ export default function WaitingListTable() {
       />
     </>
   );
-}
+});
+
+export default WaitingListTable;
