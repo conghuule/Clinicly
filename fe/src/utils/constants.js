@@ -414,12 +414,6 @@ export const REGULATION_COLUMNS = [
 
 export const MEDICAL_REPORT_COLUMN = [
   {
-    title: '#',
-    dataIndex: 'index',
-    key: 'index',
-    width: 40,
-  },
-  {
     title: 'Mã bệnh nhân',
     dataIndex: 'patient_id',
     key: 'patient_id',
@@ -443,12 +437,6 @@ export const MEDICAL_REPORT_COLUMN = [
 ];
 
 export const PRESCRIPTION_COLUMN = [
-  {
-    title: '#',
-    dataIndex: 'index',
-    key: 'index',
-    width: 40,
-  },
   {
     title: 'STT',
     render: (_, record, rowIndex) => <div>{rowIndex + 1}</div>,

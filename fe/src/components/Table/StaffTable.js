@@ -101,7 +101,7 @@ const StaffTable = ({ searchValue }, ref) => {
         dataSource={filteredStaffs}
         columns={STAFF_COLUMNS}
         onRow={(record) => ({
-          onClick: () => navigate(record.id.toString()),
+          onClick: () => navigate(`staffs/${record.id.toString()}`),
         })}
         onChange={onChange}
         pagination={{

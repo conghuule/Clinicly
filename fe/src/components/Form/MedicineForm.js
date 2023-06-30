@@ -25,10 +25,6 @@ export default function MedicineForm({ defaultValue = {}, onSubmit, submitText, 
         <Input placeholder="Nhập thông tin" />
       </Form.Item>
 
-      <Form.Item label="Số lượng" name="quantity" rules={[{ required: true, message: 'Nhập số lượng' }]}>
-        <Input placeholder="Nhập số lượng" />
-      </Form.Item>
-
       <Form.Item name="unit" label="Đơn vị" rules={[{ required: true, message: 'Nhập mã đơn vị' }]}>
         <Select style={{ width: 400 }} options={UNITS} placeholder="Chọn đơn vị" />
       </Form.Item>

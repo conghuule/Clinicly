@@ -11,11 +11,12 @@ import { MEDICAL_REPORT_COLUMN, PRESCRIPTION_COLUMN } from '../../utils/constant
 import PrescriptionModal from '../../components/Modal/PrescriptionModal';
 import medicalReportAPI from '../../services/medicalReportApi';
 import { notify } from '../../components/Notification/Notification';
+import waitingListApi from '../../services/waitingListApi';
 
 export default function CreateMedicalReport() {
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
-  const { id } = useParams();
+  const { id, ticket_id } = useParams();
   const [information, setInformation] = useState({
     patient_id: id,
     patient_name: '',
@@ -56,9 +57,9 @@ export default function CreateMedicalReport() {
     getPatient();
   }, [getPatient]);
 
-  const onSubmit = ({ diagnose }) => {
+  const onSubmit = async ({ diagnose }) => {
     try {
-      medicalReportAPI.createMedicalReport({
+      await medicalReportAPI.createMedicalReport({
         diagnose,
         doctor_id: auth.id,
         patient_id: Number(id),
@@ -69,6 +70,11 @@ export default function CreateMedicalReport() {
           index: index + 1,
         })),
       });
+
+      await waitingListApi.update(ticket_id, { status: 3 });
+
+      navigate('/examination_list');
+
       notify({ type: 'success', mess: 'Tạo phiếu khám thành công' });
     } catch (err) {
       console.log(err);
@@ -104,7 +110,14 @@ export default function CreateMedicalReport() {
         <div className="flex flex-col gap-5">
           <div className="flex justify-between align-middle">
             <span className="text-[24px] font-semibold">Đơn thuốc</span>
-            <Button size="middle" type="primary" onClick={() => setOpenModal(true)}>
+            <Button
+              size="middle"
+              type="primary"
+              onClick={() => {
+                setMedicineSelected(null);
+                setOpenModal(true);
+              }}
+            >
               Thêm thuốc
             </Button>
           </div>

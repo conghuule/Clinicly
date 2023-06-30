@@ -39,7 +39,7 @@ export default function ExaminationListTable({ searchValue = '' }) {
         {
           value: 'Khám',
           color: '##2ecc71',
-          onClick: () => navigate(`/patients/${patient.patient.id}`),
+          onClick: () => navigate(`/patients/${patient.patient.id}/create_medical_report/${patient.id}`),
         },
       ],
     }))

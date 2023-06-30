@@ -20,7 +20,7 @@ export default function Medicines() {
       <HeaderBar title="Kho thuốc" icon={faPills} image="" name={auth.full_name} role={auth.role} />
       <div className="flex gap-[80px] mt-[30px] mb-[30px]">
         <Search
-          placeholder="Nhập bệnh nhân cần tìm"
+          placeholder="Nhập tên thuốc cần tìm"
           onSearch={onSearch}
           enterButton
           className="rounded-[4px]"

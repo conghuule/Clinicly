@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, DatePicker, Form, Input, Select } from 'antd';
 import { GENDERS, ROLES, STATUS } from '../../utils/constants';
 
-export default function StaffForm({ defaultValue = {}, onSubmit, submitText, isAdd = false }) {
+export default function StaffForm({ defaultValue = {}, onSubmit, submitText }) {
   const validateInput = (_, value) => {
     if (value && value.length !== 12) {
       return Promise.reject('Căn cước công dân phải bao gồm 12 số');
@@ -48,11 +48,10 @@ export default function StaffForm({ defaultValue = {}, onSubmit, submitText, isA
       <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Nhập số email' }]}>
         <Input placeholder="Nhập email" />
       </Form.Item>
-      {isAdd && (
-        <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Nhập password' }]}>
-          <Input type="password" placeholder="Nhập password" />
-        </Form.Item>
-      )}
+
+      <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Nhập password' }]}>
+        <Input type="password" placeholder="Nhập password" />
+      </Form.Item>
 
       <Form.Item name="role" label="Vai trò" rules={[{ required: true, message: 'Chọn vai trò' }]}>
         <Select style={{ width: 400 }} options={ROLES} placeholder="Chọn vai trò" />

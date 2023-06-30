@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { PATIENT_HISTORY_COLUMNS } from '../../utils/constants';
 import ConfirmDeleteModal from '../Modal/ConfirmDeleteModal';
 import patientApi from '../../services/patientApi';
@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 
 const PatientHistoryTable = ({ searchValue = '' }) => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [selectedHistory, setSelectedHistory] = useState({ name: '', id: null });
   const [history, setHistory] = useState({
@@ -31,7 +32,7 @@ const PatientHistoryTable = ({ searchValue = '' }) => {
 
   const getHistory = async (searchValue) => {
     try {
-      const response = await patientApi.getHistory({ ...history.params, name: searchValue, patient_id: id });
+      const response = await patientApi.getHistory({ ...history.params, name: searchValue, patient: id });
       setHistory({
         ...history,
         loading: false,
@@ -103,7 +104,11 @@ const PatientHistoryTable = ({ searchValue = '' }) => {
           total: history.params.total_page * history.params.page_size,
           showSizeChanger: true,
         }}
+        onRow={(record) => ({
+          onClick: () => navigate(`/patients/${id}/medical_report/${record.id}`),
+        })}
         onChange={onChange}
+        rowClassName="cursor-pointer"
       />
       <ConfirmDeleteModal
         title={` phiếu khám ${selectedHistory.id}`}
