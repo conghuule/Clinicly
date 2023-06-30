@@ -30,8 +30,9 @@ export default function ExaminationListTable({ searchValue = '' }) {
   }, [searchValue]);
 
   const filteredPatients = patients.data
-    .map((patient) => ({
+    .map((patient, index) => ({
       ...patient.patient,
+      index: index + 1,
       key: patient.patient.id,
       birth_date: dayjs(patient.patient.birth_date).format('DD-MM-YYYY'),
       actions: [
@@ -44,9 +45,5 @@ export default function ExaminationListTable({ searchValue = '' }) {
     }))
     .filter((patient) => patient.full_name.toLowerCase().includes(searchValue.toLowerCase()));
 
-  return (
-    <>
-      <Table dataSource={filteredPatients} columns={PATIENT_COLUMNS_BEING_EXAMINED} loading={patients.loading} />
-    </>
-  );
+  return <Table dataSource={filteredPatients} columns={PATIENT_COLUMNS_BEING_EXAMINED} loading={patients.loading} />;
 }

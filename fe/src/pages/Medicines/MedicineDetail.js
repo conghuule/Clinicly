@@ -21,17 +21,19 @@ export default function MedicineDetail() {
       setMedicine(response.data);
     })();
   }, [id]);
+
   const onSubmit = async (values) => {
     try {
       const newMedicine = {
         ...values,
-        unit: UNITS.find((unit) => unit.label === values)?.value || 1,
+        unit: UNITS.find((unit) => unit.value === values.unit)?.value || 1,
         quantity: Number(values.quantity),
+        price: Number(values.price),
       };
       await medicineApi.update(id, newMedicine);
-      notify({ type: 'success', mess: 'Cập nhật thuốc thành công' });
+      notify({ type: 'success', mess: 'Cập nhật thành công' });
     } catch (error) {
-      notify({ type: 'error', mess: 'Cập nhật thuốc thất bại' });
+      notify({ type: 'error', mess: 'Cập nhật thất bại' });
     }
   };
 

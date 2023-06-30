@@ -1,9 +1,15 @@
-import { Space, Tag, Typography } from 'antd';
+import { Space, Tag } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DateFormat } from './utils';
 
 export const PATIENT_COLUMNS = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'Tên bệnh nhân',
     dataIndex: 'full_name',
@@ -51,7 +57,68 @@ export const PATIENT_COLUMNS = [
   },
 ];
 
+export const PATIENT_HISTORY_COLUMNS = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
+  {
+    title: 'Mã phiếu khám',
+    dataIndex: 'id',
+    key: 'id',
+    width: 200,
+  },
+  {
+    title: 'Bác sĩ',
+    dataIndex: 'full_name',
+    key: 'full_name',
+  },
+  {
+    title: 'Ngày khám',
+    dataIndex: 'date',
+    key: 'date',
+  },
+  {
+    title: 'Chẩn đoán',
+    dataIndex: 'diagnose',
+    key: 'diagnose',
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'actions',
+    key: 'actions',
+    width: 120,
+    render: (_, { actions }) => (
+      <>
+        {actions.map((action) => {
+          return (
+            <div className="text-center cursor-pointer" key={action.value}>
+              <FontAwesomeIcon
+                icon={faTrash}
+                color={action.color}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  action.onClick(e);
+                }}
+                className="p-[8px] rounded-[50%] hover:bg-[#fecaca]"
+              />
+            </div>
+          );
+        })}
+      </>
+    ),
+  },
+];
+
 export const PATIENT_COLUMNS_IN_WAITING_LIST = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'Tên bệnh nhân',
     dataIndex: 'full_name',
@@ -61,7 +128,7 @@ export const PATIENT_COLUMNS_IN_WAITING_LIST = [
     title: 'Ngày sinh',
     dataIndex: 'birth_date',
     key: 'birth_date',
-    render: ({ birth_date }) => DateFormat(birth_date),
+    render: (birth_date) => DateFormat(birth_date),
   },
   {
     title: 'Địa chỉ',
@@ -102,6 +169,12 @@ export const PATIENT_COLUMNS_IN_WAITING_LIST = [
 
 export const PATIENT_COLUMNS_BEING_EXAMINED = [
   {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
+  {
     title: 'Tên bệnh nhân',
     dataIndex: 'full_name',
     key: 'full_name',
@@ -110,7 +183,7 @@ export const PATIENT_COLUMNS_BEING_EXAMINED = [
     title: 'Ngày sinh',
     dataIndex: 'birth_date',
     key: 'birth_date',
-    render: ({ birth_date }) => DateFormat(birth_date),
+    render: (birth_date) => DateFormat(birth_date),
   },
   {
     title: 'Địa chỉ',
@@ -150,6 +223,12 @@ export const PATIENT_COLUMNS_BEING_EXAMINED = [
 ];
 
 export const MEDICINE_COLUMNS = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'Mã thuốc',
     dataIndex: 'id',
@@ -198,6 +277,12 @@ export const MEDICINE_COLUMNS = [
 ];
 export const INVOICE_COLUMNS = [
   {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
+  {
     title: 'Mã hoá đơn',
     dataIndex: 'id',
     key: 'id',
@@ -223,6 +308,7 @@ export const INVOICE_COLUMNS = [
     title: 'Thao tác',
     dataIndex: 'actions',
     key: 'actions',
+    width: '400px',
     render: (_, { actions }) => (
       <>
         {actions.map((action) => {
@@ -234,6 +320,7 @@ export const INVOICE_COLUMNS = [
                 e.stopPropagation();
                 action.onClick(e);
               }}
+              className={`${action.disabled ? 'cursor-no-drop opacity-60' : ''}`}
             >
               {action.value.toUpperCase()}
             </Tag>
@@ -244,6 +331,12 @@ export const INVOICE_COLUMNS = [
   },
 ];
 export const STAFF_COLUMNS = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'Tên nhân viên',
     dataIndex: 'full_name',
@@ -297,6 +390,12 @@ export const STAFF_COLUMNS = [
 ];
 export const REGULATION_COLUMNS = [
   {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
+  {
     title: 'Mã quy định',
     dataIndex: 'id',
     key: 'id',
@@ -314,6 +413,12 @@ export const REGULATION_COLUMNS = [
 ];
 
 export const MEDICAL_REPORT_COLUMN = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'Mã bệnh nhân',
     dataIndex: 'patient_id',
@@ -338,6 +443,12 @@ export const MEDICAL_REPORT_COLUMN = [
 ];
 
 export const PRESCRIPTION_COLUMN = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'STT',
     render: (_, record, rowIndex) => <div>{rowIndex + 1}</div>,
@@ -386,6 +497,12 @@ export const PRESCRIPTION_COLUMN = [
 
 export const PRESCRIPTION_VIEW_COLUMN = [
   {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
+  {
     title: 'STT',
     render: (_, record, rowIndex) => <div>{rowIndex + 1}</div>,
   },
@@ -421,16 +538,19 @@ export const GENDERS = [
   { value: 2, label: 'Nữ' },
   { value: 3, label: 'Khác' },
 ];
+
 export const ROLES = [
   { value: 1, label: 'Tiếp tân' },
   { value: 2, label: 'Bác sĩ' },
   { value: 3, label: 'Dược sĩ' },
   { value: 4, label: 'Quản lý' },
 ];
+
 export const STATUS = [
   { value: 1, label: 'Đang làm' },
   { value: 2, label: 'Đã nghỉ' },
 ];
+
 export const UNITS = [
   { label: 'Viên', value: 1 },
   { label: 'Chai', value: 2 },

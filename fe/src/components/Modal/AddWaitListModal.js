@@ -1,7 +1,7 @@
 import { Button, Input, Modal } from 'antd';
 import { React, useState, useRef } from 'react';
-import PatientTable from '../Table/PatientTable';
 import PatientModal from '../../components/Modal/PatientModal';
+import WaitingPatientTable from '../Table/WaitingPatientTable';
 const { Search } = Input;
 
 export default function AddWaitListModal(props) {
@@ -11,7 +11,7 @@ export default function AddWaitListModal(props) {
   const patientTableRef = useRef(null);
 
   return (
-    <Modal {...props} centered width={1000} footer={null}>
+    <Modal {...props} destroyOnClose centered width={1000} footer={null}>
       <h5 className="text-center text-[24px]">Thêm vào danh sách đợi khám</h5>
       <div className="flex gap-[80px] mt-[30px] mb-[30px]">
         <Search
@@ -32,7 +32,7 @@ export default function AddWaitListModal(props) {
           />
         </div>
       </div>
-      <PatientTable searchValue={searchValue} ref={patientTableRef} />
+      <WaitingPatientTable searchValue={searchValue} ref={patientTableRef} />
     </Modal>
   );
 }

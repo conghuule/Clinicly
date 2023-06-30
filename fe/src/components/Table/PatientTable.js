@@ -20,10 +20,10 @@ const PatientTable = ({ searchValue }, ref) => {
   const deletePatient = async ({ id, name }) => {
     try {
       await patientApi.delete(id);
-      notify({ type: 'success', mess: `Xóa ${name} thành công` });
+      notify({ type: 'success', mess: `Xóa bệnh nhân ${name} thành công` });
       getPatients(searchValue);
     } catch (error) {
-      notify({ type: 'error', mess: 'Xóa thất bại' });
+      notify({ type: 'error', mess: `Xóa bệnh nhân ${name} thất bại` });
     }
 
     setOpenModal(false);
@@ -69,9 +69,10 @@ const PatientTable = ({ searchValue }, ref) => {
     });
   };
 
-  const filteredPatients = patients.data.map((patient) => ({
+  const filteredPatients = patients.data.map((patient, index) => ({
     key: patient.id,
     ...patient,
+    index: index + 1,
     actions: [
       {
         value: 'Xoá',
@@ -108,7 +109,7 @@ const PatientTable = ({ searchValue }, ref) => {
         rowClassName="cursor-pointer"
       />
       <ConfirmDeleteModal
-        title={selectedPatient.name}
+        title={` bệnh nhân ${selectedPatient.name}`}
         open={openModal}
         onCancel={() => setOpenModal(false)}
         onOk={() => deletePatient(selectedPatient)}

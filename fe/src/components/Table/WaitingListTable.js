@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState, useImperativeHandle } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { Table } from 'antd';
 import dayjs from 'dayjs';
 import waitingListApi from '../../services/waitingListApi';
@@ -13,6 +13,7 @@ const WaitingListTable = forwardRef((props, ref) => {
 
   useEffect(() => {
     getPatients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getPatients = async () => {
@@ -33,14 +34,15 @@ const WaitingListTable = forwardRef((props, ref) => {
       notify({ type: 'success', mess: `Xóa bệnh nhân ${name} thành công` });
       getPatients();
     } catch (error) {
-      notify({ type: 'error', mess: 'Xóa thất bại' });
+      notify({ type: 'error', mess: `Xóa bệnh nhân ${name} thất bại` });
     }
     setOpenModal(false);
   };
 
-  const filteredPatients = patients.data.map((patient) => ({
+  const filteredPatients = patients.data.map((patient, index) => ({
     ...patient.patient,
     key: patient.patient.id,
+    index: index + 1,
     birth_date: dayjs(patient.patient.birth_date).format('DD-MM-YYYY'),
     actions: [
       {
@@ -58,7 +60,7 @@ const WaitingListTable = forwardRef((props, ref) => {
     <>
       <Table dataSource={filteredPatients} columns={PATIENT_COLUMNS} loading={patients.loading} ref={ref} />
       <ConfirmDeleteModal
-        title={selectedPatient.name}
+        title={` bệnh nhân ${selectedPatient.name}`}
         open={openModal}
         onCancel={() => setOpenModal(false)}
         onOk={() => deletePatient(selectedPatient)}

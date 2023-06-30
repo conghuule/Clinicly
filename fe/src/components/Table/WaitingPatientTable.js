@@ -14,17 +14,20 @@ const WaitingPatientTable = ({ searchValue }, ref) => {
     loading: true,
     params: { page_size: 10, page: 1, total_page: 0 },
   });
-  useEffect(() => {
-    getPatients();
+
+  useImperativeHandle(ref, () => {
+    return {
+      getPatients,
+    };
   });
 
   const addPatient = async ({ id, name }) => {
     try {
       await waitingListApi.post({ patient_id: Number(id) });
-      notify({ type: 'success', mess: `Thêm ${name} vào danh sách đợi khám thành công` });
+      notify({ type: 'success', mess: `Thêm bệnh nhân ${name} vào danh sách đợi khám thành công` });
       getPatients(searchValue);
     } catch (error) {
-      notify({ type: 'error', mess: 'Thêm vào danh sách đợi khám thất bại' });
+      notify({ type: 'error', mess: `Thêm bệnh nhân ${name} vào danh sách đợi khám thất bại` });
     }
 
     setOpenModal(false);
@@ -32,11 +35,20 @@ const WaitingPatientTable = ({ searchValue }, ref) => {
 
   const getPatients = async (searchValue) => {
     try {
-      const response = await patientApi.getAll({ ...patients.params, name: searchValue });
+      const waitingList = await waitingListApi.getAll({ status: 1 });
+      const excludedPatientIds = waitingList.data.map(({ patient }) => patient.id);
+      const response = await patientApi.getAll({
+        ...patients.params,
+        name: searchValue,
+      });
+
+      console.log(excludedPatientIds);
+      // console.log(response.data.filter((patient) => !excludedPatientIds.includes(patient.id)));
+
       setPatients({
         ...patients,
         loading: false,
-        data: response.data,
+        data: response.data.filter((patient) => !excludedPatientIds.includes(patient.id)),
         params: {
           ...patients.params,
           page_size: response.page_info.page_size,
@@ -60,9 +72,10 @@ const WaitingPatientTable = ({ searchValue }, ref) => {
     });
   };
 
-  const filteredPatients = patients.data.map((patient) => ({
+  const filteredPatients = patients.data.map((patient, index) => ({
     key: patient.id,
     ...patient,
+    index: index + 1,
     actions: [
       {
         value: 'Thêm',
@@ -78,7 +91,7 @@ const WaitingPatientTable = ({ searchValue }, ref) => {
   useEffect(() => {
     getPatients(searchValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [patients.params.page_size, patients.params.page, searchValue]);
+  }, [patients.params.page, patients.params.page_size, searchValue]);
 
   return (
     <>

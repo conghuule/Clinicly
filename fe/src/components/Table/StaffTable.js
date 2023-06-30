@@ -24,11 +24,11 @@ const StaffTable = ({ searchValue }, ref) => {
   const deleteStaff = async ({ id, name }) => {
     try {
       await staffAPI.delete(id);
-      notify({ type: 'success', mess: `Xóa ${name} thành công` });
+      notify({ type: 'success', mess: `Xóa nhân viên ${name} thành công` });
       getStaffs(searchValue);
     } catch (error) {
       console.log(error);
-      notify({ type: 'error', mess: 'Xóa thất bại' });
+      notify({ type: 'error', mess: `Xóa nhân viên ${name} thất bại` });
     }
 
     setOpenDeleteModal(false);
@@ -73,9 +73,10 @@ const StaffTable = ({ searchValue }, ref) => {
       },
     });
   };
-  const filteredStaffs = staffs.data.map((staff) => ({
+  const filteredStaffs = staffs.data.map((staff, index) => ({
     key: staff.id,
     ...staff,
+    index: index + 1,
     actions: [
       {
         value: 'Xoá',
@@ -114,7 +115,7 @@ const StaffTable = ({ searchValue }, ref) => {
       {openDeleteModal ? (
         <Modal>
           <ConfirmDeleteModal
-            title={deleteTitle}
+            title={` nhân viên ${deleteTitle}`}
             open={openDeleteModal}
             onCancel={() => setOpenDeleteModal(false)}
             onOk={() => deleteStaff(selectedStaff)}

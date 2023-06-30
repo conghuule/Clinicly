@@ -1,10 +1,8 @@
 import { faUserClock } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'antd';
-import dayjs from 'dayjs';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import HeaderBar from '../../components/HeaderBar';
 import AddWaitListModal from '../../components/Modal/AddWaitListModal';
-import ConfirmAddExamination from '../../components/Modal/ConfirmAddExamination';
 import WaitingListTable from '../../components/Table/WaitingListTable';
 import { AuthContext } from '../../context/authContext';
 import waitingListApi from '../../services/waitingListApi';
@@ -28,6 +26,14 @@ export default function WaitingList() {
     }
   };
 
+  const onCancelHandel = async () => {
+    try {
+      const temp = await waitingListApi.getAll({ status: 1 });
+      setPatients({ ...patients, data: temp.data });
+    } catch (error) {}
+    setOpenModalAdd(false);
+  };
+
   return (
     <div>
       <HeaderBar
@@ -45,7 +51,12 @@ export default function WaitingList() {
           <Button type="primary" className="bg-primary-200 h-[40px] w-[20rem]" onClick={() => setOpenModalAdd(true)}>
             Thêm vào DSDK
           </Button>
-          <AddWaitListModal open={openModalAdd} onCancel={() => setOpenModalAdd(false)} />
+          <AddWaitListModal
+            open={openModalAdd}
+            onCancel={onCancelHandel}
+            patients={patients}
+            setPatients={setPatients}
+          />
         </div>
       </div>
       <WaitingListTable patients={patients} setPatients={setPatients} />

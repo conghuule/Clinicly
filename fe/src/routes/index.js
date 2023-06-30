@@ -16,6 +16,7 @@ import Login from '../pages/Login';
 import NotFound from '../pages/NotFound';
 import MedicalReport from '../pages/Patients/MedicalReport';
 import CreateMedicalReport from '../pages/Patients/CreateMedicalReport';
+import PatientHistory from '../pages/Patients/PatientHistory';
 
 const publicRoutes = [
   { path: config.routes.login, element: Login, layout: null },
@@ -25,6 +26,7 @@ const publicRoutes = [
 const privateRoutes = [
   { path: config.routes.home, element: Home },
   { path: config.routes.patients, element: Patients },
+  { path: config.routes.patient_history, element: PatientHistory },
   { path: config.routes.patient_detail, element: PatientDetail },
   { path: config.routes.medical_report, element: MedicalReport },
   { path: config.routes.create_medical_report, element: CreateMedicalReport },

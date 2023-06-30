@@ -6,6 +6,7 @@ import { Button } from 'antd';
 import RegulationTable from '../../../components/Table/RegulationTable';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../context/authContext';
+import config from '../../../config';
 const { Search } = Input;
 
 export default function Bills() {
@@ -16,10 +17,10 @@ export default function Bills() {
     <div>
       <HeaderBar title="Quản lý" icon={faFileInvoiceDollar} image="" name={auth.full_name} role={auth.role} />
       <div className="flex gap-[2rem] mt-[2rem]">
-        <Link to="/manage/staffs">
+        <Link to={config.routes.staffs}>
           <Button className="h-[40px] ">Quản lý nhân viên</Button>
         </Link>
-        <Link to="/manage/regulations">
+        <Link to={config.routes.regulations}>
           <Button className="h-[40px] bg-blue text-[#fff]">Quản lý quy định</Button>
         </Link>
       </div>
