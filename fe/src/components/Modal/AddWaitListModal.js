@@ -12,7 +12,7 @@ export default function AddWaitListModal(props) {
   const patientTableRef = useRef(null);
 
   return (
-    <Modal {...props} centered width={1000} footer={null}>
+    <Modal {...props} destroyOnClose centered width={1000} footer={null}>
       <h5 className="text-center text-[24px]">Thêm vào danh sách đợi khám</h5>
       <div className="flex gap-[80px] mt-[30px] mb-[30px]">
         <Search

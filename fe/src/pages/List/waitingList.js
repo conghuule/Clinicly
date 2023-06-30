@@ -26,6 +26,14 @@ export default function WaitingList() {
     }
   };
 
+  const onCancelHandel = async () => {
+    try {
+      const temp = await waitingListApi.getAll({ status: 1 });
+      setPatients({ ...patients, data: temp.data });
+    } catch (error) {}
+    setOpenModalAdd(false);
+  };
+
   return (
     <div>
       <HeaderBar
@@ -43,7 +51,12 @@ export default function WaitingList() {
           <Button type="primary" className="bg-primary-200 h-[40px] w-[20rem]" onClick={() => setOpenModalAdd(true)}>
             Thêm vào DSDK
           </Button>
-          <AddWaitListModal open={openModalAdd} onCancel={() => setOpenModalAdd(false)} />
+          <AddWaitListModal
+            open={openModalAdd}
+            onCancel={onCancelHandel}
+            patients={patients}
+            setPatients={setPatients}
+          />
         </div>
       </div>
       <WaitingListTable patients={patients} setPatients={setPatients} />
