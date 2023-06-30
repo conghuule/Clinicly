@@ -1,9 +1,15 @@
-import { Space, Tag, Typography } from 'antd';
+import { Space, Tag } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DateFormat } from './utils';
 
 export const PATIENT_COLUMNS = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'Tên bệnh nhân',
     dataIndex: 'full_name',
@@ -52,6 +58,12 @@ export const PATIENT_COLUMNS = [
 ];
 
 export const PATIENT_HISTORY_COLUMNS = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'Mã phiếu khám',
     dataIndex: 'id',
@@ -102,6 +114,12 @@ export const PATIENT_HISTORY_COLUMNS = [
 
 export const PATIENT_COLUMNS_IN_WAITING_LIST = [
   {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
+  {
     title: 'Tên bệnh nhân',
     dataIndex: 'full_name',
     key: 'full_name',
@@ -150,6 +168,12 @@ export const PATIENT_COLUMNS_IN_WAITING_LIST = [
 ];
 
 export const PATIENT_COLUMNS_BEING_EXAMINED = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'Tên bệnh nhân',
     dataIndex: 'full_name',
@@ -200,6 +224,12 @@ export const PATIENT_COLUMNS_BEING_EXAMINED = [
 
 export const MEDICINE_COLUMNS = [
   {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
+  {
     title: 'Mã thuốc',
     dataIndex: 'id',
     key: 'id',
@@ -246,6 +276,12 @@ export const MEDICINE_COLUMNS = [
   },
 ];
 export const INVOICE_COLUMNS = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'Mã hoá đơn',
     dataIndex: 'id',
@@ -295,6 +331,12 @@ export const INVOICE_COLUMNS = [
   },
 ];
 export const STAFF_COLUMNS = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'Tên nhân viên',
     dataIndex: 'full_name',
@@ -348,6 +390,12 @@ export const STAFF_COLUMNS = [
 ];
 export const REGULATION_COLUMNS = [
   {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
+  {
     title: 'Mã quy định',
     dataIndex: 'id',
     key: 'id',
@@ -365,6 +413,12 @@ export const REGULATION_COLUMNS = [
 ];
 
 export const MEDICAL_REPORT_COLUMN = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'Mã bệnh nhân',
     dataIndex: 'patient_id',
@@ -389,6 +443,12 @@ export const MEDICAL_REPORT_COLUMN = [
 ];
 
 export const PRESCRIPTION_COLUMN = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'STT',
     render: (_, record, rowIndex) => <div>{rowIndex + 1}</div>,
@@ -436,6 +496,12 @@ export const PRESCRIPTION_COLUMN = [
 ];
 
 export const PRESCRIPTION_VIEW_COLUMN = [
+  {
+    title: '#',
+    dataIndex: 'index',
+    key: 'index',
+    width: 40,
+  },
   {
     title: 'STT',
     render: (_, record, rowIndex) => <div>{rowIndex + 1}</div>,

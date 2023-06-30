@@ -65,9 +65,10 @@ const PatientHistoryTable = ({ searchValue = '' }) => {
   };
 
   const filteredHistory = history.data
-    .map((history) => ({
+    .map((history, index) => ({
       key: history.id,
       ...history,
+      index: index + 1,
       actions: [
         {
           value: 'Xoá',

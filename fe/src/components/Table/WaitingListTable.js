@@ -13,6 +13,7 @@ const WaitingListTable = forwardRef((props, ref) => {
 
   useEffect(() => {
     getPatients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getPatients = async () => {
@@ -38,9 +39,10 @@ const WaitingListTable = forwardRef((props, ref) => {
     setOpenModal(false);
   };
 
-  const filteredPatients = patients.data.map((patient) => ({
+  const filteredPatients = patients.data.map((patient, index) => ({
     ...patient.patient,
     key: patient.patient.id,
+    index: index + 1,
     birth_date: dayjs(patient.patient.birth_date).format('DD-MM-YYYY'),
     actions: [
       {

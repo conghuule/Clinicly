@@ -23,8 +23,9 @@ export default function InvoiceTable({ searchValue, deliveryStatus, paymentStatu
     try {
       const res = await invoiceAPI.getInvoices();
       const json = res.data;
-      json.forEach((element) => {
+      json.forEach((element, index) => {
         element.key = element.id;
+        element.index = index + 1;
         element.actions = [
           {
             value: 'Thanh toán',
@@ -72,6 +73,7 @@ export default function InvoiceTable({ searchValue, deliveryStatus, paymentStatu
       notify({ type: 'error', mess: 'Cập nhật thất bại' });
     }
   };
+  console.log('invoices: ', invoices);
   const filteredInvoices = invoices.filter((item) => {
     return (
       item.id.toString().includes(searchValue.toLowerCase()) &&

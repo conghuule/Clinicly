@@ -55,12 +55,13 @@ export default function MedicalReport() {
         <div className="flex flex-col gap-5">
           <span className="text-[24px] font-semibold">Đơn thuốc</span>
           <Table
-            dataSource={medicalReport.prescription?.map((p) => ({
+            dataSource={medicalReport.prescription?.map((p, index) => ({
               id: p.medicine?.id,
               name: p.medicine?.name,
               unit: p.medicine?.unit,
               quantity: p.quantity,
               instruction: p.instruction,
+              index: index + 1,
             }))}
             columns={PRESCRIPTION_VIEW_COLUMN}
             pagination={false}

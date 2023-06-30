@@ -69,9 +69,10 @@ const PatientTable = ({ searchValue }, ref) => {
     });
   };
 
-  const filteredPatients = patients.data.map((patient) => ({
+  const filteredPatients = patients.data.map((patient, index) => ({
     key: patient.id,
     ...patient,
+    index: index + 1,
     actions: [
       {
         value: 'Xoá',

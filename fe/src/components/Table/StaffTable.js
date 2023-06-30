@@ -73,9 +73,10 @@ const StaffTable = ({ searchValue }, ref) => {
       },
     });
   };
-  const filteredStaffs = staffs.data.map((staff) => ({
+  const filteredStaffs = staffs.data.map((staff, index) => ({
     key: staff.id,
     ...staff,
+    index: index + 1,
     actions: [
       {
         value: 'Xoá',

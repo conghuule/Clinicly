@@ -62,10 +62,11 @@ export default function CreateMedicalReport() {
         diagnose,
         doctor_id: auth.id,
         patient_id: Number(id),
-        prescription: prescription.map((p) => ({
+        prescription: prescription.map((p, index) => ({
           instruction: p.instruction,
           medicine_id: p.medicine_id,
           quantity: Number(p.quantity),
+          index: index + 1,
         })),
       });
       notify({ type: 'success', mess: 'Tạo phiếu khám thành công' });

@@ -49,9 +49,10 @@ const MedicineTable = ({ searchValue }, ref) => {
   };
 
   const filteredMedicines = medicines.data
-    .map((medicine) => ({
+    .map((medicine, index) => ({
       key: medicine.id,
       ...medicine,
+      index: index + 1,
       actions: [
         {
           value: 'Xoá',

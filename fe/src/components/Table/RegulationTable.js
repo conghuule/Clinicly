@@ -16,8 +16,9 @@ export default function RegulationTable({ searchValue }) {
     try {
       const res = await regulationAPI.getALL();
       const json = res.data;
-      await json.forEach((element) => {
+      await json.forEach((element, index) => {
         element.key = element.id;
+        element.index = index + 1;
       });
       setRegulations(json);
     } catch (error) {
