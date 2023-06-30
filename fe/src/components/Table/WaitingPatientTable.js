@@ -18,9 +18,6 @@ const WaitingPatientTable = ({ searchValue }, ref) => {
     loading: true,
     params: { page_size: 10, page: 1, total_page: 0 },
   });
-  useEffect(() => {
-    getPatients();
-  });
 
   useImperativeHandle(ref, () => {
     return {
@@ -42,11 +39,20 @@ const WaitingPatientTable = ({ searchValue }, ref) => {
 
   const getPatients = async (searchValue) => {
     try {
-      const response = await patientApi.getAll({ ...patients.params, name: searchValue });
+      const waitingList = await waitingListApi.getAll({ status: 1 });
+      const excludedPatientIds = waitingList.data.map(({ patient }) => patient.id);
+      const response = await patientApi.getAll({
+        ...patients.params,
+        name: searchValue,
+      });
+
+      console.log(excludedPatientIds);
+      // console.log(response.data.filter((patient) => !excludedPatientIds.includes(patient.id)));
+
       setPatients({
         ...patients,
         loading: false,
-        data: response.data,
+        data: response.data.filter((patient) => !excludedPatientIds.includes(patient.id)),
         params: {
           ...patients.params,
           page_size: response.page_info.page_size,
@@ -88,7 +94,7 @@ const WaitingPatientTable = ({ searchValue }, ref) => {
   useEffect(() => {
     getPatients(searchValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [patients.params.page_size, patients.params.page, searchValue]);
+  }, [patients.params.page, patients.params.page_size, searchValue]);
 
   return (
     <>

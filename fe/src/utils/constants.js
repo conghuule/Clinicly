@@ -110,7 +110,7 @@ export const PATIENT_COLUMNS_IN_WAITING_LIST = [
     title: 'Ngày sinh',
     dataIndex: 'birth_date',
     key: 'birth_date',
-    render: ({ birth_date }) => DateFormat(birth_date),
+    render: (birth_date) => DateFormat(birth_date),
   },
   {
     title: 'Địa chỉ',
@@ -159,7 +159,7 @@ export const PATIENT_COLUMNS_BEING_EXAMINED = [
     title: 'Ngày sinh',
     dataIndex: 'birth_date',
     key: 'birth_date',
-    render: ({ birth_date }) => DateFormat(birth_date),
+    render: (birth_date) => DateFormat(birth_date),
   },
   {
     title: 'Địa chỉ',
