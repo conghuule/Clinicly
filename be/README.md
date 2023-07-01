@@ -49,7 +49,7 @@ _in progress_
 ### Run
 
 ```bash
-go mod download
+go mod tidy
 go run main.go
 ```
 

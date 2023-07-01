@@ -29,6 +29,29 @@
   - React - v18.2.0
   - Ant Design - v5.6.1
 
+### Run
+
+- Database: run db/db.sql script
+
+- Backend:
+
+  - Create .env file based on .env.example file
+
+  - ```bash
+    cd be
+    go mod tidy
+    swag init
+    go run main.go
+    ```
+
+- Frontend:
+
+```bash
+cd fe
+npm install
+npm start
+```
+
 ## Features
 
 - Scheduling
