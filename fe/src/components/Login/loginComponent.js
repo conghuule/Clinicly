@@ -32,9 +32,7 @@ export const LoginComponent = () => {
   return (
     <Form
       name="basic"
-      labelCol={{ span: 6 }}
-      wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600 }}
+      layout="vertical"
       initialValues={{ remember: true }}
       autoComplete="off"
       onFinish={(values) => handleSubmit(values)}
@@ -59,14 +57,8 @@ export const LoginComponent = () => {
 
       <p className="ml-[110px] text-danger">{errorMessage}</p>
 
-      <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-        <Button
-          type="primary"
-          htmlType="submit"
-          size="large"
-          shape="round"
-          className="text-white lg:w-[35rem] mt-[12px]"
-        >
+      <Form.Item>
+        <Button type="primary" htmlType="submit" size="large" shape="round" className="text-white w-full mt-[12px]">
           Đăng nhập
         </Button>
       </Form.Item>

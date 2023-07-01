@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var allowOrigins = []string{"http://localhost:3000"}
+var allowOrigins = []string{"http://localhost:3000", "https://clinicly-three.vercel.app"}
 
 func Cors(c *gin.Context) {
 	config := cors.DefaultConfig()
