@@ -46,7 +46,7 @@ export default function MedicineDetail() {
         </Link>
       </div>
       <h3 className="text-[32px] font-semibold mt-[20px]">{medicine.name}</h3>
-      {medicine.id && <MedicineForm defaultValue={medicine} onSubmit={onSubmit} submitText="Lưu" />}
+      {medicine.id && <MedicineForm defaultValue={medicine} onSubmit={onSubmit} isUpdate submitText="Lưu" />}
     </div>
   );
 }

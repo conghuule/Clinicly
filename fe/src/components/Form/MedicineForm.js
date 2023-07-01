@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Form, Input, Select } from 'antd';
 import { UNITS } from '../../utils/constants';
 
-export default function MedicineForm({ defaultValue = {}, onSubmit, submitText, centered }) {
+export default function MedicineForm({ defaultValue = {}, onSubmit, submitText, centered, isUpdate }) {
   return (
     <Form
       name="patient-form"
@@ -24,6 +24,12 @@ export default function MedicineForm({ defaultValue = {}, onSubmit, submitText, 
       <Form.Item label="Thông tin" name="info" rules={[{ required: true, message: 'Nhập thông tin' }]}>
         <Input placeholder="Nhập thông tin" />
       </Form.Item>
+
+      {!isUpdate && (
+        <Form.Item label="Số lượng" name="quantity" rules={[{ required: true, message: 'Nhập số lượng' }]}>
+          <Input placeholder="Nhập số lượng" />
+        </Form.Item>
+      )}
 
       <Form.Item name="unit" label="Đơn vị" rules={[{ required: true, message: 'Nhập mã đơn vị' }]}>
         <Select style={{ width: 400 }} options={UNITS} placeholder="Chọn đơn vị" />
